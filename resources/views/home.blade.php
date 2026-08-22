@@ -89,59 +89,402 @@
 </head>
 <body class="min-h-screen font-sans antialiased bg-slate-50 text-slate-800 dark:bg-slate-950 dark:text-slate-100 flex flex-col justify-between" x-data="{ mobileNav: false }">
 
-    <!-- Top Navigation Header -->
-    <header class="sticky top-0 z-40 bg-white/95 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-200 dark:border-slate-800/80 px-4 sm:px-6 py-3.5 shadow-sm">
-        <div class="max-w-7xl mx-auto flex items-center justify-between">
-            <a href="{{ route('home') }}" class="flex items-center space-x-2.5 sm:space-x-3">
-                <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-400 flex items-center justify-center text-white font-bold shadow-md">
-                    <i class="fa-solid fa-cow text-lg sm:text-xl"></i>
-                </div>
-                <div>
-                    <span class="font-extrabold text-base sm:text-lg text-slate-900 dark:text-white tracking-tight">SiTernak<span class="text-emerald-500">-OK</span></span>
-                    <p class="text-[9px] sm:text-[10px] text-slate-500 dark:text-slate-400 font-semibold uppercase tracking-wider">Dinas Peternakan & Perkebunan Prov. Gorontalo</p>
-                </div>
+<!-- ========================================================= -->
+<!-- TOP NAVIGATION HEADER -->
+<!-- ========================================================= -->
+<header
+    class="sticky top-0 z-40 bg-white/95 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-200 dark:border-slate-800/80 px-4 sm:px-6 py-3.5 shadow-sm"
+>
+    <div class="max-w-7xl mx-auto flex items-center justify-between gap-3">
+
+        <!-- ================================================= -->
+        <!-- LOGO -->
+        <!-- ================================================= -->
+        <a
+            href="{{ route('home') }}"
+            class="flex items-center space-x-2.5 sm:space-x-3 shrink-0"
+        >
+            <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-400 flex items-center justify-center text-white font-bold shadow-md">
+                <i class="fa-solid fa-cow text-lg sm:text-xl"></i>
+            </div>
+
+            <div>
+                <span class="font-extrabold text-base sm:text-lg text-slate-900 dark:text-white tracking-tight">
+                    SiTernak<span class="text-emerald-500">-OK</span>
+                </span>
+
+                <p class="text-[9px] sm:text-[10px] text-slate-500 dark:text-slate-400 font-semibold uppercase tracking-wider">
+                    Dinas Peternakan & Perkebunan Prov. Gorontalo
+                </p>
+            </div>
+        </a>
+
+
+        <!-- ================================================= -->
+        <!-- DESKTOP NAVIGATION -->
+        <!-- ================================================= -->
+        <nav class="hidden lg:flex flex-1 justify-center items-center gap-1 whitespace-nowrap min-w-0">
+
+            <!-- Utama -->
+            <a
+                href="{{ route('home') }}"
+                class="px-2.5 py-1.5 2xl:px-3 2xl:py-2 rounded-xl text-xs font-extrabold transition-all flex items-center gap-1.5
+                {{ request()->routeIs('home')
+                    ? 'bg-emerald-600 text-white shadow-md'
+                    : 'text-slate-700 dark:text-slate-300 hover:bg-slate-200/70 dark:hover:bg-slate-800' }}"
+            >
+                <i class="fa-solid fa-house {{ request()->routeIs('home') ? 'text-white' : 'text-emerald-500' }}"></i>
+                <span>Utama</span>
+            </a>
+           
+
+
+            <!-- Sapi IB -->
+            <a
+                href="{{ route('cows.index') }}"
+                class="px-2.5 py-1.5 2xl:px-3 2xl:py-2 rounded-xl text-xs font-extrabold transition-all flex items-center gap-1.5
+                {{ request()->routeIs('cows.*')
+                    ? 'bg-emerald-600 text-white shadow-md'
+                    : 'text-slate-700 dark:text-slate-300 hover:bg-slate-200/70 dark:hover:bg-slate-800' }}"
+            >
+                <i class="fa-solid fa-cow {{ request()->routeIs('cows.*') ? 'text-white' : 'text-emerald-500' }}"></i>
+                <span>Sapi IB</span>
             </a>
 
-            <div class="flex items-center gap-2 sm:gap-3">
-                <!-- Theme Switcher Button -->
-                <button @click="theme = (theme === 'light' ? 'dark' : 'light'); localStorage.setItem('theme', theme)" type="button" class="inline-flex items-center space-x-1.5 px-2.5 sm:px-3 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 rounded-xl text-xs font-semibold border border-slate-200 dark:border-slate-700 transition-all">
-                    <i class="fa-solid" :class="theme === 'dark' ? 'fa-sun text-amber-400' : 'fa-moon text-indigo-600'"></i>
-                    <span class="hidden md:inline" x-text="theme === 'dark' ? 'Mode Terang' : 'Mode Gelap'"></span>
-                </button>
 
-                @auth
-                    @if(!auth()->user()->isGuest())
-                        <div class="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-bold">
-                            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                            <span class="truncate max-w-[140px] text-slate-900 dark:text-white">{{ auth()->user()->name }}</span>
-                            <span class="px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 text-[10px] font-black uppercase">{{ auth()->user()->getRoleBadgeText() }}</span>
-                        </div>
-                        <a href="{{ route('dashboard') }}" class="px-3.5 sm:px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-xl shadow-md transition flex items-center gap-1.5">
-                            <i class="fa-solid fa-chart-line"></i>
-                            <span>Dashboard</span>
-                        </a>
-                        <form action="{{ route('logout') }}" method="POST" class="inline">
-                            @csrf
-                            <button type="submit" class="p-2 bg-rose-50 hover:bg-rose-100 dark:bg-rose-950/40 dark:hover:bg-rose-900/60 text-rose-600 dark:text-rose-400 rounded-xl text-xs font-bold border border-rose-200 dark:border-rose-800 transition" title="Keluar">
-                                <i class="fa-solid fa-right-from-bracket"></i>
-                            </button>
-                        </form>
-                    @else
-                        <a href="{{ route('login') }}" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-xl shadow-md transition flex items-center gap-1.5">
-                            <i class="fa-solid fa-right-to-bracket"></i>
-                            <span>Login Petugas</span>
-                        </a>
-                    @endif
+            <!-- Pedet -->
+            <a
+                href="{{ route('calves.index') }}"
+                class="px-2.5 py-1.5 2xl:px-3 2xl:py-2 rounded-xl text-xs font-extrabold transition-all flex items-center gap-1.5
+                {{ request()->routeIs('calves.*')
+                    ? 'bg-emerald-600 text-white shadow-md'
+                    : 'text-slate-700 dark:text-slate-300 hover:bg-slate-200/70 dark:hover:bg-slate-800' }}"
+            >
+                <i class="fa-solid fa-baby-carriage {{ request()->routeIs('calves.*') ? 'text-white' : 'text-emerald-500' }}"></i>
+                <span>Pedet</span>
+            </a>
+
+
+            <!-- Kelahiran -->
+            <a
+                href="{{ route('reports.index') }}"
+                class="px-2.5 py-1.5 2xl:px-3 2xl:py-2 rounded-xl text-xs font-extrabold transition-all flex items-center gap-1.5
+                {{ request()->routeIs('reports.index')
+                    ? 'bg-emerald-600 text-white shadow-md'
+                    : 'text-slate-700 dark:text-slate-300 hover:bg-slate-200/70 dark:hover:bg-slate-800' }}"
+            >
+                <i class="fa-solid fa-file-invoice {{ request()->routeIs('reports.index') ? 'text-white' : 'text-emerald-500' }}"></i>
+                <span>Kelahiran</span>
+            </a>
+
+
+            <!-- Inseminator -->
+            <a
+                href="{{ route('reports.inseminators') }}"
+                class="px-2.5 py-1.5 2xl:px-3 2xl:py-2 rounded-xl text-xs font-extrabold transition-all flex items-center gap-1.5
+                {{ request()->routeIs('reports.inseminators')
+                    ? 'bg-emerald-600 text-white shadow-md'
+                    : 'text-slate-700 dark:text-slate-300 hover:bg-slate-200/70 dark:hover:bg-slate-800' }}"
+            >
+                <i class="fa-solid fa-trophy {{ request()->routeIs('reports.inseminators') ? 'text-white' : 'text-amber-500' }}"></i>
+                <span>Inseminator</span>
+            </a>
+
+        </nav>
+
+
+        <!-- ================================================= -->
+        <!-- RIGHT SIDE DESKTOP -->
+        <!-- ================================================= -->
+        <div class="flex items-center gap-2 sm:gap-3 shrink-0">
+
+            <!-- Theme Switcher -->
+            <button
+                @click="theme = (theme === 'light' ? 'dark' : 'light'); localStorage.setItem('theme', theme)"
+                type="button"
+                class="inline-flex items-center space-x-1.5 px-2.5 sm:px-3 py-2
+                       bg-slate-100 dark:bg-slate-800
+                       hover:bg-slate-200 dark:hover:bg-slate-700
+                       text-slate-800 dark:text-slate-200
+                       rounded-xl text-xs font-semibold
+                       border border-slate-200 dark:border-slate-700
+                       transition-all"
+            >
+                <i
+                    class="fa-solid"
+                    :class="theme === 'dark'
+                        ? 'fa-sun text-amber-400'
+                        : 'fa-moon text-indigo-600'"
+                ></i>
+
+                <span
+                    class="hidden xl:inline"
+                    x-text="theme === 'dark' ? 'Mode Terang' : 'Mode Gelap'"
+                ></span>
+            </button>
+
+
+            <!-- ================================================= -->
+            <!-- DESKTOP USER -->
+            <!-- ================================================= -->
+            @auth
+
+                @if(!auth()->user()->isGuest())
+
+                    <div class="hidden xl:flex items-center gap-2 px-3 py-1.5 rounded-xl
+                                bg-slate-100 dark:bg-slate-800
+                                border border-slate-200 dark:border-slate-700
+                                text-xs font-bold">
+
+                        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+
+                        <span class="truncate max-w-[140px] text-slate-900 dark:text-white">
+                            {{ auth()->user()->name }}
+                        </span>
+
+                        <span class="px-1.5 py-0.5 rounded
+                                     bg-emerald-500/20
+                                     text-emerald-700 dark:text-emerald-300
+                                     text-[10px] font-black uppercase">
+                            {{ auth()->user()->getRoleBadgeText() }}
+                        </span>
+                    </div>
+
+
+                    <!-- Logout -->
+                    <form
+                        action="{{ route('logout') }}"
+                        method="POST"
+                        class="hidden lg:inline"
+                    >
+                        @csrf
+
+                        <button
+                            type="submit"
+                            class="p-2
+                                   bg-rose-50 hover:bg-rose-100
+                                   dark:bg-rose-950/40 dark:hover:bg-rose-900/60
+                                   text-rose-600 dark:text-rose-400
+                                   rounded-xl text-xs font-bold
+                                   border border-rose-200 dark:border-rose-800
+                                   transition"
+                            title="Keluar"
+                        >
+                            <i class="fa-solid fa-right-from-bracket"></i>
+                        </button>
+                    </form>
+
                 @else
-                    <a href="{{ route('login') }}" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-xl shadow-md transition flex items-center gap-1.5">
-                        <i class="fa-solid fa-right-to-bracket"></i>
-                        <span>Login Pengguna</span>
-                    </a>
-                @endauth
-            </div>
-        </div>
-    </header>
 
+                    <a
+                        href="{{ route('login') }}"
+                        class="hidden sm:flex px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-xl shadow-md transition items-center gap-1.5"
+                    >
+                        <i class="fa-solid fa-right-to-bracket"></i>
+                        <span>Login Petugas</span>
+                    </a>
+
+                @endif
+            @else
+                <a
+                    href="{{ route('login') }}"
+                    class="flex px-3 sm:flex px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-xl shadow-md transition items-center gap-1.5">
+                    <i class="fa-solid fa-right-to-bracket"></i>
+                    <span>Login</span>
+                </a>
+
+            @endauth
+
+            <!-- ================================================= -->
+            <!-- MOBILE HAMBURGER -->
+            <!-- ================================================= -->
+            <button
+                @click="mobileNav = !mobileNav"
+                type="button"
+                class="lg:hidden w-10 h-10 flex items-center justify-center
+                       bg-slate-100 dark:bg-slate-800
+                       hover:bg-emerald-100 dark:hover:bg-emerald-950
+                       text-slate-700 dark:text-slate-200
+                       hover:text-emerald-600 dark:hover:text-emerald-400
+                       rounded-xl
+                       border border-slate-200 dark:border-slate-700
+                       transition-all"
+                aria-label="Buka menu navigasi"
+            >
+                <i
+                    class="fa-solid text-lg"
+                    :class="mobileNav ? 'fa-xmark' : 'fa-bars'"
+                ></i>
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- MOBILE NAVIGATION -->
+    <!-- ========================================================= -->
+    <div
+        x-cloak
+        x-show="mobileNav"
+        x-transition:enter="transition ease-out duration-200"
+        x-transition:enter-start="opacity-0 -translate-y-2"
+        x-transition:enter-end="opacity-100 translate-y-0"
+        x-transition:leave="transition ease-in duration-150"
+        x-transition:leave-start="opacity-100 translate-y-0"
+        x-transition:leave-end="opacity-0 -translate-y-2"
+        class="lg:hidden border-t border-slate-200 dark:border-slate-800 mt-3 pt-3 pb-1"
+    >
+
+        <nav class="max-w-7xl mx-auto space-y-1">
+
+            <!-- Utama -->
+            <a
+                href="{{ route('home') }}"
+                @click="mobileNav = false"
+                class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-extrabold transition-all
+                {{ request()->routeIs('home')
+                    ? 'bg-emerald-600 text-white shadow-md'
+                    : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800' }}"
+            >
+                <i class="fa-solid fa-house w-5 text-center
+                    {{ request()->routeIs('home') ? 'text-white' : 'text-emerald-500' }}">
+                </i>
+
+                <span>Utama</span>
+            </a>
+
+
+
+
+
+            <!-- Sapi IB -->
+            <a
+                href="{{ route('cows.index') }}"
+                @click="mobileNav = false"
+                class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-extrabold transition-all
+                {{ request()->routeIs('cows.*')
+                    ? 'bg-emerald-600 text-white shadow-md'
+                    : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800' }}"
+            >
+                <i class="fa-solid fa-cow w-5 text-center
+                    {{ request()->routeIs('cows.*') ? 'text-white' : 'text-emerald-500' }}">
+                </i>
+
+                <span>Sapi IB</span>
+            </a>
+
+
+            <!-- Pedet -->
+            <a
+                href="{{ route('calves.index') }}"
+                @click="mobileNav = false"
+                class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-extrabold transition-all
+                {{ request()->routeIs('calves.*')
+                    ? 'bg-emerald-600 text-white shadow-md'
+                    : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800' }}"
+            >
+                <i class="fa-solid fa-baby-carriage w-5 text-center
+                    {{ request()->routeIs('calves.*') ? 'text-white' : 'text-emerald-500' }}">
+                </i>
+
+                <span>Pedet</span>
+            </a>
+
+
+            <!-- Kelahiran -->
+            <a
+                href="{{ route('reports.index') }}"
+                @click="mobileNav = false"
+                class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-extrabold transition-all
+                {{ request()->routeIs('reports.index')
+                    ? 'bg-emerald-600 text-white shadow-md'
+                    : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800' }}"
+            >
+                <i class="fa-solid fa-file-invoice w-5 text-center
+                    {{ request()->routeIs('reports.index') ? 'text-white' : 'text-emerald-500' }}">
+                </i>
+
+                <span>Kelahiran</span>
+            </a>
+
+
+            <!-- Inseminator -->
+            <a
+                href="{{ route('reports.inseminators') }}"
+                @click="mobileNav = false"
+                class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-extrabold transition-all
+                {{ request()->routeIs('reports.inseminators')
+                    ? 'bg-emerald-600 text-white shadow-md'
+                    : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800' }}"
+            >
+                <i class="fa-solid fa-trophy w-5 text-center
+                    {{ request()->routeIs('reports.inseminators') ? 'text-white' : 'text-amber-500' }}">
+                </i>
+
+                <span>Inseminator</span>
+            </a>
+
+
+            <!-- ================================================= -->
+            <!-- MOBILE USER INFO -->
+            <!-- ================================================= -->
+            @auth
+
+                @if(!auth()->user()->isGuest())
+
+                    <div class="mt-3 pt-3 border-t border-slate-200 dark:border-slate-800">
+
+                        <div class="flex items-center justify-between gap-3 px-4 py-3 rounded-xl bg-slate-100 dark:bg-slate-800">
+
+                            <div class="flex items-center gap-2 min-w-0">
+
+                                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shrink-0"></span>
+
+                                <div class="min-w-0">
+                                    <p class="text-xs font-bold text-slate-900 dark:text-white truncate">
+                                        {{ auth()->user()->name }}
+                                    </p>
+
+                                    <p class="text-[10px] font-black uppercase text-emerald-600 dark:text-emerald-400">
+                                        {{ auth()->user()->getRoleBadgeText() }}
+                                    </p>
+                                </div>
+
+                            </div>
+
+                            <!-- Mobile Logout -->
+                            <form action="{{ route('logout') }}" method="POST">
+                                @csrf
+
+                                <button
+                                    type="submit"
+                                    class="w-9 h-9 flex items-center justify-center
+                                           bg-rose-50 hover:bg-rose-100
+                                           dark:bg-rose-950/40 dark:hover:bg-rose-900/60
+                                           text-rose-600 dark:text-rose-400
+                                           rounded-xl
+                                           border border-rose-200 dark:border-rose-800"
+                                    title="Keluar"
+                                >
+                                    <i class="fa-solid fa-right-from-bracket"></i>
+                                </button>
+                            </form>
+
+                        </div>
+
+                    </div>
+
+                @endif
+
+            @endauth
+
+        </nav>
+
+    </div>
+
+</header>
     <!-- Main Content Container -->
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10 space-y-8 sm:space-y-10 flex-1 w-full">
 
@@ -436,23 +779,6 @@
                 </div>
                 <a href="{{ route('straws.index') }}" class="w-full py-2.5 px-4 bg-purple-700 hover:bg-purple-600 text-white font-bold text-xs rounded-xl shadow transition flex items-center justify-center gap-2 group">
                     <span>Buka Database Straw</span>
-                    <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
-                </a>
-            </div>
-
-            <!-- Card 5: Dashboard Pemantauan Kehamilan -->
-            <div class="glass-card p-6 rounded-2xl flex flex-col justify-between space-y-4 border-blue-500/20">
-                <div class="space-y-2.5">
-                    <div class="w-12 h-12 rounded-2xl bg-blue-50 dark:bg-blue-950/80 border border-blue-200 dark:border-blue-800 flex items-center justify-center text-blue-600 dark:text-blue-400 text-xl font-bold">
-                        <i class="fa-solid fa-chart-line"></i>
-                    </div>
-                    <h3 class="text-lg font-bold text-slate-900 dark:text-white tracking-tight">Dashboard Monitoring Sapi</h3>
-                    <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
-                        Pantau siklus kebuntingan 30/90/245 hari, konfirmasi milestone, dan estimasi HPL sapi seluruh Gorontalo.
-                    </p>
-                </div>
-                <a href="{{ route('dashboard') }}" class="w-full py-2.5 px-4 bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs rounded-xl shadow transition flex items-center justify-center gap-2 group">
-                    <span>Buka Dashboard Sapi</span>
                     <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
                 </a>
             </div>

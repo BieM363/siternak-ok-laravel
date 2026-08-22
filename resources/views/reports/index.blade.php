@@ -23,13 +23,13 @@
             </a>
 
             <!-- PDF Export Button -->
-            <a href="{{ route('reports.pdf', request()->query()) }}" target="_blank" class="flex-1 sm:flex-initial px-4 py-2.5 bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs rounded-xl shadow transition-all flex items-center justify-center space-x-2 whitespace-nowrap">
+            <a href="{{ route('reports.pdf', array_merge(['start_date' => $startDate, 'end_date' => $endDate], request()->query())) }}" target="_blank" class="flex-1 sm:flex-initial px-4 py-2.5 bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs rounded-xl shadow transition-all flex items-center justify-center space-x-2 whitespace-nowrap">
                 <i class="fa-solid fa-file-pdf"></i>
                 <span>Export PDF</span>
             </a>
 
             <!-- Excel Export Button -->
-            <a href="{{ route('reports.excel', request()->query()) }}" class="flex-1 sm:flex-initial px-4 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-xl shadow transition-all flex items-center justify-center space-x-2 whitespace-nowrap">
+            <a href="{{ route('reports.excel', array_merge(['start_date' => $startDate, 'end_date' => $endDate], request()->query())) }}" class="flex-1 sm:flex-initial px-4 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-xl shadow transition-all flex items-center justify-center space-x-2 whitespace-nowrap">
                 <i class="fa-solid fa-file-excel"></i>
                 <span>Export Excel</span>
             </a>
@@ -99,12 +99,12 @@
         <form method="GET" action="{{ route('reports.index') }}" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
             <div>
                 <label class="block text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase mb-1">Dari Tanggal Lahir</label>
-                <input type="date" name="start_date" value="{{ request('start_date') }}" class="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-emerald-500">
+                <input type="date" name="start_date" value="{{ $startDate }}" class="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-emerald-500">
             </div>
 
             <div>
                 <label class="block text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase mb-1">Sampai Tanggal Lahir</label>
-                <input type="date" name="end_date" value="{{ request('end_date') }}" class="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-emerald-500">
+                <input type="date" name="end_date" value="{{ $endDate }}" class="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-emerald-500">
             </div>
 
             <div>
@@ -128,9 +128,14 @@
             </div>
 
             <div class="flex items-end gap-2">
-                <button type="submit" class="w-full py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-xl shadow transition whitespace-nowrap">
+                <button type="submit" class="flex-1 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-xl shadow transition whitespace-nowrap">
                     Terapkan Filter
                 </button>
+                @if(request()->has('start_date') || request()->has('end_date') || request()->has('breed') || request()->has('officer_name'))
+                    <a href="{{ route('reports.index') }}" title="Reset Filter ke Default" class="px-3 py-2 bg-slate-200 hover:bg-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 font-bold text-xs rounded-xl transition flex items-center justify-center">
+                        <i class="fa-solid fa-rotate-left"></i>
+                    </a>
+                @endif
             </div>
         </form>
     </div>

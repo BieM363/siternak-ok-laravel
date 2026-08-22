@@ -22,10 +22,8 @@ class ReportController extends Controller
         $isPureOperator   = $user && $user->isOperator() && !$user->isAdmin();
         $isAdminKabupaten = $user && $user->isAdminKabupaten();
 
-        $month       = $request->query('month', date('m'));
-        $year        = $request->query('year', date('Y'));
-        $startDate   = $request->query('start_date');
-        $endDate     = $request->query('end_date');
+        $startDate   = $request->has('start_date') ? $request->query('start_date') : '2025-01-01';
+        $endDate     = $request->has('end_date') ? $request->query('end_date') : date('Y-m-d');
         $calfGender  = $request->query('calf_gender');
         $breedFilter = $request->query('breed');
         $regencyId   = $request->query('regency_id');
@@ -54,9 +52,10 @@ class ReportController extends Controller
 
         if ($startDate && $endDate) {
             $calvesQuery->whereBetween('birth_date', [$startDate, $endDate]);
-        } else {
-            $calvesQuery->whereYear('birth_date', $year)
-                        ->whereMonth('birth_date', $month);
+        } elseif ($startDate) {
+            $calvesQuery->where('birth_date', '>=', $startDate);
+        } elseif ($endDate) {
+            $calvesQuery->where('birth_date', '<=', $endDate);
         }
 
         if ($isPureOperator) {
@@ -208,8 +207,6 @@ class ReportController extends Controller
             'districts',
             'officers',
             'breeds',
-            'month',
-            'year',
             'startDate',
             'endDate',
             'calfGender',
@@ -294,13 +291,28 @@ class ReportController extends Controller
         $isPureOperator   = $user && $user->isOperator() && !$user->isAdmin();
         $isAdminKabupaten = $user && $user->isAdminKabupaten();
 
-        $month      = $request->query('month', date('m'));
-        $year       = $request->query('year', date('Y'));
-        $calfGender = $request->query('calf_gender');
+        $startDate   = $request->has('start_date') ? $request->query('start_date') : '2025-01-01';
+        $endDate     = $request->has('end_date') ? $request->query('end_date') : date('Y-m-d');
+        $calfGender  = $request->query('calf_gender');
+        $breedFilter = $request->query('breed');
+        $regencyId   = $request->query('regency_id');
+        $districtId  = $request->query('district_id');
+        $villageId   = $request->query('village_id');
+        $officerName = $request->query('officer_name');
 
-        $calvesQuery = Calf::with(['motherCow.farmer', 'motherCow.regency', 'motherCow.district', 'motherCow.village'])
-            ->whereYear('birth_date', $year)
-            ->whereMonth('birth_date', $month);
+        if ($isAdminKabupaten) {
+            $regencyId = $user->regency_id;
+        }
+
+        $calvesQuery = Calf::with(['motherCow.farmer', 'motherCow.regency', 'motherCow.district', 'motherCow.village', 'pregnancyRecord']);
+
+        if ($startDate && $endDate) {
+            $calvesQuery->whereBetween('birth_date', [$startDate, $endDate]);
+        } elseif ($startDate) {
+            $calvesQuery->where('birth_date', '>=', $startDate);
+        } elseif ($endDate) {
+            $calvesQuery->where('birth_date', '<=', $endDate);
+        }
 
         if ($isPureOperator) {
             $calvesQuery->whereHas('pregnancyRecord', function ($q) use ($user) {
@@ -318,9 +330,37 @@ class ReportController extends Controller
             $calvesQuery->where('gender', $calfGender);
         }
 
+        if ($breedFilter) {
+            $calvesQuery->where('breed', $breedFilter);
+        }
+
+        if ($officerName) {
+            $calvesQuery->whereHas('pregnancyRecord', function ($q) use ($officerName) {
+                $q->where('officer_name', $officerName);
+            });
+        }
+
+        if ($regencyId) {
+            $calvesQuery->whereHas('motherCow', function ($q) use ($regencyId) {
+                $q->where('regency_id', $regencyId);
+            });
+        }
+
+        if ($districtId) {
+            $calvesQuery->whereHas('motherCow', function ($q) use ($districtId) {
+                $q->where('district_id', $districtId);
+            });
+        }
+
+        if ($villageId) {
+            $calvesQuery->whereHas('motherCow', function ($q) use ($villageId) {
+                $q->where('village_id', $villageId);
+            });
+        }
+
         $bornCalves = $calvesQuery->latest('birth_date')->get();
 
-        return view('reports.pdf', compact('bornCalves', 'month', 'year', 'calfGender'));
+        return view('reports.pdf', compact('bornCalves', 'startDate', 'endDate', 'calfGender', 'breedFilter', 'officerName'));
     }
 
     public function exportExcel(Request $request)
@@ -329,13 +369,28 @@ class ReportController extends Controller
         $isPureOperator   = $user && $user->isOperator() && !$user->isAdmin();
         $isAdminKabupaten = $user && $user->isAdminKabupaten();
 
-        $month      = $request->query('month', date('m'));
-        $year       = $request->query('year', date('Y'));
-        $calfGender = $request->query('calf_gender');
+        $startDate   = $request->has('start_date') ? $request->query('start_date') : '2025-01-01';
+        $endDate     = $request->has('end_date') ? $request->query('end_date') : date('Y-m-d');
+        $calfGender  = $request->query('calf_gender');
+        $breedFilter = $request->query('breed');
+        $regencyId   = $request->query('regency_id');
+        $districtId  = $request->query('district_id');
+        $villageId   = $request->query('village_id');
+        $officerName = $request->query('officer_name');
 
-        $calvesQuery = Calf::with(['motherCow.farmer', 'motherCow.regency', 'motherCow.district', 'motherCow.village'])
-            ->whereYear('birth_date', $year)
-            ->whereMonth('birth_date', $month);
+        if ($isAdminKabupaten) {
+            $regencyId = $user->regency_id;
+        }
+
+        $calvesQuery = Calf::with(['motherCow.farmer', 'motherCow.regency', 'motherCow.district', 'motherCow.village', 'pregnancyRecord']);
+
+        if ($startDate && $endDate) {
+            $calvesQuery->whereBetween('birth_date', [$startDate, $endDate]);
+        } elseif ($startDate) {
+            $calvesQuery->where('birth_date', '>=', $startDate);
+        } elseif ($endDate) {
+            $calvesQuery->where('birth_date', '<=', $endDate);
+        }
 
         if ($isPureOperator) {
             $calvesQuery->whereHas('pregnancyRecord', function ($q) use ($user) {
@@ -353,9 +408,38 @@ class ReportController extends Controller
             $calvesQuery->where('gender', $calfGender);
         }
 
+        if ($breedFilter) {
+            $calvesQuery->where('breed', $breedFilter);
+        }
+
+        if ($officerName) {
+            $calvesQuery->whereHas('pregnancyRecord', function ($q) use ($officerName) {
+                $q->where('officer_name', $officerName);
+            });
+        }
+
+        if ($regencyId) {
+            $calvesQuery->whereHas('motherCow', function ($q) use ($regencyId) {
+                $q->where('regency_id', $regencyId);
+            });
+        }
+
+        if ($districtId) {
+            $calvesQuery->whereHas('motherCow', function ($q) use ($districtId) {
+                $q->where('district_id', $districtId);
+            });
+        }
+
+        if ($villageId) {
+            $calvesQuery->whereHas('motherCow', function ($q) use ($villageId) {
+                $q->where('village_id', $villageId);
+            });
+        }
+
         $calves = $calvesQuery->latest('birth_date')->get();
 
-        $filename = "Rekapan_Kelahiran_Anak_Sapi_{$year}_{$month}_" . date('His') . ".csv";
+        $dateSuffix = ($startDate && $endDate) ? "{$startDate}_sd_{$endDate}" : date('Ymd');
+        $filename = "Rekapan_Kelahiran_Pedet_{$dateSuffix}_" . date('His') . ".csv";
 
         $headers = [
             "Content-type"        => "text/csv; charset=utf-8",
@@ -384,7 +468,8 @@ class ReportController extends Controller
                 'NIK Peternak',
                 'Kabupaten',
                 'Kecamatan',
-                'Desa'
+                'Desa',
+                'Inseminator'
             ]);
 
             foreach ($calves as $index => $row) {
@@ -403,7 +488,8 @@ class ReportController extends Controller
                     $row->motherCow->farmer->nik ?? '-',
                     $row->motherCow->regency->name ?? '-',
                     $row->motherCow->district->name ?? '-',
-                    $row->motherCow->village->name ?? '-'
+                    $row->motherCow->village->name ?? '-',
+                    $row->pregnancyRecord->officer_name ?? '-'
                 ]);
             }
 

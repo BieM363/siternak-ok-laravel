@@ -36,13 +36,14 @@ Aplikasi sistem informasi berbasis web (**Laravel**) yang dirancang khusus untuk
 
 5. **Peringkat Kinerja & Rekapitulasi Kelahiran**:
    - **Leaderboard Inseminator**: Memperingkatkan inseminator berdasarkan total tindakan IB, kebuntingan positif, pedet lahir, serta nilai *Conception Rate* (CR %).
-   - **Rekapan Kelahiran Pedet**: Menampilkan statistik kelahiran bulanan, rasio kelamin pedet (Jantan vs Betina), *Calving Rate* (CvR %), dan silsilah induk.
+   - **Rekapan Kelahiran Pedet (Filter Otomatis 1 Jan 2025 - Sekarang)**: Menampilkan statistik dan rincian kelahiran pedet yang secara otomatis mencakup data dari tanggal **1 Januari 2025 hingga hari ini**, rasio kelamin pedet (Jantan vs Betina), metrik *Calving Rate* (CvR %), silsilah induk, serta filter kustom (ras, inseminator, rentang tanggal manual).
 
 6. **Promosi Pedet Betina ("Tarik ke Sapi Siap IB")**:
    - Anak sapi betina yang lahir dapat langsung dipromosikan menjadi sapi indukan baru dengan 1-klik, otomatis mengalokasikan NIK ternak induk baru.
 
 7. **Ekspor Laporan Resmi (PDF & Excel)**:
-   - Cetak laporan rekapitulasi kelahiran berformat **PDF resmi dengan Kop Dinas Peternakan dan Perkebunan Provinsi Gorontalo** serta ekspor data ke **Excel / CSV**.
+   - Cetak laporan rekapitulasi kelahiran berformat **PDF resmi dengan Kop Dinas Peternakan dan Perkebunan Provinsi Gorontalo**, filter periode tanggal aktif, serta tanda tangan resmi Kepala Dinas (**Ir. Ramdhan Pade, M.Si** - NIP. 19691115 200212 1 008).
+   - Ekspor data lengkap ke format **Excel / CSV** dengan penamaan file otomatis berdasarkan rentang tanggal.
 
 8. **Antarmuka Modern & Optimalisasi Layar Ponsel (*Mobile UI/UX*)**:
    - Tampilan responsif dengan Tailwind CSS & Alpine.js, mode Gelap/Terang, tombol aksi adaptif, serta menu drawer terisolasi di root overlay agar tidak menimpa konten ponsel.

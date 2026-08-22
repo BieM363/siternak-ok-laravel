@@ -43,8 +43,23 @@
 
     <!-- Document Title -->
     <div class="title-section">
-        <h3>REKAPITULASI KELAHIRAN BULANAN ANAK SAPI (PEDET)</h3>
-        <p>Bulan: {{ $month }}/{{ $year }} {{ $calfGender ? '| Filter Gender Anak: ' . $calfGender : '' }}</p>
+        <h3>REKAPITULASI KELAHIRAN ANAK SAPI (PEDET)</h3>
+        <p>
+            @if(!empty($startDate) && !empty($endDate))
+                Periode: {{ \Carbon\Carbon::parse($startDate)->translatedFormat('d F Y') }} s/d {{ \Carbon\Carbon::parse($endDate)->translatedFormat('d F Y') }}
+            @elseif(!empty($startDate))
+                Mulai Tanggal: {{ \Carbon\Carbon::parse($startDate)->translatedFormat('d F Y') }}
+            @elseif(!empty($endDate))
+                Sampai Tanggal: {{ \Carbon\Carbon::parse($endDate)->translatedFormat('d F Y') }}
+            @elseif(isset($month) && isset($year))
+                Bulan: {{ $month }}/{{ $year }}
+            @else
+                Semua Periode
+            @endif
+            {{ !empty($calfGender) ? ' | Gender: ' . $calfGender : '' }}
+            {{ !empty($breedFilter) ? ' | Ras: ' . $breedFilter : '' }}
+            {{ !empty($officerName) ? ' | Inseminator: ' . $officerName : '' }}
+        </p>
     </div>
 
     <!-- Data Table -->
@@ -86,11 +101,11 @@
     <!-- Signature Block -->
     <div class="signature-section">
         <div class="signature-box">
-            <p>Gorontalo, {{ date('d F Y') }}</p>
+            <p>Gorontalo, {{ \Carbon\Carbon::now()->translatedFormat('d F Y') }}</p>
             <p>Kepala Dinas Peternakan dan Perkebunan<br>Provinsi Gorontalo,</p>
             <div style="height: 60px;"></div>
-            <p style="text-decoration: underline; font-weight: bold;">Drh. H. Bambang Triyono, M.Si</p>
-            <p>NIP. 19780512 200312 1 004</p>
+            <p style="text-decoration: underline; font-weight: bold;">Ir. Ramdhan Pade, M.Si</p>
+            <p>NIP. 19691115 200212 1 008</p>
         </div>
     </div>
 

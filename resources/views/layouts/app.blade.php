@@ -335,7 +335,7 @@
                     </form>
                     @else
                     <a href="{{ route('login') }}" class="block text-center py-3 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-xl shadow transition">
-                        <i class="fa-solid fa-right-to-bracket mr-1"></i> Login Pengguna
+                        <i class="fa-solid fa-right-to-bracket mr-1"></i> Login
                     </a>
                     @endif
                 </div>
@@ -384,7 +384,7 @@
                 <span>Anda mengakses dalam <strong class="text-blue-700 dark:text-white">Mode Lihat Publik (Read-Only)</strong>. Untuk melakukan penambahan atau konfirmasi data, silakan login ke akun Pengelola.</span>
             </div>
             <a href="{{ route('login') }}" class="px-3 py-1 bg-blue-600 hover:bg-blue-500 text-white rounded-lg font-bold text-[11px] flex-shrink-0 transition">
-                Login Pengguna
+                Login
             </a>
         </div>
         @endif
