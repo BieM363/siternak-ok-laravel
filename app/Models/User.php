@@ -69,17 +69,52 @@ class User extends Authenticatable
     }
 
     /**
-     * Mengembalikan regency_idscope jika user adalah Admin Kabupaten
+     * Memeriksa apakah user adalah Admin Kota
+     */
+    public function isAdminKota(): bool
+    {
+        return $this->isAdminKabupaten() && $this->regency && str_contains(strtolower($this->regency->name), 'kota');
+    }
+
+    /**
+     * Mengembalikan teks badge peran user
+     */
+    public function getRoleBadgeText(): string
+    {
+        if ($this->isAdminProvinsi()) {
+            return 'Admin Prov';
+        }
+        if ($this->isAdminKota()) {
+            return 'Admin Kota';
+        }
+        if ($this->isAdminKabupaten()) {
+            return 'Admin Kab';
+        }
+        if ($this->isOperator()) {
+            return 'Operator IB';
+        }
+        return 'Tamu';
+    }
+
+    /**
+     * Mengembalikan regency_id scope jika user adalah Admin Kabupaten/Kota
      */
     public function getScopeRegencyId(): ?int
     {
         return $this->isAdminKabupaten() ? (int) $this->regency_id : null;
     }
 
+    
+
     /**
      * Memeriksa apakah user memiliki hak Operator (Operator atau Admin)
      */
     public function isOperator(): bool
+    {
+        return strtolower($this->role) === 'operator';
+    }
+
+    public function canOperate(): bool
     {
         return in_array(strtolower($this->role), ['admin', 'operator']);
     }

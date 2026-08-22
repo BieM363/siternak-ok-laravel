@@ -19,10 +19,14 @@ class PregnancyController extends Controller
     {
         $user = auth()->user();
 
+        if (!$user || !$user->isOperator()) {
+            return back()->with('error', 'Akses ditolak: Pendaftaran Inseminasi Buatan (IB) Baru hanya dapat dilakukan oleh Petugas Inseminator / Operator Lapangan.');
+        }
+
         $request->validate([
             'cow_id' => 'required|exists:cows,id',
             'insemination_date' => 'required|date',
-            'semen_code' => 'nullable|string|max:50',
+            'semen_code' => 'nullable|string|max:100',
             'officer_name' => 'nullable|string|max:100',
             'notes' => 'nullable|string',
         ]);
@@ -83,273 +87,331 @@ class PregnancyController extends Controller
     /**
      * Konfirmasi tahapan kebuntingan dan kelahiran.
      */
-    public function updateStatus(Request $request, $id)
-    {
-        $user = auth()->user();
+   /**
+ * Konfirmasi tahapan kebuntingan dan kelahiran.
+ */
+public function updateStatus(Request $request, $id)
+{
+    $user = auth()->user();
 
-        $record = PregnancyRecord::findOrFail($id);
+    $record = PregnancyRecord::findOrFail($id);
 
-        /*
-        |--------------------------------------------------------------------------
-        | Proteksi Operator
-        |--------------------------------------------------------------------------
-        */
+    /*
+    |--------------------------------------------------------------------------
+    | Proteksi Operator
+    |--------------------------------------------------------------------------
+    */
 
-        if (
-            $user &&
-            $user->isOperator() &&
-            !$user->isAdmin() &&
-            $record->operator_id !== $user->id
-        ) {
+    if (!$user || !$user->canOperate()) {
+        return back()->with(
+            'error',
+            'Anda tidak memiliki hak untuk melakukan tindakan konfirmasi.'
+        );
+    }
+
+    if (
+        $user->isOperator() &&
+        $record->operator_id !== $user->id
+    ) {
+        return back()->with(
+            'error',
+            'Akses ditolak. Anda hanya dapat mengonfirmasi sapi yang menjadi tanggung jawab Anda sendiri.'
+        );
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | VALIDASI
+    |--------------------------------------------------------------------------
+    */
+
+    $request->validate([
+        'action' => 'required|in:confirm_yes,confirm_no,birth_yes,birth_no,direct_update',
+        'actual_birth_date' => 'nullable|date',
+        'calf_name' => 'nullable|string|max:100',
+        'calf_gender' => 'required_if:action,birth_yes|in:Jantan,Betina',
+        'calf_breed' => 'nullable|string|max:100',
+        'calf_nik' => 'nullable|string|max:50',
+        'calf_weight' => 'nullable|numeric|min:0',
+        'calf_condition' => 'nullable|in:Sehat,Cacat,Mati',
+        'notes' => 'nullable|string',
+    ]);
+
+    $cow = $record->cow;
+    $now = now();
+
+    /*
+    |--------------------------------------------------------------------------
+    | KONFIRMASI YA
+    |--------------------------------------------------------------------------
+    */
+
+    if ($request->action === 'confirm_yes') {
+
+        $nextStatus = match ($record->status) {
+
+            'Pasca IB'
+                => 'Bunting (PKB 90 Hari)',
+
+            'Estimasi 30 Hari'
+                => 'Bunting (PKB 90 Hari)',
+
+            'Bunting (PKB 90 Hari)'
+                => 'Siap Melahirkan (245 Hari)',
+
+            'Siap Melahirkan (245 Hari)'
+                => 'Fase Melahirkan',
+
+            default
+                => null,
+        };
+
+        if (!$nextStatus) {
             return back()->with(
                 'error',
-                'Akses ditolak. Anda hanya dapat mengonfirmasi sapi IB milik Anda sendiri.'
+                'Status sapi saat ini tidak dapat dikonfirmasi pada tahap ini.'
             );
         }
 
-        $request->validate([
-            'action' => 'required|in:confirm_yes,confirm_no,birth_yes,birth_no,direct_update',
-            'actual_birth_date' => 'nullable|date',
-            'calf_gender' => 'required_if:action,birth_yes|in:Jantan,Betina',
-            'calf_nik' => 'nullable|string|max:50',
-            'calf_weight' => 'nullable|numeric|min:0',
-            'calf_condition' => 'nullable|in:Sehat,Cacat,Mati',
-            'notes' => 'nullable|string',
+        $oldNotes = $record->notes ?? '';
+
+        $newNotes = $request->notes
+            ? trim(
+                $oldNotes .
+                "\n[Konfirmasi YA]: " .
+                $request->notes
+            )
+            : $oldNotes;
+
+        $record->update([
+            'status' => $nextStatus,
+            'confirmed_at' => $now,
+            'is_auto_advanced' => false,
+            'notes' => $newNotes,
         ]);
 
-        $cow = $record->cow;
-        $now = now();
+        $cowStatus = match ($nextStatus) {
 
-        /*
-        |--------------------------------------------------------------------------
-        | KONFIRMASI YA
-        |--------------------------------------------------------------------------
-        |
-        | Alurnya:
-        |
-        | Pasca IB
-        |     ↓
-        | Estimasi 30 Hari
-        |     ↓
-        | Bunting (PKB 90 Hari)
-        |     ↓
-        | Siap Melahirkan (245 Hari)
-        |     ↓
-        | Fase Melahirkan
-        |
-        */
+            'Bunting (PKB 90 Hari)'
+                => 'Bunting',
 
-        if ($request->action === 'confirm_yes') {
+            'Siap Melahirkan (245 Hari)'
+                => 'Siap Melahirkan',
 
-            $nextStatus = match ($record->status) {
+            'Fase Melahirkan'
+                => 'Mendekati Melahirkan',
 
-                'Pasca IB'
-                    => 'Bunting (PKB 90 Hari)',
+            default
+                => 'Bunting',
+        };
 
-                'Estimasi 30 Hari'
-                    => 'Bunting (PKB 90 Hari)',
+        $cow->update([
+            'current_status' => $cowStatus
+        ]);
 
-                'Bunting (PKB 90 Hari)'
-                    => 'Siap Melahirkan (245 Hari)',
+        return back()->with(
+            'success',
+            "Konfirmasi YA berhasil! Sapi dimajukan ke fase: {$nextStatus}."
+        );
+    }
 
-                'Siap Melahirkan (245 Hari)'
-                    => 'Fase Melahirkan',
+    /*
+    |--------------------------------------------------------------------------
+    | KONFIRMASI TIDAK
+    |--------------------------------------------------------------------------
+    */
 
-                default
-                    => null,
-            };
+    if (
+        $request->action === 'confirm_no' ||
+        $request->action === 'birth_no'
+    ) {
 
-            if (!$nextStatus) {
+        $oldNotes = $record->notes ?? '';
+
+        $newNotes = $request->notes
+            ? trim(
+                $oldNotes .
+                "\n[Konfirmasi TIDAK]: " .
+                $request->notes
+            )
+            : $oldNotes;
+
+        $record->update([
+            'status' => 'Gagal/Keguguran',
+            'confirmed_at' => $now,
+            'is_auto_advanced' => false,
+            'notes' => $newNotes,
+        ]);
+
+        $cow->update([
+            'current_status' => 'Tidak Bunting'
+        ]);
+
+        return back()->with(
+            'info',
+            'Konfirmasi TIDAK dicatat. Status kebuntingan menjadi Gagal/Keguguran.'
+        );
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | KONFIRMASI MELAHIRKAN + DATA ANAK
+    |--------------------------------------------------------------------------
+    */
+
+    if ($request->action === 'birth_yes') {
+
+        if ($record->status !== 'Fase Melahirkan') {
+            return back()->with(
+                'error',
+                'Data kelahiran hanya dapat dicatat pada Fase Melahirkan.'
+            );
+        }
+
+        $birthDate = $request->actual_birth_date
+            ?? Carbon::today()->format('Y-m-d');
+
+        return DB::transaction(function () use (
+            $request,
+            $record,
+            $cow,
+            $now,
+            $birthDate
+        ) {
+
+            /*
+            |--------------------------------------------------------------------------
+            | CEGAH PENCATATAN ANAK GANDA
+            |--------------------------------------------------------------------------
+            */
+
+            if ($record->calves()->exists()) {
                 return back()->with(
                     'error',
-                    'Status sapi saat ini tidak dapat dikonfirmasi pada tahap ini.'
+                    'Data anak sapi untuk rekam kebuntingan ini sudah tercatat.'
                 );
             }
 
-            $oldNotes = $record->notes ?? '';
+            /*
+            |--------------------------------------------------------------------------
+            | NIK ANAK OTOMATIS
+            |--------------------------------------------------------------------------
+            */
 
-            $newNotes = $request->notes
-                ? trim(
-                    $oldNotes .
-                    "\n[Konfirmasi YA]: " .
-                    $request->notes
-                )
-                : $oldNotes;
+            $calfNik = $request->calf_nik
+                ?? (
+                    'PEDET-' .
+                    $cow->cow_nik .
+                    '-' .
+                    Carbon::parse($birthDate)->format('Ymd')
+                );
+
+            /*
+            |--------------------------------------------------------------------------
+            | NAMA ANAK
+            |--------------------------------------------------------------------------
+            |
+            | Jika operator tidak mengisi nama:
+            | Anak [Nama Induk] 1
+            |
+            */
+
+            $calfCount = Calf::where('cow_id', $cow->id)->count() + 1;
+
+            $calfName = $request->filled('calf_name')
+                ? trim($request->calf_name)
+                : 'Anak ' . ($cow->name ?? $cow->cow_nik) . ' ' . $calfCount;
+
+            /*
+            |--------------------------------------------------------------------------
+            | RAS ANAK
+            |--------------------------------------------------------------------------
+            |
+            | Jika operator tidak memilih/mengirim ras,
+            | otomatis mengikuti ras induk.
+            */
+
+            $calfBreed = $request->filled('calf_breed')
+                ? trim($request->calf_breed)
+                : ($cow->breed ?? 'Limosin');
+
+            /*
+            |--------------------------------------------------------------------------
+            | UPDATE RECORD KEBUNTINGAN
+            |--------------------------------------------------------------------------
+            */
 
             $record->update([
-                'status' => $nextStatus,
+                'status' => 'Melahirkan (Selesai)',
+                'actual_birth_date' => $birthDate,
                 'confirmed_at' => $now,
                 'is_auto_advanced' => false,
-                'notes' => $newNotes,
+
+                'notes' => $request->notes
+                    ? trim(
+                        ($record->notes ?? '') .
+                        "\n[Melahirkan]: " .
+                        $request->notes
+                    )
+                    : $record->notes,
             ]);
 
-            $cowStatus = match ($nextStatus) {
+            /*
+            |--------------------------------------------------------------------------
+            | BUAT DATA ANAK SAPI
+            |--------------------------------------------------------------------------
+            */
 
-                'Bunting (PKB 90 Hari)'
-                    => 'Bunting',
+            Calf::create([
+                'pregnancy_record_id' => $record->id,
+                'cow_id' => $cow->id,
+                'calf_nik' => $calfNik,
+                'name' => $calfName,
+                'breed' => $calfBreed,
+                'gender' => $request->calf_gender,
+                'birth_date' => $birthDate,
+                'birth_weight' => $request->calf_weight,
+                'condition' => $request->calf_condition ?? 'Sehat',
+                'notes' => $request->notes,
+            ]);
+           
 
-                'Siap Melahirkan (245 Hari)'
-                    => 'Siap Melahirkan',
-
-                'Fase Melahirkan'
-                    => 'Mendekati Melahirkan',
-
-                default
-                    => 'Bunting',
-            };
+            /*
+            |--------------------------------------------------------------------------
+            | UPDATE STATUS INDUK
+            |--------------------------------------------------------------------------
+            */
 
             $cow->update([
-                'current_status' => $cowStatus
+                'current_status' => 'Pasca Melahirkan'
             ]);
 
             return back()->with(
                 'success',
-                "Konfirmasi YA berhasil! Sapi dimajukan ke fase: {$nextStatus}."
+                "Konfirmasi melahirkan berhasil! Data anak sapi dengan NIK {$calfNik} telah tersimpan."
             );
-        }
+        });
+    }
 
-        /*
-        |--------------------------------------------------------------------------
-        | KONFIRMASI TIDAK
-        |--------------------------------------------------------------------------
-        */
+    /*
+    |--------------------------------------------------------------------------
+    | UPDATE LANGSUNG
+    |--------------------------------------------------------------------------
+    */
 
-        if (
-            $request->action === 'confirm_no' ||
-            $request->action === 'birth_no'
-        ) {
-
-            $oldNotes = $record->notes ?? '';
-
-            $newNotes = $request->notes
-                ? trim(
-                    $oldNotes .
-                    "\n[Konfirmasi TIDAK]: " .
-                    $request->notes
-                )
-                : $oldNotes;
-
-            $record->update([
-                'status' => 'Gagal/Keguguran',
-                'confirmed_at' => $now,
-                'is_auto_advanced' => false,
-                'notes' => $newNotes,
-            ]);
-
-            $cow->update([
-                'current_status' => 'Tidak Bunting'
-            ]);
-
-            return back()->with(
-                'info',
-                'Konfirmasi TIDAK dicatat. Status kebuntingan menjadi Gagal/Keguguran.'
-            );
-        }
-
-        /*
-        |--------------------------------------------------------------------------
-        | KONFIRMASI MELAHIRKAN + DATA ANAK
-        |--------------------------------------------------------------------------
-        */
-
-        if ($request->action === 'birth_yes') {
-
-            if ($record->status !== 'Fase Melahirkan') {
-                return back()->with(
-                    'error',
-                    'Data kelahiran hanya dapat dicatat pada Fase Melahirkan.'
-                );
-            }
-
-            $birthDate = $request->actual_birth_date
-                ?? Carbon::today()->format('Y-m-d');
-
-            return DB::transaction(function () use (
-                $request,
-                $record,
-                $cow,
-                $now,
-                $birthDate
-            ) {
-
-                /*
-                |--------------------------------------------------------------------------
-                | Cegah pencatatan anak ganda
-                |--------------------------------------------------------------------------
-                */
-
-                if ($record->calves()->exists()) {
-                    return back()->with(
-                        'error',
-                        'Data anak sapi untuk rekam kebuntingan ini sudah tercatat.'
-                    );
-                }
-
-                $calfNik = $request->calf_nik
-                    ?? (
-                        'PEDET-' .
-                        $cow->cow_nik .
-                        '-' .
-                        Carbon::parse($birthDate)->format('Ymd')
-                    );
-
-                $record->update([
-                    'status' => 'Melahirkan (Selesai)',
-                    'actual_birth_date' => $birthDate,
-                    'confirmed_at' => $now,
-                    'is_auto_advanced' => false,
-                    'notes' => $request->notes
-                        ? trim(
-                            ($record->notes ?? '') .
-                            "\n[Melahirkan]: " .
-                            $request->notes
-                        )
-                        : $record->notes,
-                ]);
-
-                Calf::create([
-                    'pregnancy_record_id' => $record->id,
-                    'cow_id' => $cow->id,
-                    'calf_nik' => $calfNik,
-                    'name' => 'Anak Sapi NIK ' . $cow->cow_nik,
-                    'breed' => $cow->breed ?? 'Limosin',
-                    'gender' => $request->calf_gender,
-                    'birth_date' => $birthDate,
-                    'birth_weight' => $request->calf_weight,
-                    'condition' => $request->calf_condition ?? 'Sehat',
-                    'notes' => $request->notes,
-                ]);
-
-                $cow->update([
-                    'current_status' => 'Pasca Melahirkan'
-                ]);
-
-                return back()->with(
-                    'success',
-                    "Konfirmasi melahirkan berhasil! Data anak sapi dengan NIK {$calfNik} telah tersimpan."
-                );
-            });
-        }
-
-        /*
-        |--------------------------------------------------------------------------
-        | UPDATE LANGSUNG
-        |--------------------------------------------------------------------------
-        */
-
-        if ($request->action === 'direct_update') {
-
-            return back()->with(
-                'info',
-                'Pembaruan langsung belum digunakan dalam alur otomatisasi.'
-            );
-        }
+    if ($request->action === 'direct_update') {
 
         return back()->with(
-            'error',
-            'Aksi konfirmasi tidak valid.'
+            'info',
+            'Pembaruan langsung belum digunakan dalam alur otomatisasi.'
         );
     }
+
+    return back()->with(
+        'error',
+        'Aksi konfirmasi tidak valid.'
+    );
+}
 
     /**
      * Jalankan otomatisasi status secara manual.

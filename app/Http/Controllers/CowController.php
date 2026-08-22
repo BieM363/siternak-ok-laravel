@@ -65,6 +65,10 @@ class CowController extends Controller
     {
         $user = auth()->user();
 
+        if (!$user || !$user->isOperator()) {
+            return redirect()->route('dashboard')->with('error', 'Akses dibatasi: Pendaftaran Sapi & Inseminasi Buatan (IB) Baru hanya dapat dilakukan oleh Petugas Inseminator / Operator Lapangan.');
+        }
+
         $farmers = ($user && $user->isAdminKabupaten())
             ? Farmer::where('regency_id', $user->regency_id)->orderBy('name')->get()
             : Farmer::orderBy('name')->get();
@@ -132,6 +136,10 @@ class CowController extends Controller
     public function store(Request $request)
     {
         $user = auth()->user();
+
+        if (!$user || !$user->isOperator()) {
+            return redirect()->route('dashboard')->with('error', 'Akses dibatasi: Pendaftaran Sapi & Inseminasi Buatan (IB) Baru hanya dapat dilakukan oleh Petugas Inseminator / Operator Lapangan.');
+        }
 
         $request->validate([
             'farmer_id' => ['required', 'exists:farmers,id'],
@@ -234,7 +242,9 @@ class CowController extends Controller
 
         $straws = BullStraw::where('is_active', true)->orderBy('code')->get();
 
-        return view('cows.show', compact('cow', 'straws'));
+        $inseminators = User::where('role', 'operator')->orderBy('name')->get();
+
+        return view('cows.show', compact('cow', 'straws', 'inseminators'));
     }
 
     public function edit($id)

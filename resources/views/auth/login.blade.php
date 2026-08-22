@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - SiTernak-OK (Dinas Peternakan)</title>
+    <title>Login - SiTernak-OK (Dinas Peternakan & Perkebunan Prov. Gorontalo)</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -41,7 +41,7 @@
             </div>
             <h1 class="text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">SiTernak<span class="text-emerald-500">-OK</span></h1>
             <p class="text-sm text-slate-500 dark:text-slate-400 font-medium">Sistem Pemantauan Kehamilan Sapi & Otomasi HPL</p>
-            <span class="inline-block px-3 py-1 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-emerald-600 dark:text-emerald-400 text-xs font-semibold rounded-full shadow-sm">Dinas Peternakan Wilayah</span>
+            <span class="inline-block px-3 py-1 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-emerald-600 dark:text-emerald-400 text-xs font-semibold rounded-full shadow-sm">Dinas Peternakan & Perkebunan Prov. Gorontalo</span>
         </div>
 
         <!-- Login Card -->
@@ -99,7 +99,7 @@
 
             <div class="relative flex py-2 items-center">
                 <div class="flex-grow border-t border-slate-200 dark:border-slate-800"></div>
-                <span class="flex-shrink mx-4 text-[11px] uppercase tracking-widest text-slate-400 font-semibold">Preset Akses Demo Multi-Level Admin</span>
+                <span class="flex-shrink mx-4 text-[11px] uppercase tracking-widest text-slate-400 font-semibold">Preset Akses Demo Wilayah Gorontalo</span>
                 <div class="flex-grow border-t border-slate-200 dark:border-slate-800"></div>
             </div>
 
@@ -107,18 +107,22 @@
             <div class="space-y-2">
                 <!-- Group Admin -->
                 <p class="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">Akses Tingkat Administrasi</p>
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                    <button onclick="setCredentials('admin@siternak.go.id', 'password')" class="px-2.5 py-2.5 bg-purple-50 dark:bg-purple-950/40 hover:bg-purple-100 dark:hover:bg-purple-900/60 border border-purple-200 dark:border-purple-800/60 text-purple-700 dark:text-purple-300 text-[11px] font-semibold rounded-xl transition-all text-center">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="setCredentials('admin@siternak.go.id', 'password')" class="px-2.5 py-2 bg-purple-50 dark:bg-purple-950/40 hover:bg-purple-100 dark:hover:bg-purple-900/60 border border-purple-200 dark:border-purple-800/60 text-purple-700 dark:text-purple-300 text-[11px] font-semibold rounded-xl transition-all text-center">
                         <span class="block text-[9px] text-purple-600 dark:text-purple-400 font-bold uppercase">Semua Kab/Kota</span>
-                        Admin Provinsi
+                        Admin Prov. Gorontalo
                     </button>
-                    <button onclick="setCredentials('admin.malang@siternak.go.id', 'password')" class="px-2.5 py-2.5 bg-blue-50 dark:bg-blue-950/40 hover:bg-blue-100 dark:hover:bg-blue-900/60 border border-blue-200 dark:border-blue-800/60 text-blue-700 dark:text-blue-300 text-[11px] font-semibold rounded-xl transition-all text-center">
-                        <span class="block text-[9px] text-blue-600 dark:text-blue-400 font-bold uppercase">Scope Kab. Malang</span>
-                        Admin Kab. Malang
+                    <button onclick="setCredentials('admin.gorontalo@siternak.go.id', 'password')" class="px-2.5 py-2 bg-blue-50 dark:bg-blue-950/40 hover:bg-blue-100 dark:hover:bg-blue-900/60 border border-blue-200 dark:border-blue-800/60 text-blue-700 dark:text-blue-300 text-[11px] font-semibold rounded-xl transition-all text-center">
+                        <span class="block text-[9px] text-blue-600 dark:text-blue-400 font-bold uppercase">Scope Kab. Gorontalo</span>
+                        Admin Kab. Gorontalo
                     </button>
-                    <button onclick="setCredentials('admin.batu@siternak.go.id', 'password')" class="px-2.5 py-2.5 bg-teal-50 dark:bg-teal-950/40 hover:bg-teal-100 dark:hover:bg-teal-900/60 border border-teal-200 dark:border-teal-800/60 text-teal-700 dark:text-teal-300 text-[11px] font-semibold rounded-xl transition-all text-center">
-                        <span class="block text-[9px] text-teal-600 dark:text-teal-400 font-bold uppercase">Scope Kota Batu</span>
-                        Admin Kota Batu
+                    <button onclick="setCredentials('admin.kotagorontalo@siternak.go.id', 'password')" class="px-2.5 py-2 bg-teal-50 dark:bg-teal-950/40 hover:bg-teal-100 dark:hover:bg-teal-900/60 border border-teal-200 dark:border-teal-800/60 text-teal-700 dark:text-teal-300 text-[11px] font-semibold rounded-xl transition-all text-center">
+                        <span class="block text-[9px] text-teal-600 dark:text-teal-400 font-bold uppercase">Scope Kota Gorontalo</span>
+                        Admin Kota Gorontalo
+                    </button>
+                    <button onclick="setCredentials('admin.boalemo@siternak.go.id', 'password')" class="px-2.5 py-2 bg-emerald-50 dark:bg-emerald-950/40 hover:bg-emerald-100 dark:hover:bg-emerald-900/60 border border-emerald-200 dark:border-emerald-800/60 text-emerald-700 dark:text-emerald-300 text-[11px] font-semibold rounded-xl transition-all text-center">
+                        <span class="block text-[9px] text-emerald-600 dark:text-emerald-400 font-bold uppercase">Scope Kab. Boalemo</span>
+                        Admin Kab. Boalemo
                     </button>
                 </div>
 
@@ -127,11 +131,11 @@
                 <div class="grid grid-cols-2 gap-2">
                     <button onclick="setCredentials('operator@siternak.go.id', 'password')" class="px-2.5 py-2.5 bg-amber-50 dark:bg-amber-950/40 hover:bg-amber-100 dark:hover:bg-amber-900/60 border border-amber-200 dark:border-amber-800/60 text-amber-700 dark:text-amber-300 text-[11px] font-semibold rounded-xl transition-all text-center">
                         <span class="block text-[9px] text-amber-600 dark:text-amber-400 font-bold uppercase">Operator A</span>
-                        Budi (Inseminator A)
+                        Budi (Inseminator Gorontalo)
                     </button>
                     <button onclick="setCredentials('operator2@siternak.go.id', 'password')" class="px-2.5 py-2.5 bg-indigo-50 dark:bg-indigo-950/40 hover:bg-indigo-100 dark:hover:bg-indigo-900/60 border border-indigo-200 dark:border-indigo-800/60 text-indigo-700 dark:text-indigo-300 text-[11px] font-semibold rounded-xl transition-all text-center">
                         <span class="block text-[9px] text-indigo-600 dark:text-indigo-400 font-bold uppercase">Operator B</span>
-                        Taufik (Inseminator B)
+                        Taufik (Inseminator Gorontalo)
                     </button>
                 </div>
             </div>

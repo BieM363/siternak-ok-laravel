@@ -82,4 +82,60 @@ class RegionController extends Controller
         Village::create($request->only(['district_id', 'code', 'name']));
         return back()->with('success', 'Desa / Kelurahan baru berhasil ditambahkan.');
     }
+
+    public function updateRegency(Request $request, $id)
+    {
+        $user = auth()->user();
+
+        if ($user && !$user->isAdminProvinsi()) {
+            return back()->with('error', 'Hanya Admin Provinsi yang dapat mengedit data Kabupaten / Kota.');
+        }
+
+        $regency = Regency::findOrFail($id);
+
+        $request->validate([
+            'code' => 'required|string|unique:regencies,code,' . $regency->id,
+            'name' => 'required|string|max:100',
+        ]);
+
+        $regency->update($request->only(['code', 'name']));
+        return back()->with('success', "Data {$regency->name} berhasil diperbarui.");
+    }
+
+    public function updateDistrict(Request $request, $id)
+    {
+        $user = auth()->user();
+        $district = District::findOrFail($id);
+
+        if ($user && $user->isAdminKabupaten() && $district->regency_id != $user->regency_id) {
+            return back()->with('error', 'Anda hanya dapat mengedit Kecamatan pada wilayah Anda sendiri.');
+        }
+
+        $request->validate([
+            'code' => 'required|string|unique:districts,code,' . $district->id,
+            'name' => 'required|string|max:100',
+        ]);
+
+        $district->update($request->only(['code', 'name']));
+        return back()->with('success', "Data Kecamatan {$district->name} berhasil diperbarui.");
+    }
+
+    public function updateVillage(Request $request, $id)
+    {
+        $user = auth()->user();
+        $village = Village::with('district')->findOrFail($id);
+
+        if ($user && $user->isAdminKabupaten() && $village->district->regency_id != $user->regency_id) {
+            return back()->with('error', 'Anda hanya dapat mengedit Desa / Kelurahan pada wilayah Anda sendiri.');
+        }
+
+        $request->validate([
+            'code' => 'required|string',
+            'name' => 'required|string|max:100',
+        ]);
+
+        $village->update($request->only(['code', 'name']));
+        $unitLabel = ($village->district && $village->district->regency && str_contains(strtolower($village->district->regency->name), 'kota')) ? 'Kelurahan' : 'Desa';
+        return back()->with('success', "Data {$unitLabel} {$village->name} berhasil diperbarui.");
+    }
 }

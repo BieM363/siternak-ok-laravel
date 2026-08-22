@@ -40,7 +40,7 @@ class UserController extends Controller
         $request->validate([
             'name' => 'required|string|max:100',
             'email' => 'required|email|unique:users,email',
-            'role' => 'required|in:admin,operator,guest',
+            'role' => 'required|in:admin,operator',
             'regency_id' => 'nullable|exists:regencies,id',
             'password' => 'required|string|min:6',
             'phone' => 'nullable|string',
@@ -75,7 +75,7 @@ class UserController extends Controller
         $request->validate([
             'name' => 'required|string|max:100',
             'email' => 'required|email|unique:users,email,' . $id,
-            'role' => 'required|in:admin,operator,guest',
+            'role' => 'required|in:admin,operator',
             'regency_id' => 'nullable|exists:regencies,id',
             'password' => 'nullable|string|min:6',
             'phone' => 'nullable|string',

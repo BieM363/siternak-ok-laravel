@@ -40,6 +40,11 @@ class Calf extends Model
         return $this->belongsTo(PregnancyRecord::class);
     }
 
+    public function cow(): BelongsTo
+    {
+        return $this->belongsTo(Cow::class, 'cow_id');
+    }
+
     public function motherCow(): BelongsTo
     {
         return $this->belongsTo(Cow::class, 'cow_id');

@@ -51,16 +51,26 @@ class FarmerController extends Controller
         $user = auth()->user();
         $q = $request->query('q');
 
-        $query = Farmer::where(function ($sq) use ($q) {
-            $sq->where('name', 'LIKE', "%{$q}%")
-               ->orWhere('nik', 'LIKE', "%{$q}%");
-        });
-
+        $query = Farmer::query();
+        if(auth()->check()) {
+            $query->where(function ($sq) use ($q) {
+                $sq->where('name', 'LIKE', "%{$q}%")
+                   ->orWhere('nik', 'LIKE', "%{$q}%");
+            });    
+        } else {
+            $query->where('name', 'LIKE', "%{$q}%");
+        }
+        
         if ($user && $user->isAdminKabupaten()) {
             $query->where('regency_id', $user->regency_id);
         }
 
-        $farmers = $query->limit(15)->get(['id', 'nik', 'name', 'phone']);
+        $fields = ['id', 'nik', 'name', 'phone'];
+        if(auth()->check()) {
+            $fields[] = 'nik';
+        }
+
+        $farmers = $query->limit(15)->get($fields);
 
         return response()->json($farmers);
     }
@@ -99,6 +109,47 @@ class FarmerController extends Controller
         ]);
 
         return back()->with('success', 'Data Peternak berhasil ditambahkan.');
+    }
+
+    public function update(Request $request, $id)
+    {
+        $user = auth()->user();
+        $farmer = Farmer::findOrFail($id);
+
+        if ($user && $user->isAdminKabupaten() && $farmer->regency_id != $user->regency_id) {
+            return back()->with('error', 'Anda tidak memiliki hak akses untuk mengubah data peternak dari wilayah lain.');
+        }
+
+        $request->validate([
+            'nik' => [
+                'required',
+                'digits:16',
+                'unique:farmers,nik,' . $id,
+            ],
+            'name' => 'required|string|max:100',
+            'phone' => 'nullable|string',
+            'village_id' => 'required|exists:villages,id',
+            'address' => 'nullable|string',
+        ]);
+
+        $village = Village::with('district.regency')->findOrFail($request->village_id);
+        $farmerRegencyId = $village->district->regency_id ?? null;
+
+        if ($user && $user->isAdminKabupaten() && $farmerRegencyId != $user->regency_id) {
+            return back()->with('error', 'Anda hanya dapat memindahkan peternak pada wilayah Kabupaten Anda sendiri.');
+        }
+
+        $farmer->update([
+            'nik' => $request->nik,
+            'name' => $request->name,
+            'phone' => $request->phone,
+            'address' => $request->address,
+            'regency_id' => $farmerRegencyId,
+            'district_id' => $village->district_id,
+            'village_id' => $village->id,
+        ]);
+
+        return back()->with('success', 'Data Peternak berhasil diperbarui.');
     }
 
     public function destroy($id)

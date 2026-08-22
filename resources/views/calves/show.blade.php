@@ -117,10 +117,37 @@
                         </span>
                     </div>
 
-                    <div class="flex justify-between py-1 border-b border-slate-800">
-                        <span class="text-slate-400">Pemilik / Peternak:</span>
-                        <span class="font-bold text-white">{{ $calf->motherCow->farmer->name ?? '-' }} (NIK: {{ $calf->motherCow->farmer->nik ?? '-' }})</span>
+                    <div class="flex justify-between py-1 border-b border-slate-800 gap-4">
+                        <span class="text-slate-400 shrink-0">Pemilik / Peternak:</span>
+                        <span class="font-bold text-white">{{ $calf->motherCow->farmer->name ?? '-' }}</span>
                     </div>
+
+                    <div class="flex justify-between py-1 border-b border-slate-800 gap-4">
+                        <span class="text-slate-400 shrink-0">No. HP:</span>
+
+                        @if(!@empty($calf->motherCow->farmer->phone))
+                            <a href="tel:{{ $calf->motherCow->farmer->phone }}" class="font-bold text-emerald-400 hover:text-emerald-300 hover:underline text-right">
+                                <i class="fa-solid fa-phone mr-1"></i>
+                                {{ $calf->motherCow->farmer->phone }}
+                            </a>
+                        @else
+                        <span class="font-medium text-slate-500 text-right">
+                            -
+                        </span>
+                    @endif
+                </div>
+               
+                @if(auth()->check() && auth()->user()->isAdmin())
+                <div class="flex justify-between py-1 border-b border-slate-800 gap-4">
+                    <span class="text-slate-400 shrink-0">
+                        NIK Peternak:
+                    </span>
+                
+                    <span class="font-bold text-amber-300 font-mono text-right">
+                        {{ $calf->motherCow->farmer->nik ?? '-' }}
+                    </span>
+                </div>
+                @endif
 
                     <div class="flex justify-between py-1 border-b border-slate-800">
                         <span class="text-slate-400">Kode Straw Pejantan:</span>
@@ -136,6 +163,13 @@
                         <span class="text-slate-400">Lokasi Wilayah:</span>
                         <span class="font-medium text-slate-300 text-right">
                             Kab. {{ $calf->motherCow->regency->name ?? '-' }}, Kec. {{ $calf->motherCow->district->name ?? '-' }}
+                        </span>
+                    </div>
+
+                    <div class="flex justify-between py-1 border-b border-slate-800 gap-4">
+                        <span class="text-slate-400 shrink-0">Alamat Lengkap: </span>
+                        <span class="font-medium text-slate-300 text-right leading-relaxed max-w-[65%]">
+                            {{ $calf->motherCow->farmer->address ?? '-' }}
                         </span>
                     </div>
                 </div>

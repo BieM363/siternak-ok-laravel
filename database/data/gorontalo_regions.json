@@ -1,0 +1,4193 @@
+[
+    {
+        "raw_id": "7501",
+        "code": "75.01",
+        "name": "Kabupaten Boalemo",
+        "districts": [
+            {
+                "raw_id": "7501031",
+                "code": "75.01.031",
+                "name": "Mananggu",
+                "villages": [
+                    {
+                        "raw_id": "7501031001",
+                        "code": "1001",
+                        "name": "Mananggu"
+                    },
+                    {
+                        "raw_id": "7501031002",
+                        "code": "1002",
+                        "name": "Tabulo"
+                    },
+                    {
+                        "raw_id": "7501031003",
+                        "code": "1003",
+                        "name": "Bendungan"
+                    },
+                    {
+                        "raw_id": "7501031004",
+                        "code": "1004",
+                        "name": "Kaaruyan"
+                    },
+                    {
+                        "raw_id": "7501031005",
+                        "code": "1005",
+                        "name": "Salilama"
+                    },
+                    {
+                        "raw_id": "7501031006",
+                        "code": "1006",
+                        "name": "Buti"
+                    },
+                    {
+                        "raw_id": "7501031007",
+                        "code": "1007",
+                        "name": "Pontolo"
+                    },
+                    {
+                        "raw_id": "7501031008",
+                        "code": "1008",
+                        "name": "Keramat"
+                    },
+                    {
+                        "raw_id": "7501031009",
+                        "code": "1009",
+                        "name": "Tabulo Selatan"
+                    }
+                ]
+            },
+            {
+                "raw_id": "7501040",
+                "code": "75.01.040",
+                "name": "Tilamuta",
+                "villages": [
+                    {
+                        "raw_id": "7501040007",
+                        "code": "0007",
+                        "name": "Lamu"
+                    },
+                    {
+                        "raw_id": "7501040008",
+                        "code": "0008",
+                        "name": "Bajo"
+                    },
+                    {
+                        "raw_id": "7501040009",
+                        "code": "0009",
+                        "name": "Pentadu Barat"
+                    },
+                    {
+                        "raw_id": "7501040010",
+                        "code": "0010",
+                        "name": "Modelomo"
+                    },
+                    {
+                        "raw_id": "7501040011",
+                        "code": "0011",
+                        "name": "Hungayonaa"
+                    },
+                    {
+                        "raw_id": "7501040012",
+                        "code": "0012",
+                        "name": "Ayuhulalo"
+                    },
+                    {
+                        "raw_id": "7501040013",
+                        "code": "0013",
+                        "name": "Piloliyanga"
+                    },
+                    {
+                        "raw_id": "7501040014",
+                        "code": "0014",
+                        "name": "Limbato"
+                    },
+                    {
+                        "raw_id": "7501040015",
+                        "code": "0015",
+                        "name": "Mohungo"
+                    },
+                    {
+                        "raw_id": "7501040016",
+                        "code": "0016",
+                        "name": "Pentadu Timur"
+                    },
+                    {
+                        "raw_id": "7501040017",
+                        "code": "0017",
+                        "name": "Lahumbo"
+                    },
+                    {
+                        "raw_id": "7501040018",
+                        "code": "0018",
+                        "name": "Tenilo"
+                    }
+                ]
+            },
+            {
+                "raw_id": "7501041",
+                "code": "75.01.041",
+                "name": "Dulupi",
+                "villages": [
+                    {
+                        "raw_id": "7501041001",
+                        "code": "1001",
+                        "name": "Dulupi"
+                    },
+                    {
+                        "raw_id": "7501041002",
+                        "code": "1002",
+                        "name": "Pangi"
+                    },
+                    {
+                        "raw_id": "7501041003",
+                        "code": "1003",
+                        "name": "Tangga Jaya"
+                    },
+                    {
+                        "raw_id": "7501041004",
+                        "code": "1004",
+                        "name": "Polohungo"
+                    },
+                    {
+                        "raw_id": "7501041005",
+                        "code": "1005",
+                        "name": "Kotaraja"
+                    },
+                    {
+                        "raw_id": "7501041006",
+                        "code": "1006",
+                        "name": "Tabongo"
+                    },
+                    {
+                        "raw_id": "7501041007",
+                        "code": "1007",
+                        "name": "Tanah Putih"
+                    },
+                    {
+                        "raw_id": "7501041008",
+                        "code": "1008",
+                        "name": "Tangga Barito"
+                    }
+                ]
+            },
+            {
+                "raw_id": "7501042",
+                "code": "75.01.042",
+                "name": "Botumoito",
+                "villages": [
+                    {
+                        "raw_id": "7501042001",
+                        "code": "2001",
+                        "name": "Bolihutuo"
+                    },
+                    {
+                        "raw_id": "7501042002",
+                        "code": "2002",
+                        "name": "Tapadaa"
+                    },
+                    {
+                        "raw_id": "7501042003",
+                        "code": "2003",
+                        "name": "Rumbia"
+                    },
+                    {
+                        "raw_id": "7501042004",
+                        "code": "2004",
+                        "name": "Hutamonu"
+                    },
+                    {
+                        "raw_id": "7501042005",
+                        "code": "2005",
+                        "name": "Botumoito"
+                    },
+                    {
+                        "raw_id": "7501042006",
+                        "code": "2006",
+                        "name": "Tutulo"
+                    },
+                    {
+                        "raw_id": "7501042007",
+                        "code": "2007",
+                        "name": "Patoameme"
+                    },
+                    {
+                        "raw_id": "7501042008",
+                        "code": "2008",
+                        "name": "Potanga"
+                    },
+                    {
+                        "raw_id": "7501042009",
+                        "code": "2009",
+                        "name": "Dulangeya"
+                    }
+                ]
+            },
+            {
+                "raw_id": "7501050",
+                "code": "75.01.050",
+                "name": "Paguyaman",
+                "villages": [
+                    {
+                        "raw_id": "7501050004",
+                        "code": "0004",
+                        "name": "Tangkobu"
+                    },
+                    {
+                        "raw_id": "7501050005",
+                        "code": "0005",
+                        "name": "Molombulahe"
+                    },
+                    {
+                        "raw_id": "7501050006",
+                        "code": "0006",
+                        "name": "Wonggahu"
+                    },
+                    {
+                        "raw_id": "7501050007",
+                        "code": "0007",
+                        "name": "Saripi"
+                    },
+                    {
+                        "raw_id": "7501050008",
+                        "code": "0008",
+                        "name": "Bongo Nol"
+                    },
+                    {
+                        "raw_id": "7501050009",
+                        "code": "0009",
+                        "name": "Sumber Jaya"
+                    },
+                    {
+                        "raw_id": "7501050011",
+                        "code": "0011",
+                        "name": "Mutiara"
+                    },
+                    {
+                        "raw_id": "7501050017",
+                        "code": "0017",
+                        "name": "Karya Murni"
+                    },
+                    {
+                        "raw_id": "7501050018",
+                        "code": "0018",
+                        "name": "Girisa"
+                    },
+                    {
+                        "raw_id": "7501050021",
+                        "code": "0021",
+                        "name": "Kuala Lumpur"
+                    },
+                    {
+                        "raw_id": "7501050022",
+                        "code": "0022",
+                        "name": "Tenilo"
+                    },
+                    {
+                        "raw_id": "7501050023",
+                        "code": "0023",
+                        "name": "Mustika"
+                    },
+                    {
+                        "raw_id": "7501050024",
+                        "code": "0024",
+                        "name": "Huwongo"
+                    },
+                    {
+                        "raw_id": "7501050025",
+                        "code": "0025",
+                        "name": "Bongo Tua"
+                    },
+                    {
+                        "raw_id": "7501050026",
+                        "code": "0026",
+                        "name": "Rejonegoro"
+                    },
+                    {
+                        "raw_id": "7501050027",
+                        "code": "0027",
+                        "name": "Balate Jaya"
+                    },
+                    {
+                        "raw_id": "7501050028",
+                        "code": "0028",
+                        "name": "Hulawa"
+                    },
+                    {
+                        "raw_id": "7501050029",
+                        "code": "0029",
+                        "name": "Diloato"
+                    },
+                    {
+                        "raw_id": "7501050030",
+                        "code": "0030",
+                        "name": "Permata"
+                    },
+                    {
+                        "raw_id": "7501050031",
+                        "code": "0031",
+                        "name": "Batu Kramat"
+                    },
+                    {
+                        "raw_id": "7501050032",
+                        "code": "0032",
+                        "name": "Sosial"
+                    },
+                    {
+                        "raw_id": "7501050033",
+                        "code": "0033",
+                        "name": "Bualo"
+                    }
+                ]
+            },
+            {
+                "raw_id": "7501051",
+                "code": "75.01.051",
+                "name": "Wonosari",
+                "villages": [
+                    {
+                        "raw_id": "7501051001",
+                        "code": "1001",
+                        "name": "Mekar Jaya"
+                    },
+                    {
+                        "raw_id": "7501051002",
+                        "code": "1002",
+                        "name": "Harapan"
+                    },
+                    {
+                        "raw_id": "7501051003",
+                        "code": "1003",
+                        "name": "Suka Maju"
+                    },
+                    {
+                        "raw_id": "7501051004",
+                        "code": "1004",
+                        "name": "Makmur"
+                    },
+                    {
+                        "raw_id": "7501051005",
+                        "code": "1005",
+                        "name": "Sejahtera"
+                    },
+                    {
+                        "raw_id": "7501051006",
+                        "code": "1006",
+                        "name": "Pangea"
+                    },
+                    {
+                        "raw_id": "7501051007",
+                        "code": "1007",
+                        "name": "Jati Mulya"
+                    },
+                    {
+                        "raw_id": "7501051008",
+                        "code": "1008",
+                        "name": "Tri Rukun"
+                    },
+                    {
+                        "raw_id": "7501051009",
+                        "code": "1009",
+                        "name": "Raharja"
+                    },
+                    {
+                        "raw_id": "7501051010",
+                        "code": "1010",
+                        "name": "Dimito"
+                    },
+                    {
+                        "raw_id": "7501051011",
+                        "code": "1011",
+                        "name": "Suka Mulia"
+                    },
+                    {
+                        "raw_id": "7501051012",
+                        "code": "1012",
+                        "name": "Sari Tani"
+                    },
+                    {
+                        "raw_id": "7501051013",
+                        "code": "1013",
+                        "name": "Tanjung Harapan"
+                    },
+                    {
+                        "raw_id": "7501051014",
+                        "code": "1014",
+                        "name": "Dulohupa"
+                    }
+                ]
+            },
+            {
+                "raw_id": "7501052",
+                "code": "75.01.052",
+                "name": "Paguyaman Pantai",
+                "villages": [
+                    {
+                        "raw_id": "7501052001",
+                        "code": "2001",
+                        "name": "Limbatihu"
+                    },
+                    {
+                        "raw_id": "7501052002",
+                        "code": "2002",
+                        "name": "Bubaa"
+                    },
+                    {
+                        "raw_id": "7501052003",
+                        "code": "2003",
+                        "name": "Lito"
+                    },
+                    {
+                        "raw_id": "7501052004",
+                        "code": "2004",
+                        "name": "Bukit Karya"
+                    },
+                    {
+                        "raw_id": "7501052005",
+                        "code": "2005",
+                        "name": "Apitalawu"
+                    },
+                    {
+                        "raw_id": "7501052006",
+                        "code": "2006",
+                        "name": "Olibu"
+                    },
+                    {
+                        "raw_id": "7501052007",
+                        "code": "2007",
+                        "name": "Towayu"
+                    },
+                    {
+                        "raw_id": "7501052008",
+                        "code": "2008",
+                        "name": "Bangga"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "raw_id": "7502",
+        "code": "75.02",
+        "name": "Kabupaten Gorontalo",
+        "districts": [
+            {
+                "raw_id": "7502010",
+                "code": "75.02.010",
+                "name": "Batudaa Pantai",
+                "villages": [
+                    {
+                        "raw_id": "7502010006",
+                        "code": "0006",
+                        "name": "Lamu"
+                    },
+                    {
+                        "raw_id": "7502010007",
+                        "code": "0007",
+                        "name": "Tontayuo"
+                    },
+                    {
+                        "raw_id": "7502010008",
+                        "code": "0008",
+                        "name": "Biluhu Timur"
+                    },
+                    {
+                        "raw_id": "7502010009",
+                        "code": "0009",
+                        "name": "Kayubulan"
+                    },
+                    {
+                        "raw_id": "7502010010",
+                        "code": "0010",
+                        "name": "Lopo"
+                    },
+                    {
+                        "raw_id": "7502010011",
+                        "code": "0011",
+                        "name": "Bongo"
+                    },
+                    {
+                        "raw_id": "7502010013",
+                        "code": "0013",
+                        "name": "Olimoo'o"
+                    },
+                    {
+                        "raw_id": "7502010014",
+                        "code": "0014",
+                        "name": "Langgula"
+                    },
+                    {
+                        "raw_id": "7502010015",
+                        "code": "0015",
+                        "name": "Buhudaa"
+                    }
+                ]
+            },
+            {
+                "raw_id": "7502011",
+                "code": "75.02.011",
+                "name": "Biluhu",
+                "villages": [
+                    {
+                        "raw_id": "7502011001",
+                        "code": "1001",
+                        "name": "Huwongo"
+                    },
+                    {
+                        "raw_id": "7502011002",
+                        "code": "1002",
+                        "name": "Biluhu Barat"
+                    },
+                    {
+                        "raw_id": "7502011003",
+                        "code": "1003",
+                        "name": "Lobuto"
+                    },
+                    {
+                        "raw_id": "7502011004",
+                        "code": "1004",
+                        "name": "Luluo"
+                    },
+                    {
+                        "raw_id": "7502011005",
+                        "code": "1005",
+                        "name": "Biluhu Tengah"
+                    },
+                    {
+                        "raw_id": "7502011006",
+                        "code": "1006",
+                        "name": "Lobuto Timur"
+                    },
+                    {
+                        "raw_id": "7502011007",
+                        "code": "1007",
+                        "name": "Olimeyala"
+                    },
+                    {
+                        "raw_id": "7502011008",
+                        "code": "1008",
+                        "name": "Botubolu'o"
+                    }
+                ]
+            },
+            {
+                "raw_id": "7502020",
+                "code": "75.02.020",
+                "name": "Batudaa",
+                "villages": [
+                    {
+                        "raw_id": "7502020019",
+                        "code": "0019",
+                        "name": "Payunga"
+                    },
+                    {
+                        "raw_id": "7502020021",
+                        "code": "0021",
+                        "name": "Bua"
+                    },
+                    {
+                        "raw_id": "7502020022",
+                        "code": "0022",
+                        "name": "Iluta"
+                    },
+                    {
+                        "raw_id": "7502020025",
+                        "code": "0025",
+                        "name": "Barakati"
+                    },
+                    {
+                        "raw_id": "7502020026",
+                        "code": "0026",
+                        "name": "Dunggala"
+                    },
+                    {
+                        "raw_id": "7502020027",
+                        "code": "0027",
+                        "name": "Ilohungayo"
+                    },
+                    {
+                        "raw_id": "7502020028",
+                        "code": "0028",
+                        "name": "Pilobuhuta"
+                    }
+                ]
+            },
+            {
+                "raw_id": "7502021",
+                "code": "75.02.021",
+                "name": "Bongomeme",
+                "villages": [
+                    {
+                        "raw_id": "7502021001",
+                        "code": "1001",
+                        "name": "Molanihu"
+                    },
+                    {
+                        "raw_id": "7502021002",
+                        "code": "1002",
+                        "name": "Batulayar"
+                    },
+                    {
+                        "raw_id": "7502021003",
+                        "code": "1003",
+                        "name": "Molas"
+                    },
+                    {
+                        "raw_id": "7502021004",
+                        "code": "1004",
+                        "name": "Tohupo"
+                    },
+                    {
+                        "raw_id": "7502021005",
+                        "code": "1005",
+                        "name": "Molopatodu"
+                    },
+                    {
+                        "raw_id": "7502021006",
+                        "code": "1006",
+                        "name": "Upomela"
+                    },
+                    {
+                        "raw_id": "7502021007",
+                        "code": "1007",
+                        "name": "Dulamayo"
+                    },
+                    {
+                        "raw_id": "7502021014",
+                        "code": "1014",
+                        "name": "Otopade"
+                    },
+                    {
+                        "raw_id": "7502021015",
+                        "code": "1015",
+                        "name": "Batu Loreng"
+                    },
+                    {
+                        "raw_id": "7502021016",
+                        "code": "1016",
+                        "name": "Bongohulawa"
+                    },
+                    {
+                        "raw_id": "7502021017",
+                        "code": "1017",
+                        "name": "Huntulohulawa"
+                    },
+                    {
+                        "raw_id": "7502021020",
+                        "code": "1020",
+                        "name": "Liyodu"
+                    },
+                    {
+                        "raw_id": "7502021021",
+                        "code": "1021",
+                        "name": "Kayumerah"
+                    },
+                    {
+                        "raw_id": "7502021022",
+                        "code": "1022",
+                        "name": "Owalanga"
+                    },
+                    {
+                        "raw_id": "7502021025",
+                        "code": "1025",
+                        "name": "Liyoto"
+                    }
+                ]
+            },
+            {
+                "raw_id": "7502022",
+                "code": "75.02.022",
+                "name": "Tabongo",
+                "villages": [
+                    {
+                        "raw_id": "7502022001",
+                        "code": "2001",
+                        "name": "Tabongo Barat"
+                    },
+                    {
+                        "raw_id": "7502022002",
+                        "code": "2002",
+                        "name": "Limehe Barat"
+                    },
+                    {
+                        "raw_id": "7502022003",
+                        "code": "2003",
+                        "name": "Ilomangga"
+                    },
+                    {
+                        "raw_id": "7502022004",
+                        "code": "2004",
+                        "name": "Tabongo Timur"
+                    },
+                    {
+                        "raw_id": "7502022005",
+                        "code": "2005",
+                        "name": "Limehe Timur"
+                    },
+                    {
+                        "raw_id": "7502022006",
+                        "code": "2006",
+                        "name": "Motinelo"
+                    },
+                    {
+                        "raw_id": "7502022007",
+                        "code": "2007",
+                        "name": "Moahudu"
+                    },
+                    {
+                        "raw_id": "7502022008",
+                        "code": "2008",
+                        "name": "Teratai"
+                    },
+                    {
+                        "raw_id": "7502022009",
+                        "code": "2009",
+                        "name": "Limehu"
+                    }
+                ]
+            },
+            {
+                "raw_id": "7502023",
+                "code": "75.02.023",
+                "name": "Dungaliyo",
+                "villages": [
+                    {
+                        "raw_id": "7502023001",
+                        "code": "3001",
+                        "name": "Momala"
+                    },
+                    {
+                        "raw_id": "7502023002",
+                        "code": "3002",
+                        "name": "Ambara"
+                    },
+                    {
+                        "raw_id": "7502023003",
+                        "code": "3003",
+                        "name": "Ayuhula"
+                    },
+                    {
+                        "raw_id": "7502023004",
+                        "code": "3004",
+                        "name": "Botubulowe"
+                    },
+                    {
+                        "raw_id": "7502023005",
+                        "code": "3005",
+                        "name": "Dungaliyo"
+                    },
+                    {
+                        "raw_id": "7502023006",
+                        "code": "3006",
+                        "name": "Pilolalenga"
+                    },
+                    {
+                        "raw_id": "7502023007",
+                        "code": "3007",
+                        "name": "Kaliyoso"
+                    },
+                    {
+                        "raw_id": "7502023008",
+                        "code": "3008",
+                        "name": "Pangadaa"
+                    },
+                    {
+                        "raw_id": "7502023009",
+                        "code": "3009",
+                        "name": "Bongomeme"
+                    },
+                    {
+                        "raw_id": "7502023010",
+                        "code": "3010",
+                        "name": "Duwanga"
+                    }
+                ]
+            },
+            {
+                "raw_id": "7502030",
+                "code": "75.02.030",
+                "name": "Tibawa",
+                "villages": [
+                    {
+                        "raw_id": "7502030004",
+                        "code": "0004",
+                        "name": "Ilomata"
+                    },
+                    {
+                        "raw_id": "7502030005",
+                        "code": "0005",
+                        "name": "Molowahu"
+                    },
+                    {
+                        "raw_id": "7502030006",
+                        "code": "0006",
+                        "name": "Dunggala"
+                    },
+                    {
+                        "raw_id": "7502030007",
+                        "code": "0007",
+                        "name": "Reksonegoro"
+                    },
+                    {
+                        "raw_id": "7502030008",
+                        "code": "0008",
+                        "name": "Tolotio"
+                    },
+                    {
+                        "raw_id": "7502030009",
+                        "code": "0009",
+                        "name": "Isimu Selatan"
+                    },
+                    {
+                        "raw_id": "7502030010",
+                        "code": "0010",
+                        "name": "Datahu"
+                    },
+                    {
+                        "raw_id": "7502030016",
+                        "code": "0016",
+                        "name": "Iloponu"
+                    },
+                    {
+                        "raw_id": "7502030018",
+                        "code": "0018",
+                        "name": "Isimu Utara"
+                    },
+                    {
+                        "raw_id": "7502030019",
+                        "code": "0019",
+                        "name": "Labanu"
+                    },
+                    {
+                        "raw_id": "7502030021",
+                        "code": "0021",
+                        "name": "Motilango"
+                    },
+                    {
+                        "raw_id": "7502030022",
+                        "code": "0022",
+                        "name": "Balahu"
+                    },
+                    {
+                        "raw_id": "7502030023",
+                        "code": "0023",
+                        "name": "Botumoputi"
+                    },
+                    {
+                        "raw_id": "7502030024",
+                        "code": "0024",
+                        "name": "Isimu Raya"
+                    },
+                    {
+                        "raw_id": "7502030025",
+                        "code": "0025",
+                        "name": "Ulobua"
+                    }
+                ]
+            },
+            {
+                "raw_id": "7502031",
+                "code": "75.02.031",
+                "name": "Pulubala",
+                "villages": [
+                    {
+                        "raw_id": "7502031001",
+                        "code": "1001",
+                        "name": "Mulyonegoro"
+                    },
+                    {
+                        "raw_id": "7502031002",
+                        "code": "1002",
+                        "name": "Bakti"
+                    },
+                    {
+                        "raw_id": "7502031003",
+                        "code": "1003",
+                        "name": "Pulubala"
+                    },
+                    {
+                        "raw_id": "7502031004",
+                        "code": "1004",
+                        "name": "Tridarma"
+                    },
+                    {
+                        "raw_id": "7502031005",
+                        "code": "1005",
+                        "name": "Pongongaila"
+                    },
+                    {
+                        "raw_id": "7502031006",
+                        "code": "1006",
+                        "name": "Puncak"
+                    },
+                    {
+                        "raw_id": "7502031007",
+                        "code": "1007",
+                        "name": "Molamahu"
+                    },
+                    {
+                        "raw_id": "7502031008",
+                        "code": "1008",
+                        "name": "Molalahu"
+                    },
+                    {
+                        "raw_id": "7502031009",
+                        "code": "1009",
+                        "name": "Toydito"
+                    },
+                    {
+                        "raw_id": "7502031010",
+                        "code": "1010",
+                        "name": "Ayumolingo"
+                    },
+                    {
+                        "raw_id": "7502031011",
+                        "code": "1011",
+                        "name": "Bukit Aren"
+                    },
+                    {
+                        "raw_id": "7502031012",
+                        "code": "1012",
+                        "name": "Upt Ayumolingo"
+                    },
+                    {
+                        "raw_id": "7502031013",
+                        "code": "1013",
+                        "name": "Upt Puncak"
+                    }
+                ]
+            },
+            {
+                "raw_id": "7502040",
+                "code": "75.02.040",
+                "name": "Boliyohuto",
+                "villages": [
+                    {
+                        "raw_id": "7502040007",
+                        "code": "0007",
+                        "name": "Parungi"
+                    },
+                    {
+                        "raw_id": "7502040008",
+                        "code": "0008",
+                        "name": "Sido Mulyo"
+                    },
+                    {
+                        "raw_id": "7502040009",
+                        "code": "0009",
+                        "name": "Sidodadi"
+                    },
+                    {
+                        "raw_id": "7502040016",
+                        "code": "0016",
+                        "name": "Diloniyohu"
+                    },
+                    {
+                        "raw_id": "7502040017",
+                        "code": "0017",
+                        "name": "Motoduto"
+                    },
+                    {
+                        "raw_id": "7502040018",
+                        "code": "0018",
+                        "name": "Potanga"
+                    },
+                    {
+                        "raw_id": "7502040020",
+                        "code": "0020",
+                        "name": "Bandung Rejo"
+                    },
+                    {
+                        "raw_id": "7502040021",
+                        "code": "0021",
+                        "name": "Iloheluma"
+                    },
+                    {
+                        "raw_id": "7502040022",
+                        "code": "0022",
+                        "name": "Monggolito"
+                    },
+                    {
+                        "raw_id": "7502040023",
+                        "code": "0023",
+                        "name": "Dulohupa"
+                    },
+                    {
+                        "raw_id": "7502040024",
+                        "code": "0024",
+                        "name": "Sidomulyo Selatan"
+                    },
+                    {
+                        "raw_id": "7502040025",
+                        "code": "0025",
+                        "name": "Bongongoayu"
+                    },
+                    {
+                        "raw_id": "7502040026",
+                        "code": "0026",
+                        "name": "Tolite"
+                    }
+                ]
+            },
+            {
+                "raw_id": "7502041",
+                "code": "75.02.041",
+                "name": "Mootilango",
+                "villages": [
+                    {
+                        "raw_id": "7502041001",
+                        "code": "1001",
+                        "name": "Talumopatu"
+                    },
+                    {
+                        "raw_id": "7502041002",
+                        "code": "1002",
+                        "name": "Sido Mukti"
+                    },
+                    {
+                        "raw_id": "7502041003",
+                        "code": "1003",
+                        "name": "Karya Mukti"
+                    },
+                    {
+                        "raw_id": "7502041004",
+                        "code": "1004",
+                        "name": "Satria"
+                    },
+                    {
+                        "raw_id": "7502041005",
+                        "code": "1005",
+                        "name": "Paris"
+                    },
+                    {
+                        "raw_id": "7502041006",
+                        "code": "1006",
+                        "name": "Helumo"
+                    },
+                    {
+                        "raw_id": "7502041007",
+                        "code": "1007",
+                        "name": "Pilomonu"
+                    },
+                    {
+                        "raw_id": "7502041008",
+                        "code": "1008",
+                        "name": "Huyula"
+                    },
+                    {
+                        "raw_id": "7502041009",
+                        "code": "1009",
+                        "name": "Payu"
+                    },
+                    {
+                        "raw_id": "7502041010",
+                        "code": "1010",
+                        "name": "Suka Maju"
+                    }
+                ]
+            },
+            {
+                "raw_id": "7502042",
+                "code": "75.02.042",
+                "name": "Tolangohula",
+                "villages": [
+                    {
+                        "raw_id": "7502042001",
+                        "code": "2001",
+                        "name": "Gandasari"
+                    },
+                    {
+                        "raw_id": "7502042002",
+                        "code": "2002",
+                        "name": "Sukamakmur"
+                    },
+                    {
+                        "raw_id": "7502042003",
+                        "code": "2003",
+                        "name": "Molohu"
+                    },
+                    {
+                        "raw_id": "7502042004",
+                        "code": "2004",
+                        "name": "Lakeya"
+                    },
+                    {
+                        "raw_id": "7502042007",
+                        "code": "2007",
+                        "name": "Polohungo"
+                    },
+                    {
+                        "raw_id": "7502042008",
+                        "code": "2008",
+                        "name": "Bina Jaya"
+                    },
+                    {
+                        "raw_id": "7502042009",
+                        "code": "2009",
+                        "name": "Tamaila"
+                    },
+                    {
+                        "raw_id": "7502042010",
+                        "code": "2010",
+                        "name": "Sidoarjo"
+                    },
+                    {
+                        "raw_id": "7502042013",
+                        "code": "2013",
+                        "name": "Sukamakmur Utara"
+                    },
+                    {
+                        "raw_id": "7502042014",
+                        "code": "2014",
+                        "name": "Margomulya"
+                    },
+                    {
+                        "raw_id": "7502042015",
+                        "code": "2015",
+                        "name": "Makmur Abadi"
+                    },
+                    {
+                        "raw_id": "7502042016",
+                        "code": "2016",
+                        "name": "Gandaria"
+                    },
+                    {
+                        "raw_id": "7502042017",
+                        "code": "2017",
+                        "name": "Ombulo Tango"
+                    },
+                    {
+                        "raw_id": "7502042018",
+                        "code": "2018",
+                        "name": "Tamaila Utara"
+                    },
+                    {
+                        "raw_id": "7502042019",
+                        "code": "2019",
+                        "name": "Himalaya"
+                    }
+                ]
+            },
+            {
+                "raw_id": "7502043",
+                "code": "75.02.043",
+                "name": "Asparaga",
+                "villages": [
+                    {
+                        "raw_id": "7502043001",
+                        "code": "3001",
+                        "name": "Bululi"
+                    },
+                    {
+                        "raw_id": "7502043002",
+                        "code": "3002",
+                        "name": "Mohiyolo"
+                    },
+                    {
+                        "raw_id": "7502043003",
+                        "code": "3003",
+                        "name": "Karya Indah"
+                    },
+                    {
+                        "raw_id": "7502043004",
+                        "code": "3004",
+                        "name": "Pangahu"
+                    },
+                    {
+                        "raw_id": "7502043005",
+                        "code": "3005",
+                        "name": "Tiohu"
+                    },
+                    {
+                        "raw_id": "7502043006",
+                        "code": "3006",
+                        "name": "Prima"
+                    },
+                    {
+                        "raw_id": "7502043007",
+                        "code": "3007",
+                        "name": "Karya Baru"
+                    },
+                    {
+                        "raw_id": "7502043008",
+                        "code": "3008",
+                        "name": "Bontula"
+                    },
+                    {
+                        "raw_id": "7502043009",
+                        "code": "3009",
+                        "name": "Bihe"
+                    },
+                    {
+                        "raw_id": "7502043010",
+                        "code": "3010",
+                        "name": "Olimohulo"
+                    }
+                ]
+            },
+            {
+                "raw_id": "7502044",
+                "code": "75.02.044",
+                "name": "Bilato",
+                "villages": [
+                    {
+                        "raw_id": "7502044001",
+                        "code": "4001",
+                        "name": "Bilato"
+                    },
+                    {
+                        "raw_id": "7502044002",
+                        "code": "4002",
+                        "name": "Ilomata"
+                    },
+                    {
+                        "raw_id": "7502044004",
+                        "code": "4004",
+                        "name": "Taulaa"
+                    },
+                    {
+                        "raw_id": "7502044005",
+                        "code": "4005",
+                        "name": "Juriya"
+                    },
+                    {
+                        "raw_id": "7502044006",
+                        "code": "4006",
+                        "name": "Bumela"
+                    },
+                    {
+                        "raw_id": "7502044007",
+                        "code": "4007",
+                        "name": "Totopo"
+                    },
+                    {
+                        "raw_id": "7502044008",
+                        "code": "4008",
+                        "name": "Suka Damai"
+                    },
+                    {
+                        "raw_id": "7502044009",
+                        "code": "4009",
+                        "name": "Lamahu"
+                    },
+                    {
+                        "raw_id": "7502044010",
+                        "code": "4010",
+                        "name": "Musyawarah"
+                    }
+                ]
+            },
+            {
+                "raw_id": "7502070",
+                "code": "75.02.070",
+                "name": "Limboto",
+                "villages": [
+                    {
+                        "raw_id": "7502070005",
+                        "code": "0005",
+                        "name": "Tenilo"
+                    },
+                    {
+                        "raw_id": "7502070006",
+                        "code": "0006",
+                        "name": "Bolihuangga"
+                    },
+                    {
+                        "raw_id": "7502070007",
+                        "code": "0007",
+                        "name": "Hunggaluwa"
+                    },
+                    {
+                        "raw_id": "7502070008",
+                        "code": "0008",
+                        "name": "Kayubulan"
+                    },
+                    {
+                        "raw_id": "7502070009",
+                        "code": "0009",
+                        "name": "Hepuhulawa"
+                    },
+                    {
+                        "raw_id": "7502070010",
+                        "code": "0010",
+                        "name": "Dutulanaa"
+                    },
+                    {
+                        "raw_id": "7502070011",
+                        "code": "0011",
+                        "name": "Hutuo"
+                    },
+                    {
+                        "raw_id": "7502070012",
+                        "code": "0012",
+                        "name": "Bulota"
+                    },
+                    {
+                        "raw_id": "7502070013",
+                        "code": "0013",
+                        "name": "Malahu"
+                    },
+                    {
+                        "raw_id": "7502070014",
+                        "code": "0014",
+                        "name": "Biyonga"
+                    },
+                    {
+                        "raw_id": "7502070015",
+                        "code": "0015",
+                        "name": "Bongohulawa"
+                    },
+                    {
+                        "raw_id": "7502070016",
+                        "code": "0016",
+                        "name": "Kayumerah"
+                    },
+                    {
+                        "raw_id": "7502070017",
+                        "code": "0017",
+                        "name": "Polohungo"
+                    },
+                    {
+                        "raw_id": "7502070018",
+                        "code": "0018",
+                        "name": "Tilihuwa"
+                    }
+                ]
+            },
+            {
+                "raw_id": "7502071",
+                "code": "75.02.071",
+                "name": "Limboto Barat",
+                "villages": [
+                    {
+                        "raw_id": "7502071001",
+                        "code": "1001",
+                        "name": "Padengo"
+                    },
+                    {
+                        "raw_id": "7502071002",
+                        "code": "1002",
+                        "name": "Hutabohu"
+                    },
+                    {
+                        "raw_id": "7502071003",
+                        "code": "1003",
+                        "name": "Yoosonegoro"
+                    },
+                    {
+                        "raw_id": "7502071004",
+                        "code": "1004",
+                        "name": "Tunggulo"
+                    },
+                    {
+                        "raw_id": "7502071005",
+                        "code": "1005",
+                        "name": "Pone"
+                    },
+                    {
+                        "raw_id": "7502071006",
+                        "code": "1006",
+                        "name": "Huidu"
+                    },
+                    {
+                        "raw_id": "7502071007",
+                        "code": "1007",
+                        "name": "Ombulo"
+                    },
+                    {
+                        "raw_id": "7502071008",
+                        "code": "1008",
+                        "name": "Daenaa"
+                    },
+                    {
+                        "raw_id": "7502071009",
+                        "code": "1009",
+                        "name": "Huidu Utara"
+                    },
+                    {
+                        "raw_id": "7502071010",
+                        "code": "1010",
+                        "name": "Haya-haya"
+                    }
+                ]
+            },
+            {
+                "raw_id": "7502080",
+                "code": "75.02.080",
+                "name": "Telaga",
+                "villages": [
+                    {
+                        "raw_id": "7502080011",
+                        "code": "0011",
+                        "name": "Bulila"
+                    },
+                    {
+                        "raw_id": "7502080014",
+                        "code": "0014",
+                        "name": "Mongolato"
+                    },
+                    {
+                        "raw_id": "7502080016",
+                        "code": "0016",
+                        "name": "Hulawa"
+                    },
+                    {
+                        "raw_id": "7502080017",
+                        "code": "0017",
+                        "name": "Pilohayanga"
+                    },
+                    {
+                        "raw_id": "7502080027",
+                        "code": "0027",
+                        "name": "Dulamayo Selatan"
+                    },
+                    {
+                        "raw_id": "7502080028",
+                        "code": "0028",
+                        "name": "Dulamayo Barat"
+                    },
+                    {
+                        "raw_id": "7502080029",
+                        "code": "0029",
+                        "name": "Pilohayanga Barat"
+                    },
+                    {
+                        "raw_id": "7502080030",
+                        "code": "0030",
+                        "name": "Doluhupa"
+                    }
+                ]
+            },
+            {
+                "raw_id": "7502081",
+                "code": "75.02.081",
+                "name": "Telaga Biru",
+                "villages": [
+                    {
+                        "raw_id": "7502081001",
+                        "code": "1001",
+                        "name": "Lupoyo"
+                    },
+                    {
+                        "raw_id": "7502081002",
+                        "code": "1002",
+                        "name": "Pantungo"
+                    },
+                    {
+                        "raw_id": "7502081003",
+                        "code": "1003",
+                        "name": "Dumati"
+                    },
+                    {
+                        "raw_id": "7502081004",
+                        "code": "1004",
+                        "name": "Tuladenggi"
+                    },
+                    {
+                        "raw_id": "7502081005",
+                        "code": "1005",
+                        "name": "Ulapato.a"
+                    },
+                    {
+                        "raw_id": "7502081006",
+                        "code": "1006",
+                        "name": "Pentadio Timur"
+                    },
+                    {
+                        "raw_id": "7502081007",
+                        "code": "1007",
+                        "name": "Pentadio Barat"
+                    },
+                    {
+                        "raw_id": "7502081008",
+                        "code": "1008",
+                        "name": "Talumelito"
+                    },
+                    {
+                        "raw_id": "7502081009",
+                        "code": "1009",
+                        "name": "Ulapato.b"
+                    },
+                    {
+                        "raw_id": "7502081010",
+                        "code": "1010",
+                        "name": "Dulamayo Utara"
+                    },
+                    {
+                        "raw_id": "7502081011",
+                        "code": "1011",
+                        "name": "Modellidu"
+                    },
+                    {
+                        "raw_id": "7502081012",
+                        "code": "1012",
+                        "name": "Tinelo"
+                    },
+                    {
+                        "raw_id": "7502081013",
+                        "code": "1013",
+                        "name": "Timuato"
+                    },
+                    {
+                        "raw_id": "7502081014",
+                        "code": "1014",
+                        "name": "Tapaluluo"
+                    },
+                    {
+                        "raw_id": "7502081015",
+                        "code": "1015",
+                        "name": "Tonala"
+                    }
+                ]
+            },
+            {
+                "raw_id": "7502082",
+                "code": "75.02.082",
+                "name": "Tilango",
+                "villages": [
+                    {
+                        "raw_id": "7502082001",
+                        "code": "2001",
+                        "name": "Tualango"
+                    },
+                    {
+                        "raw_id": "7502082002",
+                        "code": "2002",
+                        "name": "Dulomo"
+                    },
+                    {
+                        "raw_id": "7502082003",
+                        "code": "2003",
+                        "name": "Tilote"
+                    },
+                    {
+                        "raw_id": "7502082004",
+                        "code": "2004",
+                        "name": "Tabumela"
+                    },
+                    {
+                        "raw_id": "7502082005",
+                        "code": "2005",
+                        "name": "Ilotidea"
+                    },
+                    {
+                        "raw_id": "7502082006",
+                        "code": "2006",
+                        "name": "Lauwonu"
+                    },
+                    {
+                        "raw_id": "7502082007",
+                        "code": "2007",
+                        "name": "Tenggela"
+                    },
+                    {
+                        "raw_id": "7502082008",
+                        "code": "2008",
+                        "name": "Tinelo"
+                    }
+                ]
+            },
+            {
+                "raw_id": "7502083",
+                "code": "75.02.083",
+                "name": "Telaga Jaya",
+                "villages": [
+                    {
+                        "raw_id": "7502083001",
+                        "code": "3001",
+                        "name": "Hutadaa"
+                    },
+                    {
+                        "raw_id": "7502083003",
+                        "code": "3003",
+                        "name": "Luwoo"
+                    },
+                    {
+                        "raw_id": "7502083004",
+                        "code": "3004",
+                        "name": "Bunggalo"
+                    },
+                    {
+                        "raw_id": "7502083005",
+                        "code": "3005",
+                        "name": "Bulota"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "raw_id": "7503",
+        "code": "75.03",
+        "name": "Kabupaten Pohuwato",
+        "districts": [
+            {
+                "raw_id": "7503010",
+                "code": "75.03.010",
+                "name": "Popayato",
+                "villages": [
+                    {
+                        "raw_id": "7503010003",
+                        "code": "0003",
+                        "name": "Torosiaje"
+                    },
+                    {
+                        "raw_id": "7503010004",
+                        "code": "0004",
+                        "name": "Popayato"
+                    },
+                    {
+                        "raw_id": "7503010005",
+                        "code": "0005",
+                        "name": "Telaga"
+                    },
+                    {
+                        "raw_id": "7503010019",
+                        "code": "0019",
+                        "name": "Torosiaje Jaya"
+                    },
+                    {
+                        "raw_id": "7503010021",
+                        "code": "0021",
+                        "name": "Bukit Tingki"
+                    },
+                    {
+                        "raw_id": "7503010023",
+                        "code": "0023",
+                        "name": "Trikora"
+                    },
+                    {
+                        "raw_id": "7503010024",
+                        "code": "0024",
+                        "name": "Telaga Biru"
+                    },
+                    {
+                        "raw_id": "7503010025",
+                        "code": "0025",
+                        "name": "Dambalo"
+                    },
+                    {
+                        "raw_id": "7503010026",
+                        "code": "0026",
+                        "name": "Bumi Bahari"
+                    },
+                    {
+                        "raw_id": "7503010027",
+                        "code": "0027",
+                        "name": "Tunas Harapan"
+                    }
+                ]
+            },
+            {
+                "raw_id": "7503011",
+                "code": "75.03.011",
+                "name": "Popayato Barat",
+                "villages": [
+                    {
+                        "raw_id": "7503011001",
+                        "code": "1001",
+                        "name": "Molosipat"
+                    },
+                    {
+                        "raw_id": "7503011002",
+                        "code": "1002",
+                        "name": "Dudewulo"
+                    },
+                    {
+                        "raw_id": "7503011003",
+                        "code": "1003",
+                        "name": "Tunas Jaya"
+                    },
+                    {
+                        "raw_id": "7503011004",
+                        "code": "1004",
+                        "name": "Padengo"
+                    },
+                    {
+                        "raw_id": "7503011005",
+                        "code": "1005",
+                        "name": "Molosipat Utara"
+                    },
+                    {
+                        "raw_id": "7503011006",
+                        "code": "1006",
+                        "name": "Persatuan"
+                    },
+                    {
+                        "raw_id": "7503011007",
+                        "code": "1007",
+                        "name": "Butungale"
+                    }
+                ]
+            },
+            {
+                "raw_id": "7503012",
+                "code": "75.03.012",
+                "name": "Popayato Timur",
+                "villages": [
+                    {
+                        "raw_id": "7503012001",
+                        "code": "2001",
+                        "name": "Tahele"
+                    },
+                    {
+                        "raw_id": "7503012002",
+                        "code": "2002",
+                        "name": "Bunto"
+                    },
+                    {
+                        "raw_id": "7503012003",
+                        "code": "2003",
+                        "name": "Londoun"
+                    },
+                    {
+                        "raw_id": "7503012004",
+                        "code": "2004",
+                        "name": "Milangodaa"
+                    },
+                    {
+                        "raw_id": "7503012005",
+                        "code": "2005",
+                        "name": "Marisa"
+                    },
+                    {
+                        "raw_id": "7503012006",
+                        "code": "2006",
+                        "name": "Maleo"
+                    },
+                    {
+                        "raw_id": "7503012007",
+                        "code": "2007",
+                        "name": "Kelapa Lima"
+                    }
+                ]
+            },
+            {
+                "raw_id": "7503020",
+                "code": "75.03.020",
+                "name": "Lemito",
+                "villages": [
+                    {
+                        "raw_id": "7503020001",
+                        "code": "0001",
+                        "name": "Lomuli"
+                    },
+                    {
+                        "raw_id": "7503020002",
+                        "code": "0002",
+                        "name": "Lemito"
+                    },
+                    {
+                        "raw_id": "7503020003",
+                        "code": "0003",
+                        "name": "Wonggarasi Barat"
+                    },
+                    {
+                        "raw_id": "7503020008",
+                        "code": "0008",
+                        "name": "Kenari"
+                    },
+                    {
+                        "raw_id": "7503020009",
+                        "code": "0009",
+                        "name": "Lemito Utara"
+                    },
+                    {
+                        "raw_id": "7503020010",
+                        "code": "0010",
+                        "name": "Wonggarasi Tengah"
+                    },
+                    {
+                        "raw_id": "7503020011",
+                        "code": "0011",
+                        "name": "Suka Damai"
+                    },
+                    {
+                        "raw_id": "7503020012",
+                        "code": "0012",
+                        "name": "Balobalonge"
+                    }
+                ]
+            },
+            {
+                "raw_id": "7503021",
+                "code": "75.03.021",
+                "name": "Wanggarasi",
+                "villages": [
+                    {
+                        "raw_id": "7503021001",
+                        "code": "1001",
+                        "name": "Wonggarasi Timur"
+                    },
+                    {
+                        "raw_id": "7503021002",
+                        "code": "1002",
+                        "name": "Bukit Harapan"
+                    },
+                    {
+                        "raw_id": "7503021003",
+                        "code": "1003",
+                        "name": "Bohusami"
+                    },
+                    {
+                        "raw_id": "7503021004",
+                        "code": "1004",
+                        "name": "Lembah Permai"
+                    },
+                    {
+                        "raw_id": "7503021005",
+                        "code": "1005",
+                        "name": "Limbula"
+                    },
+                    {
+                        "raw_id": "7503021006",
+                        "code": "1006",
+                        "name": "Tuweya"
+                    },
+                    {
+                        "raw_id": "7503021007",
+                        "code": "1007",
+                        "name": "Yipilo"
+                    }
+                ]
+            },
+            {
+                "raw_id": "7503030",
+                "code": "75.03.030",
+                "name": "Marisa",
+                "villages": [
+                    {
+                        "raw_id": "7503030005",
+                        "code": "0005",
+                        "name": "Marisa Selatan"
+                    },
+                    {
+                        "raw_id": "7503030006",
+                        "code": "0006",
+                        "name": "Pohuwato"
+                    },
+                    {
+                        "raw_id": "7503030007",
+                        "code": "0007",
+                        "name": "Marisa Utara"
+                    },
+                    {
+                        "raw_id": "7503030008",
+                        "code": "0008",
+                        "name": "Teratai"
+                    },
+                    {
+                        "raw_id": "7503030019",
+                        "code": "0019",
+                        "name": "Botubilotahu Indah"
+                    },
+                    {
+                        "raw_id": "7503030020",
+                        "code": "0020",
+                        "name": "Palopo"
+                    },
+                    {
+                        "raw_id": "7503030021",
+                        "code": "0021",
+                        "name": "Pohuwato Timur"
+                    },
+                    {
+                        "raw_id": "7503030022",
+                        "code": "0022",
+                        "name": "Bulangita"
+                    }
+                ]
+            },
+            {
+                "raw_id": "7503031",
+                "code": "75.03.031",
+                "name": "Patilanggio",
+                "villages": [
+                    {
+                        "raw_id": "7503031001",
+                        "code": "1001",
+                        "name": "Ilo Heluma"
+                    },
+                    {
+                        "raw_id": "7503031002",
+                        "code": "1002",
+                        "name": "Balayo"
+                    },
+                    {
+                        "raw_id": "7503031003",
+                        "code": "1003",
+                        "name": "Manawa"
+                    },
+                    {
+                        "raw_id": "7503031004",
+                        "code": "1004",
+                        "name": "Suka Makmur"
+                    },
+                    {
+                        "raw_id": "7503031005",
+                        "code": "1005",
+                        "name": "Dudepo"
+                    },
+                    {
+                        "raw_id": "7503031006",
+                        "code": "1006",
+                        "name": "Dulomo"
+                    }
+                ]
+            },
+            {
+                "raw_id": "7503032",
+                "code": "75.03.032",
+                "name": "Buntulia",
+                "villages": [
+                    {
+                        "raw_id": "7503032001",
+                        "code": "2001",
+                        "name": "Buntulia Utara"
+                    },
+                    {
+                        "raw_id": "7503032002",
+                        "code": "2002",
+                        "name": "Taluduyunu"
+                    },
+                    {
+                        "raw_id": "7503032003",
+                        "code": "2003",
+                        "name": "Hulawa"
+                    },
+                    {
+                        "raw_id": "7503032004",
+                        "code": "2004",
+                        "name": "Buntulia Tengah"
+                    },
+                    {
+                        "raw_id": "7503032005",
+                        "code": "2005",
+                        "name": "Karya Indah"
+                    },
+                    {
+                        "raw_id": "7503032006",
+                        "code": "2006",
+                        "name": "Sipatana"
+                    },
+                    {
+                        "raw_id": "7503032007",
+                        "code": "2007",
+                        "name": "Taluduyunu Utara"
+                    }
+                ]
+            },
+            {
+                "raw_id": "7503033",
+                "code": "75.03.033",
+                "name": "Duhiadaa",
+                "villages": [
+                    {
+                        "raw_id": "7503033001",
+                        "code": "3001",
+                        "name": "Duhiadaa"
+                    },
+                    {
+                        "raw_id": "7503033002",
+                        "code": "3002",
+                        "name": "Bulili"
+                    },
+                    {
+                        "raw_id": "7503033003",
+                        "code": "3003",
+                        "name": "Buntulia Selatan"
+                    },
+                    {
+                        "raw_id": "7503033005",
+                        "code": "3005",
+                        "name": "Mekar Jaya"
+                    },
+                    {
+                        "raw_id": "7503033006",
+                        "code": "3006",
+                        "name": "Buntulia Barat"
+                    },
+                    {
+                        "raw_id": "7503033007",
+                        "code": "3007",
+                        "name": "Padengo"
+                    },
+                    {
+                        "raw_id": "7503033008",
+                        "code": "3008",
+                        "name": "Buntulia Jaya"
+                    },
+                    {
+                        "raw_id": "7503033009",
+                        "code": "3009",
+                        "name": "Mootilango"
+                    }
+                ]
+            },
+            {
+                "raw_id": "7503040",
+                "code": "75.03.040",
+                "name": "Randangan",
+                "villages": [
+                    {
+                        "raw_id": "7503040001",
+                        "code": "0001",
+                        "name": "Sidorukun"
+                    },
+                    {
+                        "raw_id": "7503040002",
+                        "code": "0002",
+                        "name": "Motolohu"
+                    },
+                    {
+                        "raw_id": "7503040003",
+                        "code": "0003",
+                        "name": "Huyula"
+                    },
+                    {
+                        "raw_id": "7503040004",
+                        "code": "0004",
+                        "name": "Imbodu"
+                    },
+                    {
+                        "raw_id": "7503040005",
+                        "code": "0005",
+                        "name": "Manunggal Karya"
+                    },
+                    {
+                        "raw_id": "7503040006",
+                        "code": "0006",
+                        "name": "Sari Murni"
+                    },
+                    {
+                        "raw_id": "7503040013",
+                        "code": "0013",
+                        "name": "Patuhu"
+                    },
+                    {
+                        "raw_id": "7503040014",
+                        "code": "0014",
+                        "name": "Ayula"
+                    },
+                    {
+                        "raw_id": "7503040015",
+                        "code": "0015",
+                        "name": "Omayuwa"
+                    },
+                    {
+                        "raw_id": "7503040016",
+                        "code": "0016",
+                        "name": "Banuroja"
+                    },
+                    {
+                        "raw_id": "7503040017",
+                        "code": "0017",
+                        "name": "Pelambane"
+                    },
+                    {
+                        "raw_id": "7503040018",
+                        "code": "0018",
+                        "name": "Motolohu Selatan"
+                    },
+                    {
+                        "raw_id": "7503040019",
+                        "code": "0019",
+                        "name": "Siduwonge"
+                    }
+                ]
+            },
+            {
+                "raw_id": "7503041",
+                "code": "75.03.041",
+                "name": "Taluditi",
+                "villages": [
+                    {
+                        "raw_id": "7503041001",
+                        "code": "1001",
+                        "name": "Malango"
+                    },
+                    {
+                        "raw_id": "7503041002",
+                        "code": "1002",
+                        "name": "Panca Karsa I"
+                    },
+                    {
+                        "raw_id": "7503041003",
+                        "code": "1003",
+                        "name": "Panca Karsa Ii"
+                    },
+                    {
+                        "raw_id": "7503041004",
+                        "code": "1004",
+                        "name": "Kalimas"
+                    },
+                    {
+                        "raw_id": "7503041005",
+                        "code": "1005",
+                        "name": "Mekarti Jaya"
+                    },
+                    {
+                        "raw_id": "7503041006",
+                        "code": "1006",
+                        "name": "Puncak Jaya"
+                    },
+                    {
+                        "raw_id": "7503041007",
+                        "code": "1007",
+                        "name": "Tirto Asri"
+                    }
+                ]
+            },
+            {
+                "raw_id": "7503050",
+                "code": "75.03.050",
+                "name": "Paguat",
+                "villages": [
+                    {
+                        "raw_id": "7503050001",
+                        "code": "0001",
+                        "name": "Libuo"
+                    },
+                    {
+                        "raw_id": "7503050002",
+                        "code": "0002",
+                        "name": "Pentadu"
+                    },
+                    {
+                        "raw_id": "7503050003",
+                        "code": "0003",
+                        "name": "Siduan"
+                    },
+                    {
+                        "raw_id": "7503050004",
+                        "code": "0004",
+                        "name": "Bunuyo"
+                    },
+                    {
+                        "raw_id": "7503050005",
+                        "code": "0005",
+                        "name": "Sipayo"
+                    },
+                    {
+                        "raw_id": "7503050006",
+                        "code": "0006",
+                        "name": "Soginti"
+                    },
+                    {
+                        "raw_id": "7503050010",
+                        "code": "0010",
+                        "name": "Maleo"
+                    },
+                    {
+                        "raw_id": "7503050011",
+                        "code": "0011",
+                        "name": "Bumbulan"
+                    },
+                    {
+                        "raw_id": "7503050012",
+                        "code": "0012",
+                        "name": "Buhu Jaya"
+                    },
+                    {
+                        "raw_id": "7503050013",
+                        "code": "0013",
+                        "name": "Molamahu"
+                    },
+                    {
+                        "raw_id": "7503050014",
+                        "code": "0014",
+                        "name": "Kemiri"
+                    }
+                ]
+            },
+            {
+                "raw_id": "7503051",
+                "code": "75.03.051",
+                "name": "Dengilo",
+                "villages": [
+                    {
+                        "raw_id": "7503051001",
+                        "code": "1001",
+                        "name": "Popaya"
+                    },
+                    {
+                        "raw_id": "7503051002",
+                        "code": "1002",
+                        "name": "Padengo"
+                    },
+                    {
+                        "raw_id": "7503051003",
+                        "code": "1003",
+                        "name": "Karangetang"
+                    },
+                    {
+                        "raw_id": "7503051004",
+                        "code": "1004",
+                        "name": "Karya Baru"
+                    },
+                    {
+                        "raw_id": "7503051005",
+                        "code": "1005",
+                        "name": "Huta Moputi"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "raw_id": "7504",
+        "code": "75.04",
+        "name": "Kabupaten Bone Bolango",
+        "districts": [
+            {
+                "raw_id": "7504010",
+                "code": "75.04.010",
+                "name": "Tapa",
+                "villages": [
+                    {
+                        "raw_id": "7504010006",
+                        "code": "0006",
+                        "name": "Talulobutu"
+                    },
+                    {
+                        "raw_id": "7504010007",
+                        "code": "0007",
+                        "name": "Talumopatu"
+                    },
+                    {
+                        "raw_id": "7504010008",
+                        "code": "0008",
+                        "name": "Dunggala"
+                    },
+                    {
+                        "raw_id": "7504010010",
+                        "code": "0010",
+                        "name": "Langge"
+                    },
+                    {
+                        "raw_id": "7504010011",
+                        "code": "0011",
+                        "name": "Talulobutu Selatan"
+                    },
+                    {
+                        "raw_id": "7504010012",
+                        "code": "0012",
+                        "name": "Kramat"
+                    },
+                    {
+                        "raw_id": "7504010013",
+                        "code": "0013",
+                        "name": "Meranti"
+                    }
+                ]
+            },
+            {
+                "raw_id": "7504011",
+                "code": "75.04.011",
+                "name": "Bulango Utara",
+                "villages": [
+                    {
+                        "raw_id": "7504011005",
+                        "code": "1005",
+                        "name": "Bandungan"
+                    },
+                    {
+                        "raw_id": "7504011011",
+                        "code": "1011",
+                        "name": "Boidu"
+                    },
+                    {
+                        "raw_id": "7504011012",
+                        "code": "1012",
+                        "name": "Tupa"
+                    },
+                    {
+                        "raw_id": "7504011013",
+                        "code": "1013",
+                        "name": "Longalo"
+                    },
+                    {
+                        "raw_id": "7504011016",
+                        "code": "1016",
+                        "name": "Tuloa"
+                    },
+                    {
+                        "raw_id": "7504011019",
+                        "code": "1019",
+                        "name": "Lomaya"
+                    },
+                    {
+                        "raw_id": "7504011020",
+                        "code": "1020",
+                        "name": "Kopi"
+                    },
+                    {
+                        "raw_id": "7504011021",
+                        "code": "1021",
+                        "name": "Bunuo"
+                    },
+                    {
+                        "raw_id": "7504011022",
+                        "code": "1022",
+                        "name": "Suka Damai"
+                    }
+                ]
+            },
+            {
+                "raw_id": "7504012",
+                "code": "75.04.012",
+                "name": "Bulango Selatan",
+                "villages": [
+                    {
+                        "raw_id": "7504012001",
+                        "code": "2001",
+                        "name": "Ayula Selatan"
+                    },
+                    {
+                        "raw_id": "7504012002",
+                        "code": "2002",
+                        "name": "Huntu Selatan"
+                    },
+                    {
+                        "raw_id": "7504012003",
+                        "code": "2003",
+                        "name": "Huntu Utara"
+                    },
+                    {
+                        "raw_id": "7504012004",
+                        "code": "2004",
+                        "name": "Ayula Utara"
+                    },
+                    {
+                        "raw_id": "7504012005",
+                        "code": "2005",
+                        "name": "Ayula Tilango"
+                    },
+                    {
+                        "raw_id": "7504012006",
+                        "code": "2006",
+                        "name": "Lamahu"
+                    },
+                    {
+                        "raw_id": "7504012007",
+                        "code": "2007",
+                        "name": "Huntu Barat"
+                    },
+                    {
+                        "raw_id": "7504012008",
+                        "code": "2008",
+                        "name": "Ayula Timur"
+                    },
+                    {
+                        "raw_id": "7504012009",
+                        "code": "2009",
+                        "name": "Sejahtera"
+                    },
+                    {
+                        "raw_id": "7504012010",
+                        "code": "2010",
+                        "name": "Tinelo Ayula"
+                    }
+                ]
+            },
+            {
+                "raw_id": "7504013",
+                "code": "75.04.013",
+                "name": "Bulango Timur",
+                "villages": [
+                    {
+                        "raw_id": "7504013001",
+                        "code": "3001",
+                        "name": "Bulotalangi"
+                    },
+                    {
+                        "raw_id": "7504013002",
+                        "code": "3002",
+                        "name": "Bulotalangi Barat"
+                    },
+                    {
+                        "raw_id": "7504013003",
+                        "code": "3003",
+                        "name": "Bulotalangi Timur"
+                    },
+                    {
+                        "raw_id": "7504013004",
+                        "code": "3004",
+                        "name": "Toluwaya"
+                    },
+                    {
+                        "raw_id": "7504013005",
+                        "code": "3005",
+                        "name": "Popodu"
+                    }
+                ]
+            },
+            {
+                "raw_id": "7504014",
+                "code": "75.04.014",
+                "name": "Bulango Ulu",
+                "villages": [
+                    {
+                        "raw_id": "7504014001",
+                        "code": "4001",
+                        "name": "Owata"
+                    },
+                    {
+                        "raw_id": "7504014002",
+                        "code": "4002",
+                        "name": "Mongiilo"
+                    },
+                    {
+                        "raw_id": "7504014003",
+                        "code": "4003",
+                        "name": "Mongilo Utara"
+                    },
+                    {
+                        "raw_id": "7504014004",
+                        "code": "4004",
+                        "name": "Pilolaheya"
+                    },
+                    {
+                        "raw_id": "7504014005",
+                        "code": "4005",
+                        "name": "Ilomata"
+                    },
+                    {
+                        "raw_id": "7504014006",
+                        "code": "4006",
+                        "name": "Suka Makmur"
+                    }
+                ]
+            },
+            {
+                "raw_id": "7504020",
+                "code": "75.04.020",
+                "name": "Kabila",
+                "villages": [
+                    {
+                        "raw_id": "7504020006",
+                        "code": "0006",
+                        "name": "Dutohe"
+                    },
+                    {
+                        "raw_id": "7504020007",
+                        "code": "0007",
+                        "name": "Tanggilingo"
+                    },
+                    {
+                        "raw_id": "7504020008",
+                        "code": "0008",
+                        "name": "Padengo"
+                    },
+                    {
+                        "raw_id": "7504020009",
+                        "code": "0009",
+                        "name": "Oluhuta"
+                    },
+                    {
+                        "raw_id": "7504020010",
+                        "code": "0010",
+                        "name": "Tumbihe"
+                    },
+                    {
+                        "raw_id": "7504020011",
+                        "code": "0011",
+                        "name": "Pauwo"
+                    },
+                    {
+                        "raw_id": "7504020012",
+                        "code": "0012",
+                        "name": "Toto Selatan"
+                    },
+                    {
+                        "raw_id": "7504020016",
+                        "code": "0016",
+                        "name": "Poowo"
+                    },
+                    {
+                        "raw_id": "7504020017",
+                        "code": "0017",
+                        "name": "Talango"
+                    },
+                    {
+                        "raw_id": "7504020018",
+                        "code": "0018",
+                        "name": "Poowo Barat"
+                    },
+                    {
+                        "raw_id": "7504020019",
+                        "code": "0019",
+                        "name": "Dutohe Barat"
+                    },
+                    {
+                        "raw_id": "7504020020",
+                        "code": "0020",
+                        "name": "Oluhuta Utara"
+                    }
+                ]
+            },
+            {
+                "raw_id": "7504021",
+                "code": "75.04.021",
+                "name": "Botu Pingge",
+                "villages": [
+                    {
+                        "raw_id": "7504021001",
+                        "code": "1001",
+                        "name": "Buata"
+                    },
+                    {
+                        "raw_id": "7504021002",
+                        "code": "1002",
+                        "name": "Luwohu"
+                    },
+                    {
+                        "raw_id": "7504021003",
+                        "code": "1003",
+                        "name": "Timbuolo"
+                    },
+                    {
+                        "raw_id": "7504021004",
+                        "code": "1004",
+                        "name": "Panggulo"
+                    },
+                    {
+                        "raw_id": "7504021006",
+                        "code": "1006",
+                        "name": "Timbuolo Timur"
+                    },
+                    {
+                        "raw_id": "7504021007",
+                        "code": "1007",
+                        "name": "Tanah Putih"
+                    },
+                    {
+                        "raw_id": "7504021008",
+                        "code": "1008",
+                        "name": "Timbuolo Tengah"
+                    },
+                    {
+                        "raw_id": "7504021009",
+                        "code": "1009",
+                        "name": "Panggulo Barat"
+                    },
+                    {
+                        "raw_id": "7504021010",
+                        "code": "1010",
+                        "name": "Sukma"
+                    }
+                ]
+            },
+            {
+                "raw_id": "7504022",
+                "code": "75.04.022",
+                "name": "Tilongkabila",
+                "villages": [
+                    {
+                        "raw_id": "7504022013",
+                        "code": "2013",
+                        "name": "Toto Utara"
+                    },
+                    {
+                        "raw_id": "7504022014",
+                        "code": "2014",
+                        "name": "Tamboo"
+                    },
+                    {
+                        "raw_id": "7504022015",
+                        "code": "2015",
+                        "name": "Bongoime"
+                    },
+                    {
+                        "raw_id": "7504022017",
+                        "code": "2017",
+                        "name": "Bongopini"
+                    },
+                    {
+                        "raw_id": "7504022018",
+                        "code": "2018",
+                        "name": "Moutong"
+                    },
+                    {
+                        "raw_id": "7504022019",
+                        "code": "2019",
+                        "name": "Tunggulo"
+                    },
+                    {
+                        "raw_id": "7504022020",
+                        "code": "2020",
+                        "name": "Lonuo"
+                    },
+                    {
+                        "raw_id": "7504022021",
+                        "code": "2021",
+                        "name": "Motilango"
+                    },
+                    {
+                        "raw_id": "7504022022",
+                        "code": "2022",
+                        "name": "Iloheluma"
+                    },
+                    {
+                        "raw_id": "7504022023",
+                        "code": "2023",
+                        "name": "Permata"
+                    },
+                    {
+                        "raw_id": "7504022025",
+                        "code": "2025",
+                        "name": "Tunggulo Selatan"
+                    },
+                    {
+                        "raw_id": "7504022026",
+                        "code": "2026",
+                        "name": "Berlian"
+                    },
+                    {
+                        "raw_id": "7504022027",
+                        "code": "2027",
+                        "name": "Bongohulawa"
+                    }
+                ]
+            },
+            {
+                "raw_id": "7504030",
+                "code": "75.04.030",
+                "name": "Suwawa",
+                "villages": [
+                    {
+                        "raw_id": "7504030011",
+                        "code": "0011",
+                        "name": "Tingkohubu"
+                    },
+                    {
+                        "raw_id": "7504030012",
+                        "code": "0012",
+                        "name": "Boludawa"
+                    },
+                    {
+                        "raw_id": "7504030014",
+                        "code": "0014",
+                        "name": "Huluduotamo"
+                    },
+                    {
+                        "raw_id": "7504030019",
+                        "code": "0019",
+                        "name": "Bubeya"
+                    },
+                    {
+                        "raw_id": "7504030020",
+                        "code": "0020",
+                        "name": "Bube Baru"
+                    },
+                    {
+                        "raw_id": "7504030022",
+                        "code": "0022",
+                        "name": "Tinelo"
+                    },
+                    {
+                        "raw_id": "7504030023",
+                        "code": "0023",
+                        "name": "Ulanta"
+                    },
+                    {
+                        "raw_id": "7504030024",
+                        "code": "0024",
+                        "name": "Tingkohubu Timur"
+                    },
+                    {
+                        "raw_id": "7504030025",
+                        "code": "0025",
+                        "name": "Helumo"
+                    }
+                ]
+            },
+            {
+                "raw_id": "7504031",
+                "code": "75.04.031",
+                "name": "Suwawa Selatan",
+                "villages": [
+                    {
+                        "raw_id": "7504031001",
+                        "code": "1001",
+                        "name": "Bulontala"
+                    },
+                    {
+                        "raw_id": "7504031002",
+                        "code": "1002",
+                        "name": "Libungo"
+                    },
+                    {
+                        "raw_id": "7504031003",
+                        "code": "1003",
+                        "name": "Molintogupo"
+                    },
+                    {
+                        "raw_id": "7504031004",
+                        "code": "1004",
+                        "name": "Bonedaa"
+                    },
+                    {
+                        "raw_id": "7504031005",
+                        "code": "1005",
+                        "name": "Bondawuna"
+                    },
+                    {
+                        "raw_id": "7504031006",
+                        "code": "1006",
+                        "name": "Bulontala Timur"
+                    },
+                    {
+                        "raw_id": "7504031007",
+                        "code": "1007",
+                        "name": "Pancuran"
+                    },
+                    {
+                        "raw_id": "7504031008",
+                        "code": "1008",
+                        "name": "Bonda Raya"
+                    }
+                ]
+            },
+            {
+                "raw_id": "7504032",
+                "code": "75.04.032",
+                "name": "Suwawa Timur",
+                "villages": [
+                    {
+                        "raw_id": "7504032002",
+                        "code": "2002",
+                        "name": "Tulabolo"
+                    },
+                    {
+                        "raw_id": "7504032003",
+                        "code": "2003",
+                        "name": "Dumbayabulan"
+                    },
+                    {
+                        "raw_id": "7504032004",
+                        "code": "2004",
+                        "name": "Tilangobula"
+                    },
+                    {
+                        "raw_id": "7504032006",
+                        "code": "2006",
+                        "name": "Tulabolo Timur"
+                    },
+                    {
+                        "raw_id": "7504032009",
+                        "code": "2009",
+                        "name": "Tulabolo Barat"
+                    },
+                    {
+                        "raw_id": "7504032010",
+                        "code": "2010",
+                        "name": "Poduoma"
+                    },
+                    {
+                        "raw_id": "7504032011",
+                        "code": "2011",
+                        "name": "Panggulo"
+                    },
+                    {
+                        "raw_id": "7504032012",
+                        "code": "2012",
+                        "name": "Tinemba"
+                    },
+                    {
+                        "raw_id": "7504032013",
+                        "code": "2013",
+                        "name": "Pangi"
+                    }
+                ]
+            },
+            {
+                "raw_id": "7504033",
+                "code": "75.04.033",
+                "name": "Suwawa Tengah",
+                "villages": [
+                    {
+                        "raw_id": "7504033001",
+                        "code": "3001",
+                        "name": "Lompotoo"
+                    },
+                    {
+                        "raw_id": "7504033002",
+                        "code": "3002",
+                        "name": "Lombongo"
+                    },
+                    {
+                        "raw_id": "7504033003",
+                        "code": "3003",
+                        "name": "Duano"
+                    },
+                    {
+                        "raw_id": "7504033004",
+                        "code": "3004",
+                        "name": "Tolomato"
+                    },
+                    {
+                        "raw_id": "7504033005",
+                        "code": "3005",
+                        "name": "Alale"
+                    },
+                    {
+                        "raw_id": "7504033006",
+                        "code": "3006",
+                        "name": "Tapadaa"
+                    }
+                ]
+            },
+            {
+                "raw_id": "7504034",
+                "code": "75.04.034",
+                "name": "Pinogu",
+                "villages": [
+                    {
+                        "raw_id": "7504034001",
+                        "code": "4001",
+                        "name": "Bangio"
+                    },
+                    {
+                        "raw_id": "7504034002",
+                        "code": "4002",
+                        "name": "Pinogu Permai"
+                    },
+                    {
+                        "raw_id": "7504034003",
+                        "code": "4003",
+                        "name": "Tilonggibila"
+                    },
+                    {
+                        "raw_id": "7504034004",
+                        "code": "4004",
+                        "name": "Pinogu"
+                    },
+                    {
+                        "raw_id": "7504034005",
+                        "code": "4005",
+                        "name": "Dataran Hijau"
+                    }
+                ]
+            },
+            {
+                "raw_id": "7504040",
+                "code": "75.04.040",
+                "name": "Bonepantai",
+                "villages": [
+                    {
+                        "raw_id": "7504040003",
+                        "code": "0003",
+                        "name": "Tolotio"
+                    },
+                    {
+                        "raw_id": "7504040004",
+                        "code": "0004",
+                        "name": "Tamboo"
+                    },
+                    {
+                        "raw_id": "7504040005",
+                        "code": "0005",
+                        "name": "Bilungala"
+                    },
+                    {
+                        "raw_id": "7504040006",
+                        "code": "0006",
+                        "name": "Tongo"
+                    },
+                    {
+                        "raw_id": "7504040007",
+                        "code": "0007",
+                        "name": "Uabanga"
+                    },
+                    {
+                        "raw_id": "7504040008",
+                        "code": "0008",
+                        "name": "Bilungala Utara"
+                    },
+                    {
+                        "raw_id": "7504040009",
+                        "code": "0009",
+                        "name": "Tihu"
+                    },
+                    {
+                        "raw_id": "7504040010",
+                        "code": "0010",
+                        "name": "Lembah Hijau"
+                    },
+                    {
+                        "raw_id": "7504040011",
+                        "code": "0011",
+                        "name": "Tunas Jaya"
+                    },
+                    {
+                        "raw_id": "7504040012",
+                        "code": "0012",
+                        "name": "Ombulo Hijau"
+                    },
+                    {
+                        "raw_id": "7504040013",
+                        "code": "0013",
+                        "name": "Batu Hijau"
+                    },
+                    {
+                        "raw_id": "7504040014",
+                        "code": "0014",
+                        "name": "Kamiri"
+                    },
+                    {
+                        "raw_id": "7504040015",
+                        "code": "0015",
+                        "name": "Pelita Hijau"
+                    }
+                ]
+            },
+            {
+                "raw_id": "7504041",
+                "code": "75.04.041",
+                "name": "Kabila Bone",
+                "villages": [
+                    {
+                        "raw_id": "7504041001",
+                        "code": "1001",
+                        "name": "Huangobotu"
+                    },
+                    {
+                        "raw_id": "7504041002",
+                        "code": "1002",
+                        "name": "Molotabu"
+                    },
+                    {
+                        "raw_id": "7504041003",
+                        "code": "1003",
+                        "name": "Oluhuta"
+                    },
+                    {
+                        "raw_id": "7504041004",
+                        "code": "1004",
+                        "name": "Botubarani"
+                    },
+                    {
+                        "raw_id": "7504041005",
+                        "code": "1005",
+                        "name": "Biluango"
+                    },
+                    {
+                        "raw_id": "7504041006",
+                        "code": "1006",
+                        "name": "Modelomo"
+                    },
+                    {
+                        "raw_id": "7504041007",
+                        "code": "1007",
+                        "name": "Botutonuo"
+                    },
+                    {
+                        "raw_id": "7504041008",
+                        "code": "1008",
+                        "name": "Olele"
+                    },
+                    {
+                        "raw_id": "7504041009",
+                        "code": "1009",
+                        "name": "Bintalahe"
+                    }
+                ]
+            },
+            {
+                "raw_id": "7504042",
+                "code": "75.04.042",
+                "name": "Bone Raya",
+                "villages": [
+                    {
+                        "raw_id": "7504042010",
+                        "code": "2010",
+                        "name": "Inomata"
+                    },
+                    {
+                        "raw_id": "7504042011",
+                        "code": "2011",
+                        "name": "Tombulilato"
+                    },
+                    {
+                        "raw_id": "7504042014",
+                        "code": "2014",
+                        "name": "Mootinelo"
+                    },
+                    {
+                        "raw_id": "7504042015",
+                        "code": "2015",
+                        "name": "Mootayu"
+                    },
+                    {
+                        "raw_id": "7504042016",
+                        "code": "2016",
+                        "name": "Pelita Jaya"
+                    },
+                    {
+                        "raw_id": "7504042017",
+                        "code": "2017",
+                        "name": "Laut Biru"
+                    },
+                    {
+                        "raw_id": "7504042018",
+                        "code": "2018",
+                        "name": "Alo"
+                    },
+                    {
+                        "raw_id": "7504042019",
+                        "code": "2019",
+                        "name": "Moopiya"
+                    },
+                    {
+                        "raw_id": "7504042020",
+                        "code": "2020",
+                        "name": "Bunga"
+                    },
+                    {
+                        "raw_id": "7504042021",
+                        "code": "2021",
+                        "name": "Mootawa"
+                    }
+                ]
+            },
+            {
+                "raw_id": "7504043",
+                "code": "75.04.043",
+                "name": "Bone",
+                "villages": [
+                    {
+                        "raw_id": "7504043012",
+                        "code": "3012",
+                        "name": "Monano"
+                    },
+                    {
+                        "raw_id": "7504043013",
+                        "code": "3013",
+                        "name": "Sogitia"
+                    },
+                    {
+                        "raw_id": "7504043014",
+                        "code": "3014",
+                        "name": "Taludaa"
+                    },
+                    {
+                        "raw_id": "7504043015",
+                        "code": "3015",
+                        "name": "Bilolantunga"
+                    },
+                    {
+                        "raw_id": "7504043016",
+                        "code": "3016",
+                        "name": "Moodulio"
+                    },
+                    {
+                        "raw_id": "7504043017",
+                        "code": "3017",
+                        "name": "Inogaluma"
+                    },
+                    {
+                        "raw_id": "7504043018",
+                        "code": "3018",
+                        "name": "Tumbuh Mekar"
+                    },
+                    {
+                        "raw_id": "7504043019",
+                        "code": "3019",
+                        "name": "Molamahu"
+                    },
+                    {
+                        "raw_id": "7504043020",
+                        "code": "3020",
+                        "name": "Ilohuuwa"
+                    },
+                    {
+                        "raw_id": "7504043021",
+                        "code": "3021",
+                        "name": "Masiaga"
+                    },
+                    {
+                        "raw_id": "7504043022",
+                        "code": "3022",
+                        "name": "Muara Bone"
+                    },
+                    {
+                        "raw_id": "7504043023",
+                        "code": "3023",
+                        "name": "Waluhu"
+                    },
+                    {
+                        "raw_id": "7504043024",
+                        "code": "3024",
+                        "name": "Cendana Putih"
+                    },
+                    {
+                        "raw_id": "7504043025",
+                        "code": "3025",
+                        "name": "Permata"
+                    }
+                ]
+            },
+            {
+                "raw_id": "7504044",
+                "code": "75.04.044",
+                "name": "Bulawa",
+                "villages": [
+                    {
+                        "raw_id": "7504044001",
+                        "code": "4001",
+                        "name": "Kaidundu"
+                    },
+                    {
+                        "raw_id": "7504044002",
+                        "code": "4002",
+                        "name": "Mamungaa"
+                    },
+                    {
+                        "raw_id": "7504044003",
+                        "code": "4003",
+                        "name": "Kaidundu Barat"
+                    },
+                    {
+                        "raw_id": "7504044004",
+                        "code": "4004",
+                        "name": "Mopuya"
+                    },
+                    {
+                        "raw_id": "7504044005",
+                        "code": "4005",
+                        "name": "Pinomontiga"
+                    },
+                    {
+                        "raw_id": "7504044006",
+                        "code": "4006",
+                        "name": "Dunggilata"
+                    },
+                    {
+                        "raw_id": "7504044007",
+                        "code": "4007",
+                        "name": "Mamungaa Timur"
+                    },
+                    {
+                        "raw_id": "7504044008",
+                        "code": "4008",
+                        "name": "Bukit Hijau"
+                    },
+                    {
+                        "raw_id": "7504044009",
+                        "code": "4009",
+                        "name": "Patoa"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "raw_id": "7505",
+        "code": "75.05",
+        "name": "Kabupaten Gorontalo Utara",
+        "districts": [
+            {
+                "raw_id": "7505010",
+                "code": "75.05.010",
+                "name": "Atinggola",
+                "villages": [
+                    {
+                        "raw_id": "7505010005",
+                        "code": "0005",
+                        "name": "Imana"
+                    },
+                    {
+                        "raw_id": "7505010006",
+                        "code": "0006",
+                        "name": "Ilomata"
+                    },
+                    {
+                        "raw_id": "7505010007",
+                        "code": "0007",
+                        "name": "Bintana"
+                    },
+                    {
+                        "raw_id": "7505010008",
+                        "code": "0008",
+                        "name": "Monggupo"
+                    },
+                    {
+                        "raw_id": "7505010009",
+                        "code": "0009",
+                        "name": "Kota Jin"
+                    },
+                    {
+                        "raw_id": "7505010010",
+                        "code": "0010",
+                        "name": "Pinontoyonga"
+                    },
+                    {
+                        "raw_id": "7505010011",
+                        "code": "0011",
+                        "name": "Buata"
+                    },
+                    {
+                        "raw_id": "7505010012",
+                        "code": "0012",
+                        "name": "Wapalo"
+                    },
+                    {
+                        "raw_id": "7505010013",
+                        "code": "0013",
+                        "name": "Iloheluma"
+                    },
+                    {
+                        "raw_id": "7505010014",
+                        "code": "0014",
+                        "name": "Sigaso"
+                    },
+                    {
+                        "raw_id": "7505010015",
+                        "code": "0015",
+                        "name": "Oluhuta"
+                    },
+                    {
+                        "raw_id": "7505010016",
+                        "code": "0016",
+                        "name": "Kotajin Utara"
+                    },
+                    {
+                        "raw_id": "7505010017",
+                        "code": "0017",
+                        "name": "Tombulilato"
+                    },
+                    {
+                        "raw_id": "7505010018",
+                        "code": "0018",
+                        "name": "Posono"
+                    }
+                ]
+            },
+            {
+                "raw_id": "7505011",
+                "code": "75.05.011",
+                "name": "Gentuma Raya",
+                "villages": [
+                    {
+                        "raw_id": "7505011001",
+                        "code": "1001",
+                        "name": "Ipilo"
+                    },
+                    {
+                        "raw_id": "7505011002",
+                        "code": "1002",
+                        "name": "Molonggota"
+                    },
+                    {
+                        "raw_id": "7505011003",
+                        "code": "1003",
+                        "name": "Gentuma"
+                    },
+                    {
+                        "raw_id": "7505011004",
+                        "code": "1004",
+                        "name": "Dumolodo"
+                    },
+                    {
+                        "raw_id": "7505011012",
+                        "code": "1012",
+                        "name": "Langke"
+                    },
+                    {
+                        "raw_id": "7505011013",
+                        "code": "1013",
+                        "name": "Durian"
+                    },
+                    {
+                        "raw_id": "7505011014",
+                        "code": "1014",
+                        "name": "Motomingo"
+                    },
+                    {
+                        "raw_id": "7505011015",
+                        "code": "1015",
+                        "name": "Bohusami"
+                    },
+                    {
+                        "raw_id": "7505011016",
+                        "code": "1016",
+                        "name": "Ketapang"
+                    },
+                    {
+                        "raw_id": "7505011017",
+                        "code": "1017",
+                        "name": "Pasalae"
+                    },
+                    {
+                        "raw_id": "7505011018",
+                        "code": "1018",
+                        "name": "Nanati Jaya"
+                    }
+                ]
+            },
+            {
+                "raw_id": "7505020",
+                "code": "75.05.020",
+                "name": "Kwandang",
+                "villages": [
+                    {
+                        "raw_id": "7505020008",
+                        "code": "0008",
+                        "name": "Pontolo"
+                    },
+                    {
+                        "raw_id": "7505020009",
+                        "code": "0009",
+                        "name": "Molingkapoto"
+                    },
+                    {
+                        "raw_id": "7505020010",
+                        "code": "0010",
+                        "name": "Mootinelo"
+                    },
+                    {
+                        "raw_id": "7505020011",
+                        "code": "0011",
+                        "name": "Leboto"
+                    },
+                    {
+                        "raw_id": "7505020012",
+                        "code": "0012",
+                        "name": "Bualemo"
+                    },
+                    {
+                        "raw_id": "7505020013",
+                        "code": "0013",
+                        "name": "Posso"
+                    },
+                    {
+                        "raw_id": "7505020014",
+                        "code": "0014",
+                        "name": "Bulalo"
+                    },
+                    {
+                        "raw_id": "7505020015",
+                        "code": "0015",
+                        "name": "Titidu"
+                    },
+                    {
+                        "raw_id": "7505020016",
+                        "code": "0016",
+                        "name": "Moluo"
+                    },
+                    {
+                        "raw_id": "7505020021",
+                        "code": "0021",
+                        "name": "Ombulodata"
+                    },
+                    {
+                        "raw_id": "7505020022",
+                        "code": "0022",
+                        "name": "Pontolo Atas"
+                    },
+                    {
+                        "raw_id": "7505020023",
+                        "code": "0023",
+                        "name": "Botuwombato"
+                    },
+                    {
+                        "raw_id": "7505020024",
+                        "code": "0024",
+                        "name": "Molingkapoto Selatan"
+                    },
+                    {
+                        "raw_id": "7505020025",
+                        "code": "0025",
+                        "name": "Botungobungo"
+                    },
+                    {
+                        "raw_id": "7505020026",
+                        "code": "0026",
+                        "name": "Alata Karya"
+                    },
+                    {
+                        "raw_id": "7505020027",
+                        "code": "0027",
+                        "name": "Masuru"
+                    },
+                    {
+                        "raw_id": "7505020028",
+                        "code": "0028",
+                        "name": "Cisadane"
+                    },
+                    {
+                        "raw_id": "7505020029",
+                        "code": "0029",
+                        "name": "Katialada"
+                    }
+                ]
+            },
+            {
+                "raw_id": "7505021",
+                "code": "75.05.021",
+                "name": "Tomilito",
+                "villages": [
+                    {
+                        "raw_id": "7505021001",
+                        "code": "1001",
+                        "name": "Dambalo"
+                    },
+                    {
+                        "raw_id": "7505021002",
+                        "code": "1002",
+                        "name": "Molantadu"
+                    },
+                    {
+                        "raw_id": "7505021003",
+                        "code": "1003",
+                        "name": "Tanjung Karang"
+                    },
+                    {
+                        "raw_id": "7505021004",
+                        "code": "1004",
+                        "name": "Jembatan Merah"
+                    },
+                    {
+                        "raw_id": "7505021005",
+                        "code": "1005",
+                        "name": "Leyao"
+                    },
+                    {
+                        "raw_id": "7505021006",
+                        "code": "1006",
+                        "name": "Milango"
+                    },
+                    {
+                        "raw_id": "7505021007",
+                        "code": "1007",
+                        "name": "Bubode"
+                    },
+                    {
+                        "raw_id": "7505021008",
+                        "code": "1008",
+                        "name": "Bulango Raya"
+                    },
+                    {
+                        "raw_id": "7505021009",
+                        "code": "1009",
+                        "name": "Huidu Melito"
+                    },
+                    {
+                        "raw_id": "7505021010",
+                        "code": "1010",
+                        "name": "Mutiara Laut"
+                    }
+                ]
+            },
+            {
+                "raw_id": "7505022",
+                "code": "75.05.022",
+                "name": "Ponelo Kepulauan",
+                "villages": [
+                    {
+                        "raw_id": "7505022001",
+                        "code": "2001",
+                        "name": "Ponelo"
+                    },
+                    {
+                        "raw_id": "7505022002",
+                        "code": "2002",
+                        "name": "Otiola"
+                    },
+                    {
+                        "raw_id": "7505022003",
+                        "code": "2003",
+                        "name": "Tihengo"
+                    },
+                    {
+                        "raw_id": "7505022004",
+                        "code": "2004",
+                        "name": "Malambe"
+                    }
+                ]
+            },
+            {
+                "raw_id": "7505030",
+                "code": "75.05.030",
+                "name": "Anggrek",
+                "villages": [
+                    {
+                        "raw_id": "7505030004",
+                        "code": "0004",
+                        "name": "Tolango"
+                    },
+                    {
+                        "raw_id": "7505030005",
+                        "code": "0005",
+                        "name": "Ilangata"
+                    },
+                    {
+                        "raw_id": "7505030006",
+                        "code": "0006",
+                        "name": "Popalo"
+                    },
+                    {
+                        "raw_id": "7505030007",
+                        "code": "0007",
+                        "name": "Tolongio"
+                    },
+                    {
+                        "raw_id": "7505030008",
+                        "code": "0008",
+                        "name": "Dudepo"
+                    },
+                    {
+                        "raw_id": "7505030010",
+                        "code": "0010",
+                        "name": "Motilango"
+                    },
+                    {
+                        "raw_id": "7505030016",
+                        "code": "0016",
+                        "name": "Iloheluma"
+                    },
+                    {
+                        "raw_id": "7505030017",
+                        "code": "0017",
+                        "name": "Ibarat"
+                    },
+                    {
+                        "raw_id": "7505030018",
+                        "code": "0018",
+                        "name": "Datahu"
+                    },
+                    {
+                        "raw_id": "7505030019",
+                        "code": "0019",
+                        "name": "Putiana"
+                    },
+                    {
+                        "raw_id": "7505030020",
+                        "code": "0020",
+                        "name": "Hiyalooile"
+                    },
+                    {
+                        "raw_id": "7505030021",
+                        "code": "0021",
+                        "name": "Ilodulunga"
+                    },
+                    {
+                        "raw_id": "7505030022",
+                        "code": "0022",
+                        "name": "Langge"
+                    },
+                    {
+                        "raw_id": "7505030023",
+                        "code": "0023",
+                        "name": "Tutuwoto"
+                    },
+                    {
+                        "raw_id": "7505030025",
+                        "code": "0025",
+                        "name": "Helumo"
+                    }
+                ]
+            },
+            {
+                "raw_id": "7505031",
+                "code": "75.05.031",
+                "name": "Monano",
+                "villages": [
+                    {
+                        "raw_id": "7505031002",
+                        "code": "1002",
+                        "name": "Monano"
+                    },
+                    {
+                        "raw_id": "7505031003",
+                        "code": "1003",
+                        "name": "Tudi"
+                    },
+                    {
+                        "raw_id": "7505031004",
+                        "code": "1004",
+                        "name": "Monas"
+                    },
+                    {
+                        "raw_id": "7505031005",
+                        "code": "1005",
+                        "name": "Tolitehuyu"
+                    },
+                    {
+                        "raw_id": "7505031006",
+                        "code": "1006",
+                        "name": "Zuriyati"
+                    },
+                    {
+                        "raw_id": "7505031007",
+                        "code": "1007",
+                        "name": "Mokonowu"
+                    },
+                    {
+                        "raw_id": "7505031008",
+                        "code": "1008",
+                        "name": "Pilohulata"
+                    },
+                    {
+                        "raw_id": "7505031009",
+                        "code": "1009",
+                        "name": "Garapia"
+                    },
+                    {
+                        "raw_id": "7505031010",
+                        "code": "1010",
+                        "name": "Sogu"
+                    }
+                ]
+            },
+            {
+                "raw_id": "7505040",
+                "code": "75.05.040",
+                "name": "Sumalata",
+                "villages": [
+                    {
+                        "raw_id": "7505040009",
+                        "code": "0009",
+                        "name": "Buloila"
+                    },
+                    {
+                        "raw_id": "7505040010",
+                        "code": "0010",
+                        "name": "Bulontio Barat"
+                    },
+                    {
+                        "raw_id": "7505040011",
+                        "code": "0011",
+                        "name": "Bulontio Timur"
+                    },
+                    {
+                        "raw_id": "7505040016",
+                        "code": "0016",
+                        "name": "Kikia"
+                    },
+                    {
+                        "raw_id": "7505040017",
+                        "code": "0017",
+                        "name": "Kasia"
+                    },
+                    {
+                        "raw_id": "7505040019",
+                        "code": "0019",
+                        "name": "Lelato"
+                    },
+                    {
+                        "raw_id": "7505040020",
+                        "code": "0020",
+                        "name": "Tumba"
+                    },
+                    {
+                        "raw_id": "7505040021",
+                        "code": "0021",
+                        "name": "Mebongo"
+                    },
+                    {
+                        "raw_id": "7505040022",
+                        "code": "0022",
+                        "name": "Pulohenti"
+                    },
+                    {
+                        "raw_id": "7505040023",
+                        "code": "0023",
+                        "name": "Hutakalo"
+                    },
+                    {
+                        "raw_id": "7505040028",
+                        "code": "0028",
+                        "name": "Puncak Mandiri"
+                    }
+                ]
+            },
+            {
+                "raw_id": "7505041",
+                "code": "75.05.041",
+                "name": "Sumalata Timur",
+                "villages": [
+                    {
+                        "raw_id": "7505041002",
+                        "code": "1002",
+                        "name": "Buladu"
+                    },
+                    {
+                        "raw_id": "7505041003",
+                        "code": "1003",
+                        "name": "Deme Ii"
+                    },
+                    {
+                        "raw_id": "7505041004",
+                        "code": "1004",
+                        "name": "Deme I"
+                    },
+                    {
+                        "raw_id": "7505041005",
+                        "code": "1005",
+                        "name": "Dulukapa"
+                    },
+                    {
+                        "raw_id": "7505041006",
+                        "code": "1006",
+                        "name": "Bubalango"
+                    },
+                    {
+                        "raw_id": "7505041007",
+                        "code": "1007",
+                        "name": "Hulawa"
+                    },
+                    {
+                        "raw_id": "7505041008",
+                        "code": "1008",
+                        "name": "Koluwoka"
+                    },
+                    {
+                        "raw_id": "7505041009",
+                        "code": "1009",
+                        "name": "Buluwatu"
+                    },
+                    {
+                        "raw_id": "7505041010",
+                        "code": "1010",
+                        "name": "Motihelumo"
+                    }
+                ]
+            },
+            {
+                "raw_id": "7505050",
+                "code": "75.05.050",
+                "name": "Tolinggula",
+                "villages": [
+                    {
+                        "raw_id": "7505050001",
+                        "code": "0001",
+                        "name": "Limbato"
+                    },
+                    {
+                        "raw_id": "7505050002",
+                        "code": "0002",
+                        "name": "Papualangi"
+                    },
+                    {
+                        "raw_id": "7505050003",
+                        "code": "0003",
+                        "name": "Tolinggula Ulu"
+                    },
+                    {
+                        "raw_id": "7505050004",
+                        "code": "0004",
+                        "name": "Tolinggula Tengah"
+                    },
+                    {
+                        "raw_id": "7505050005",
+                        "code": "0005",
+                        "name": "Tolinggula Pantai"
+                    },
+                    {
+                        "raw_id": "7505050008",
+                        "code": "0008",
+                        "name": "Cempaka Putih"
+                    },
+                    {
+                        "raw_id": "7505050009",
+                        "code": "0009",
+                        "name": "Molangga"
+                    },
+                    {
+                        "raw_id": "7505050012",
+                        "code": "0012",
+                        "name": "Ilotunggula"
+                    },
+                    {
+                        "raw_id": "7505050013",
+                        "code": "0013",
+                        "name": "Tolite Jaya"
+                    },
+                    {
+                        "raw_id": "7505050017",
+                        "code": "0017",
+                        "name": "Ilomangga"
+                    }
+                ]
+            },
+            {
+                "raw_id": "7505051",
+                "code": "75.05.051",
+                "name": "Biau",
+                "villages": [
+                    {
+                        "raw_id": "7505051001",
+                        "code": "1001",
+                        "name": "Biau"
+                    },
+                    {
+                        "raw_id": "7505051002",
+                        "code": "1002",
+                        "name": "Potanga"
+                    },
+                    {
+                        "raw_id": "7505051003",
+                        "code": "1003",
+                        "name": "Windu"
+                    },
+                    {
+                        "raw_id": "7505051004",
+                        "code": "1004",
+                        "name": "Didingga"
+                    },
+                    {
+                        "raw_id": "7505051005",
+                        "code": "1005",
+                        "name": "Omuto"
+                    },
+                    {
+                        "raw_id": "7505051006",
+                        "code": "1006",
+                        "name": "Luhuto"
+                    },
+                    {
+                        "raw_id": "7505051007",
+                        "code": "1007",
+                        "name": "Bohulo"
+                    },
+                    {
+                        "raw_id": "7505051008",
+                        "code": "1008",
+                        "name": "Topi"
+                    },
+                    {
+                        "raw_id": "7505051009",
+                        "code": "1009",
+                        "name": "Bualo"
+                    },
+                    {
+                        "raw_id": "7505051010",
+                        "code": "1010",
+                        "name": "Sembihingan"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "raw_id": "7571",
+        "code": "75.71",
+        "name": "Kota Gorontalo",
+        "districts": [
+            {
+                "raw_id": "7571010",
+                "code": "75.71.010",
+                "name": "Kota Barat",
+                "villages": [
+                    {
+                        "raw_id": "7571010001",
+                        "code": "0001",
+                        "name": "Dembe I"
+                    },
+                    {
+                        "raw_id": "7571010002",
+                        "code": "0002",
+                        "name": "Lekobalo"
+                    },
+                    {
+                        "raw_id": "7571010003",
+                        "code": "0003",
+                        "name": "Pilolodaa"
+                    },
+                    {
+                        "raw_id": "7571010004",
+                        "code": "0004",
+                        "name": "Buliide"
+                    },
+                    {
+                        "raw_id": "7571010005",
+                        "code": "0005",
+                        "name": "Tenilo"
+                    },
+                    {
+                        "raw_id": "7571010006",
+                        "code": "0006",
+                        "name": "Molosipat W"
+                    },
+                    {
+                        "raw_id": "7571010008",
+                        "code": "0008",
+                        "name": "Buladu"
+                    }
+                ]
+            },
+            {
+                "raw_id": "7571011",
+                "code": "75.71.011",
+                "name": "Dungingi",
+                "villages": [
+                    {
+                        "raw_id": "7571011001",
+                        "code": "1001",
+                        "name": "Tuladenggi"
+                    },
+                    {
+                        "raw_id": "7571011002",
+                        "code": "1002",
+                        "name": "Libuo"
+                    },
+                    {
+                        "raw_id": "7571011003",
+                        "code": "1003",
+                        "name": "Tomulabutao"
+                    },
+                    {
+                        "raw_id": "7571011004",
+                        "code": "1004",
+                        "name": "Huangobotu"
+                    },
+                    {
+                        "raw_id": "7571011005",
+                        "code": "1005",
+                        "name": "Tomulabutao Selatan"
+                    }
+                ]
+            },
+            {
+                "raw_id": "7571020",
+                "code": "75.71.020",
+                "name": "Kota Selatan",
+                "villages": [
+                    {
+                        "raw_id": "7571020010",
+                        "code": "0010",
+                        "name": "Biawu"
+                    },
+                    {
+                        "raw_id": "7571020011",
+                        "code": "0011",
+                        "name": "Biawao"
+                    },
+                    {
+                        "raw_id": "7571020018",
+                        "code": "0018",
+                        "name": "Limba B"
+                    },
+                    {
+                        "raw_id": "7571020019",
+                        "code": "0019",
+                        "name": "Limba U Satu"
+                    },
+                    {
+                        "raw_id": "7571020020",
+                        "code": "0020",
+                        "name": "Limba U Dua"
+                    }
+                ]
+            },
+            {
+                "raw_id": "7571021",
+                "code": "75.71.021",
+                "name": "Kota Timur",
+                "villages": [
+                    {
+                        "raw_id": "7571021006",
+                        "code": "1006",
+                        "name": "Padebuolo"
+                    },
+                    {
+                        "raw_id": "7571021007",
+                        "code": "1007",
+                        "name": "Ipilo"
+                    },
+                    {
+                        "raw_id": "7571021008",
+                        "code": "1008",
+                        "name": "Tamalate"
+                    },
+                    {
+                        "raw_id": "7571021009",
+                        "code": "1009",
+                        "name": "Moodu"
+                    },
+                    {
+                        "raw_id": "7571021010",
+                        "code": "1010",
+                        "name": "Heledulaa Selatan"
+                    },
+                    {
+                        "raw_id": "7571021011",
+                        "code": "1011",
+                        "name": "Heledulaa"
+                    }
+                ]
+            },
+            {
+                "raw_id": "7571022",
+                "code": "75.71.022",
+                "name": "Hulonthalangi",
+                "villages": [
+                    {
+                        "raw_id": "7571022001",
+                        "code": "2001",
+                        "name": "Tanjung Kramat"
+                    },
+                    {
+                        "raw_id": "7571022002",
+                        "code": "2002",
+                        "name": "Pohe"
+                    },
+                    {
+                        "raw_id": "7571022003",
+                        "code": "2003",
+                        "name": "Tenda"
+                    },
+                    {
+                        "raw_id": "7571022004",
+                        "code": "2004",
+                        "name": "Siendeng"
+                    },
+                    {
+                        "raw_id": "7571022005",
+                        "code": "2005",
+                        "name": "Donggala"
+                    }
+                ]
+            },
+            {
+                "raw_id": "7571023",
+                "code": "75.71.023",
+                "name": "Dumbo Raya",
+                "villages": [
+                    {
+                        "raw_id": "7571023001",
+                        "code": "3001",
+                        "name": "Leato Selatan"
+                    },
+                    {
+                        "raw_id": "7571023002",
+                        "code": "3002",
+                        "name": "Leato Utara"
+                    },
+                    {
+                        "raw_id": "7571023003",
+                        "code": "3003",
+                        "name": "Talumolo"
+                    },
+                    {
+                        "raw_id": "7571023004",
+                        "code": "3004",
+                        "name": "Botu"
+                    },
+                    {
+                        "raw_id": "7571023005",
+                        "code": "3005",
+                        "name": "Bugis"
+                    }
+                ]
+            },
+            {
+                "raw_id": "7571030",
+                "code": "75.71.030",
+                "name": "Kota Utara",
+                "villages": [
+                    {
+                        "raw_id": "7571030003",
+                        "code": "0003",
+                        "name": "Dembe Ii"
+                    },
+                    {
+                        "raw_id": "7571030004",
+                        "code": "0004",
+                        "name": "Wongkaditi"
+                    },
+                    {
+                        "raw_id": "7571030005",
+                        "code": "0005",
+                        "name": "Wongkaditi Barat"
+                    },
+                    {
+                        "raw_id": "7571030011",
+                        "code": "0011",
+                        "name": "Dulomo Selatan"
+                    },
+                    {
+                        "raw_id": "7571030012",
+                        "code": "0012",
+                        "name": "Dulomo"
+                    },
+                    {
+                        "raw_id": "7571030015",
+                        "code": "0015",
+                        "name": "Dembe Jaya"
+                    }
+                ]
+            },
+            {
+                "raw_id": "7571031",
+                "code": "75.71.031",
+                "name": "Kota Tengah",
+                "villages": [
+                    {
+                        "raw_id": "7571031001",
+                        "code": "1001",
+                        "name": "Wumialo"
+                    },
+                    {
+                        "raw_id": "7571031002",
+                        "code": "1002",
+                        "name": "Dulalowo"
+                    },
+                    {
+                        "raw_id": "7571031003",
+                        "code": "1003",
+                        "name": "Liluwo"
+                    },
+                    {
+                        "raw_id": "7571031004",
+                        "code": "1004",
+                        "name": "Pulubala"
+                    },
+                    {
+                        "raw_id": "7571031005",
+                        "code": "1005",
+                        "name": "Paguyaman"
+                    },
+                    {
+                        "raw_id": "7571031006",
+                        "code": "1006",
+                        "name": "Dulalowo Timur"
+                    }
+                ]
+            },
+            {
+                "raw_id": "7571032",
+                "code": "75.71.032",
+                "name": "Sipatana",
+                "villages": [
+                    {
+                        "raw_id": "7571032001",
+                        "code": "2001",
+                        "name": "Tapa"
+                    },
+                    {
+                        "raw_id": "7571032002",
+                        "code": "2002",
+                        "name": "Molosipat U"
+                    },
+                    {
+                        "raw_id": "7571032003",
+                        "code": "2003",
+                        "name": "Tanggikiki"
+                    },
+                    {
+                        "raw_id": "7571032004",
+                        "code": "2004",
+                        "name": "Bulotada Timur"
+                    },
+                    {
+                        "raw_id": "7571032005",
+                        "code": "2005",
+                        "name": "Bulotadaa"
+                    }
+                ]
+            }
+        ]
+    }
+]

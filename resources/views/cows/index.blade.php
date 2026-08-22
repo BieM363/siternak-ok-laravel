@@ -32,20 +32,24 @@
     <!-- Search Form -->
     <div class="glass-card p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
         <form method="GET" action="{{ route('cows.index') }}" class="flex flex-col sm:flex-row gap-3">
-            <div class="relative flex-1">
-                <input type="text" name="search" value="{{ $search }}" placeholder="Cari NIK Sapi, Nama Sapi, NIK Peternak, Nama Peternak..." 
-                    class="w-full pl-9 pr-4 py-2.5 bg-white dark:bg-slate-950/80 border border-slate-300 dark:border-slate-800 rounded-xl text-xs text-slate-900 dark:text-white focus:outline-none focus:border-emerald-500">
-                <i class="fa-solid fa-magnifying-glass absolute left-3 top-3 text-slate-400 text-xs"></i>
+            <div class="flex-1">
+                <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">Pencarian Data</label>
+                <div class="relative">
+                    <input type="text" name="search" value="{{ $search }}" placeholder="Cari NIK Sapi, Nama Sapi, Peternak..." 
+                        class="w-full pl-10 pr-4 py-2.5 bg-white dark:bg-slate-950/80 border border-slate-300 dark:border-slate-800 rounded-xl text-xs text-slate-900 dark:text-white focus:outline-none focus:border-emerald-500">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3 text-slate-400 text-xs"></i>
+                </div>
             </div>
-            <button type="submit" class="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-xl shadow transition-all flex items-center justify-center space-x-2">
-                <i class="fa-solid fa-search"></i>
-                <span>Cari</span>
-            </button>
-            @if($search)
-            <a href="{{ route('cows.index') }}" class="px-3.5 py-2.5 bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white rounded-xl text-xs flex items-center justify-center">
-                <i class="fa-solid fa-xmark"></i>
-            </a>
-            @endif
+            <div class="flex items-end gap-2">
+                <button type="submit" class="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-bold shadow transition flex items-center gap-1.5 whitespace-nowrap">
+                    <i class="fa-solid fa-filter"></i> Cari
+                </button>
+                @if($search)
+                <a href="{{ route('cows.index') }}" class="px-4 py-2.5 bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 rounded-xl text-xs font-semibold border border-slate-300 dark:border-slate-700 transition whitespace-nowrap">
+                    Reset
+                </a>
+                @endif
+            </div>
         </form>
     </div>
 
@@ -57,7 +61,7 @@
                     <tr>
                         <th class="px-4 py-3.5 whitespace-nowrap">NIK Sapi & Nama</th>
                         <th class="px-4 py-3.5 whitespace-nowrap">Jenis Sapi</th>
-                        <th class="px-4 py-3.5 whitespace-nowrap">Peternak Pemilik (NIK & Nama)</th>
+                        <th class="px-4 py-3.5 whitespace-nowrap">Peternak Pemilik {{ auth()->check() && !auth()->user()->isGuest() ? '(NIK & Nama)' : '' }}</th>
                         <th class="px-4 py-3.5 whitespace-nowrap">Wilayah Dinas</th>
                         <th class="px-4 py-3.5 whitespace-nowrap">Status Kebuntingan</th>
                         <th class="px-4 py-3.5 text-right whitespace-nowrap">Aksi</th>
@@ -77,11 +81,13 @@
                         <td class="px-4 py-3.5 text-slate-700 dark:text-slate-300 font-semibold">{{ $cow->breed }}</td>
                         <td class="px-4 py-3.5">
                             <p class="font-bold text-slate-900 dark:text-white">{{ $cow->farmer->name ?? '-' }}</p>
+                            @if(auth()->check() && !auth()->user()->isGuest())
                             <p class="text-[10px] text-slate-500 dark:text-slate-400 font-mono">NIK: {{ $cow->farmer->nik ?? '-' }}</p>
+                            @endif
                         </td>
                         <td class="px-4 py-3.5 text-slate-600 dark:text-slate-400">
                             <strong class="text-slate-800 dark:text-slate-300">{{ $cow->regency->name ?? '-' }}</strong>
-                            <span class="block text-[10px]">Kec. {{ $cow->district->name ?? '-' }}, Desa {{ $cow->village->name ?? '-' }}</span>
+                            <span class="block text-[10px]">Kec. {{ $cow->district->name ?? '-' }}, {{ ($cow->regency && str_contains(strtolower($cow->regency->name), 'kota')) ? 'Kel.' : 'Desa' }} {{ $cow->village->name ?? '-' }}</span>
                         </td>
                         <td class="px-4 py-3.5">
                             @php

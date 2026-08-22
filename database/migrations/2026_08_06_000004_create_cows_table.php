@@ -23,7 +23,6 @@ return new class extends Migration
             $table->foreignId('district_id')->nullable()->constrained('districts')->onDelete('set null');
             $table->foreignId('village_id')->nullable()->constrained('villages')->onDelete('set null');
             $table->string('current_status')->default('Tidak Bunting'); 
-            // Status: 'Tidak Bunting', 'Pasca IB', 'Bunting (PKB 90 Hari)', 'Siap Melahirkan', 'Fase Melahirkan', 'Pasca Melahirkan'
             $table->timestamps();
         });
     }

@@ -9,7 +9,7 @@ use Carbon\Carbon;
 /**
  * Service Generator NIK Sapi
  * Formulasi: [Kode_Kab/Kec].[Kode_Desa].[Dua_Digit_Tahun].[Nomor_Urut_4_Digit]
- * Contoh: 35.07.12.2001.26.0001
+ * Contoh: 75.02.01.2001.26.0001
  */
 class CattleNikGenerator
 {
@@ -17,7 +17,7 @@ class CattleNikGenerator
     {
         $village = Village::with('district.regency')->find($villageId);
 
-        $districtCode = $village && $village->district ? $village->district->code : '35.07.01';
+        $districtCode = $village && $village->district ? $village->district->code : '75.02.01';
         $villageCode  = $village ? $village->code : '2001';
         $yearCode     = Carbon::createFromDate($year ?? date('Y'), 1, 1)->format('y');
 

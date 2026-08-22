@@ -130,21 +130,28 @@ class PregnancyRecord extends Model
         $farmerName = $this->cow->farmer->name ?? '-';
         $farmerNik = $this->cow->farmer->nik ?? '-';
 
+        $isCity = $this->cow->regency && str_contains(strtolower($this->cow->regency->name), 'kota');
+        $unit = $isCity ? 'Kel. ' : 'Desa ';
+
         $location = trim(
             ($this->cow->regency->name ?? '') .
             ', Kec. ' .
             ($this->cow->district->name ?? '') .
-            ', Desa ' .
+            ', ' . $unit .
             ($this->cow->village->name ?? ''),
             ', '
         );
 
         $title = "[SiTernak-OK] {$titlePrefix} - NIK Sapi: {$cowNik}";
 
+        $farmerLine = (auth()->check() && !auth()->user()->isGuest()) 
+            ? "Peternak: {$farmerName} (NIK: {$farmerNik})\n" 
+            : "Peternak: {$farmerName}\n";
+
         $details =
             "PEMANTAUAN KEHAMILAN SAPI - SiTernak-OK\n" .
             "NIK Sapi: {$cowNik} ({$cowName})\n" .
-            "Peternak: {$farmerName} (NIK: {$farmerNik})\n" .
+            $farmerLine .
             "Tanggal Inseminasi (IB): " .
                 ($this->insemination_date
                     ? $this->insemination_date->format('d/m/Y')

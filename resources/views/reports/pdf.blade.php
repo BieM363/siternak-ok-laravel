@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <title>Rekapan Kelahiran Bulanan Anak Sapi - Dinas Peternakan</title>
+    <title>Rekapan Kelahiran Bulanan Anak Sapi - Dinas Peternakan dan Perkebunan Provinsi Gorontalo</title>
     <style>
         body { font-family: 'Times New Roman', Times, serif; font-size: 12px; color: #000; background: #fff; margin: 0; padding: 20px; }
         .kop-header { text-align: center; border-bottom: 3px double #000; padding-bottom: 10px; margin-bottom: 20px; }
@@ -34,11 +34,11 @@
         </button>
     </div>
 
-    <!-- Kop Surat Dinas Peternakan -->
+    <!-- Kop Surat Dinas Peternakan dan Perkebunan Provinsi Gorontalo -->
     <div class="kop-header">
-        <h2>PEMERINTAH KABUPATEN / KOTA</h2>
-        <h1>DINAS PETERNAKAN DAN KESEHATAN HEWAN</h1>
-        <p>Jl. Raya Peternakan No. 100 Telp. (0341) 889900 Fax. (0341) 889901 Email: info@peternakan.go.id</p>
+        <h2>PEMERINTAH PROVINSI GORONTALO</h2>
+        <h1>DINAS PETERNAKAN DAN PERKEBUNAN</h1>
+        <p>Kompleks Perkantoran Blok Plan Ayula, Provinsi Gorontalo Telp. (0435) 821900 Email: disnakbun@gorontaloprov.go.id</p>
     </div>
 
     <!-- Document Title -->
@@ -86,10 +86,10 @@
     <!-- Signature Block -->
     <div class="signature-section">
         <div class="signature-box">
-            <p>Dinas Peternakan, {{ date('d F Y') }}</p>
-            <p>Kepala Dinas Peternakan,</p>
+            <p>Gorontalo, {{ date('d F Y') }}</p>
+            <p>Kepala Dinas Peternakan dan Perkebunan<br>Provinsi Gorontalo,</p>
             <div style="height: 60px;"></div>
-            <p style="text-decoration: underline; font-weight: bold;">Drh. H. Bambang Suherman, M.Si</p>
+            <p style="text-decoration: underline; font-weight: bold;">Drh. H. Bambang Triyono, M.Si</p>
             <p>NIP. 19780512 200312 1 004</p>
         </div>
     </div>

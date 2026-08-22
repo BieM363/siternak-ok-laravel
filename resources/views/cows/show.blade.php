@@ -6,21 +6,24 @@
 <div class="space-y-6">
 
     <!-- Top Action Bar -->
-    <div class="flex items-center justify-between">
-        <a href="{{ route('cows.index') }}" class="px-3.5 py-2 bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-300 rounded-xl text-xs font-semibold border border-slate-300 dark:border-slate-700 transition">
-            <i class="fa-solid fa-arrow-left mr-1"></i> Kembali ke Daftar Sapi
+    <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+        <a href="{{ route('cows.index') }}" class="px-4 py-2.5 bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-300 rounded-xl text-xs font-bold border border-slate-300 dark:border-slate-700 transition flex items-center justify-center gap-1.5">
+            <i class="fa-solid fa-arrow-left"></i>
+            <span>Kembali ke Daftar Sapi</span>
         </a>
 
         @if(auth()->check() && (auth()->user()->isAdmin() || auth()->user()->isOperator()))
-        <div class="flex items-center space-x-2">
-            <a href="{{ route('cows.edit', $cow->id) }}" class="px-3.5 py-2 bg-amber-600 hover:bg-amber-500 text-white rounded-xl text-xs font-bold transition-all shadow-md flex items-center gap-1.5">
-                <i class="fa-solid fa-pen"></i> Edit Data Sapi
+        <div class="grid grid-cols-2 sm:flex sm:items-center gap-2">
+            <a href="{{ route('cows.edit', $cow->id) }}" class="px-4 py-2.5 bg-amber-600 hover:bg-amber-500 text-white rounded-xl text-xs font-bold transition-all shadow-md flex items-center justify-center gap-1.5 whitespace-nowrap">
+                <i class="fa-solid fa-pen"></i>
+                <span>Edit Sapi</span>
             </a>
-            <form action="{{ route('cows.destroy', $cow->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus data sapi ini?')">
+            <form action="{{ route('cows.destroy', $cow->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus data sapi ini?')" class="w-full">
                 @csrf
                 @method('DELETE')
-                <button type="submit" class="px-3.5 py-2 bg-rose-600 hover:bg-rose-500 text-white rounded-xl text-xs font-bold shadow-md transition-all flex items-center gap-1.5">
-                    <i class="fa-solid fa-trash"></i> Hapus Data Sapi
+                <button type="submit" class="w-full px-4 py-2.5 bg-rose-600 hover:bg-rose-500 text-white rounded-xl text-xs font-bold shadow-md transition-all flex items-center justify-center gap-1.5 whitespace-nowrap">
+                    <i class="fa-solid fa-trash"></i>
+                    <span>Hapus Sapi</span>
                 </button>
             </form>
         </div>
@@ -71,15 +74,21 @@
                 </div>
                 <div class="flex justify-between">
                     <span class="text-slate-400">Nama Peternak:</span>
-                    <strong class="text-white">{{ $cow->farmer->name ?? '-' }}</strong>
+                    <strong class="text-white text-right">{{ $cow->farmer->name ?? '-' }}</strong>
                 </div>
-                <div class="flex justify-between">
+                @if(auth()->check() && !auth()->user()->isGuest())
+                <div class="flex justify-between gap-3">
                     <span class="text-slate-400">NIK Peternak:</span>
-                    <strong class="text-slate-300 font-mono">{{ $cow->farmer->nik ?? '-' }}</strong>
+                    <strong class="text-slate-300 font-mono text-right">{{ $cow->farmer->nik ?? '-' }}</strong>
+                </div>
+                @endif
+                <div class="flex justify-between gap-3">
+                    <span class="text-slate-400">No. HP Peternak:</span>
+                    <strong class="text-slate-300 text-right">{{ $cow->farmer->phone ?? '-' }}</strong>
                 </div>
                 <div class="flex justify-between">
                     <span class="text-slate-400">Wilayah Dinas:</span>
-                    <strong class="text-slate-200 text-right">{{ $cow->regency->name ?? '-' }}, Kec. {{ $cow->district->name ?? '-' }}, Desa {{ $cow->village->name ?? '-' }}</strong>
+                    <strong class="text-slate-200 text-right">{{ $cow->regency->name ?? '-' }}, Kec. {{ $cow->district->name ?? '-' }}, {{ ($cow->regency && str_contains(strtolower($cow->regency->name), 'kota')) ? 'Kel.' : 'Desa' }} {{ $cow->village->name ?? '-' }}</strong>
                 </div>
             </div>
         </div>
@@ -147,18 +156,18 @@
                     <p class="text-[10px] text-slate-500 dark:text-slate-400">Petugas Inseminator: <strong class="text-slate-800 dark:text-slate-200">{{ $latestRecord->officer_name ?? '-' }}</strong> | Straw: <strong class="text-purple-600 dark:text-purple-400 font-mono">{{ $latestRecord->semen_code ?? '-' }}</strong></p>
                 </div>
                 
-                <div class="flex items-center space-x-2 w-full sm:w-auto">
-                    <a href="{{ $latestRecord->getGoogleCalendarUrl('birth') }}" target="_blank" class="px-3 py-2 bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs rounded-xl shadow transition-all flex items-center space-x-1.5">
+                <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full sm:w-auto">
+                    <a href="{{ $latestRecord->getGoogleCalendarUrl('birth') }}" target="_blank" class="px-3.5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs rounded-xl shadow transition-all flex items-center justify-center space-x-1.5 whitespace-nowrap">
                         <i class="fa-solid fa-calendar-plus"></i>
                         <span>+ Google Cal HPL</span>
                     </a>
 
                     @if(auth()->check() && (auth()->user()->isOperator() || auth()->user()->isAdmin()) && $latestRecord->status !== 'Gagal/Keguguran' && $latestRecord->status !== 'Melahirkan (Selesai)')
-                    <form action="{{ route('pregnancy.update-status', $latestRecord->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menandai rekam IB ini GAGAL / KEGUGURAN?')">
+                    <form action="{{ route('pregnancy.update-status', $latestRecord->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menandai rekam IB ini GAGAL / KEGUGURAN?')" class="w-full sm:w-auto">
                         @csrf
                         @method('PUT')
                         <input type="hidden" name="action" value="confirm_no">
-                        <button type="submit" class="px-3 py-2 bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs rounded-xl shadow transition-all flex items-center gap-1">
+                        <button type="submit" class="w-full px-3.5 py-2.5 bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs rounded-xl shadow transition-all flex items-center justify-center gap-1.5 whitespace-nowrap">
                             <i class="fa-solid fa-circle-xmark"></i>
                             <span>Tandai Gagal / Gugur</span>
                         </button>
@@ -211,31 +220,40 @@
     <!-- Section 3: Form Input Rekam IB Baru & Riwayat Kehamilan Sapi -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
-        <!-- Form Add Inseminasi Record (Khusus Operator / Admin dengan Dropdown Master Straw Pejantan) -->
-        @if(auth()->check() && (auth()->user()->isOperator() || auth()->user()->isAdmin()))
-        <div class="lg:col-span-1 glass-card p-6 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
-            <h4 class="font-extrabold text-sm text-slate-900 dark:text-white flex items-center gap-2 border-b border-slate-200 dark:border-slate-800 pb-3">
-                <i class="fa-solid fa-syringe text-emerald-500"></i>
-                Pendaftaran Inseminasi Buatan (IB) Baru
-            </h4>
+        <!-- Form Add Inseminasi Record (KHUSUS OPERATOR LAPANGAN) -->
+        @if(auth()->check() && auth()->user()->isOperator())
+        <div class="lg:col-span-1 glass-card p-5 sm:p-6 rounded-3xl border border-emerald-500/30 dark:border-emerald-500/20 shadow-lg space-y-4 bg-gradient-to-b from-emerald-500/5 to-transparent">
+            <div class="border-b border-slate-200 dark:border-slate-800 pb-3">
+                <h4 class="font-black text-sm text-slate-900 dark:text-white flex items-center gap-2">
+                    <i class="fa-solid fa-syringe text-emerald-500"></i>
+                    Pendaftaran Inseminasi Buatan (IB) Baru
+                </h4>
+                <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">Input tindakan suntik IB baru pada sapi betina ini.</p>
+            </div>
 
-            <form action="{{ route('pregnancy.store') }}" method="POST" class="space-y-4">
+            <form action="{{ route('pregnancy.store') }}" method="POST" class="space-y-3.5">
                 @csrf
                 <input type="hidden" name="cow_id" value="{{ $cow->id }}">
 
                 <div>
-                    <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">Tanggal Suntik IB <span class="text-rose-500">*</span></label>
+                    <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
+                        Tanggal Suntik IB <span class="text-rose-500">*</span>
+                    </label>
                     <input type="date" name="insemination_date" value="{{ date('Y-m-d') }}" required 
-                        class="w-full px-3.5 py-2.5 bg-white dark:bg-slate-950/80 border border-slate-300 dark:border-slate-800 rounded-xl text-xs text-slate-900 dark:text-white focus:outline-none focus:border-emerald-500">
+                        class="w-full px-3.5 py-2.5 bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-xl text-xs text-slate-900 dark:text-white focus:outline-none focus:border-emerald-500 shadow-sm">
                 </div>
 
                 <!-- Dropdown Master Kode Straw Pejantan -->
                 <div>
-                    <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5 flex items-center justify-between">
-                        <span>Pilih Kode Straw Pejantan</span>
-                        <a href="{{ route('straws.index') }}" target="_blank" class="text-[10px] text-purple-600 dark:text-purple-400 font-bold underline">+ Master</a>
-                    </label>
-                    <select name="semen_code" class="w-full px-3.5 py-2.5 bg-white dark:bg-slate-950/80 border border-slate-300 dark:border-slate-800 rounded-xl text-xs text-slate-900 dark:text-white focus:outline-none focus:border-emerald-500">
+                    <div class="flex items-center justify-between mb-1">
+                        <label class="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
+                            Pilih Kode Straw Pejantan
+                        </label>
+                        <a href="{{ route('straws.index') }}" target="_blank" class="text-[10px] text-purple-600 dark:text-purple-400 font-bold underline hover:text-purple-500">
+                            + Master Straw
+                        </a>
+                    </div>
+                    <select name="semen_code" class="w-full px-3.5 py-2.5 bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-xl text-xs text-slate-900 dark:text-white focus:outline-none focus:border-emerald-500 shadow-sm">
                         <option value="">-- Pilih Kode Straw Pejantan --</option>
                         @foreach($straws ?? [] as $st)
                         <option value="{{ $st->code }}">
@@ -246,27 +264,37 @@
                 </div>
 
                 <div>
-                    <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">Nama Petugas Inseminator</label>
-                    <input type="text" name="officer_name" value="{{ auth()->user()->name }}" 
-                        class="w-full px-3.5 py-2.5 bg-white dark:bg-slate-950/80 border border-slate-300 dark:border-slate-800 rounded-xl text-xs text-slate-900 dark:text-white focus:outline-none focus:border-emerald-500">
+                    <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
+                        Petugas Inseminator
+                    </label>
+                    <input type="text" value="{{ auth()->user()->name }} (Akun Anda)" readonly
+                        class="w-full px-3.5 py-2.5 bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 rounded-xl text-xs text-slate-700 dark:text-slate-300 font-bold cursor-not-allowed">
+                    <input type="hidden" name="officer_name" value="{{ auth()->user()->name }}">
+                    <p class="text-[10px] text-slate-500 dark:text-slate-400 mt-1">
+                        Nama petugas otomatis tercatat sesuai akun operator login.
+                    </p>
                 </div>
 
                 <div>
-                    <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">Catatan Tambahan</label>
-                    <textarea name="notes" rows="2" placeholder="Catatan kondisi sapi..." 
-                        class="w-full px-3.5 py-2.5 bg-white dark:bg-slate-950/80 border border-slate-300 dark:border-slate-800 rounded-xl text-xs text-slate-900 dark:text-white focus:outline-none focus:border-emerald-500"></textarea>
+                    <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
+                        Catatan Tambahan
+                    </label>
+                    <textarea name="notes" rows="2" placeholder="Catatan kondisi sapi atau dosis..." 
+                        class="w-full px-3.5 py-2.5 bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-xl text-xs text-slate-900 dark:text-white focus:outline-none focus:border-emerald-500 shadow-sm"></textarea>
                 </div>
 
-                <button type="submit" class="w-full py-2.5 px-4 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-xl shadow transition-all flex items-center justify-center space-x-2">
-                    <i class="fa-solid fa-plus"></i>
-                    <span>Simpan Rekam IB Baru</span>
-                </button>
+                <div class="pt-1">
+                    <button type="submit" class="w-full py-2.5 px-4 bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 text-white font-extrabold text-xs rounded-xl shadow-md transition flex items-center justify-center space-x-2">
+                        <i class="fa-solid fa-plus"></i>
+                        <span>Simpan Rekam IB Baru</span>
+                    </button>
+                </div>
             </form>
         </div>
         @endif
 
         <!-- Timeline Riwayat Inseminasi & Kehamilan -->
-        <div class="{{ auth()->check() && (auth()->user()->isOperator() || auth()->user()->isAdmin()) ? 'lg:col-span-2' : 'lg:col-span-3' }} glass-card p-6 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
+        <div class="{{ (auth()->check() && auth()->user()->isOperator()) ? 'lg:col-span-2' : 'lg:col-span-3' }} glass-card p-5 sm:p-6 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
             <h4 class="font-extrabold text-sm text-slate-900 dark:text-white flex items-center gap-2 border-b border-slate-200 dark:border-slate-800 pb-3">
                 <i class="fa-solid fa-clock-rotate-left text-emerald-500"></i>
                 Riwayat Siklus Inseminasi & Kebuntingan Sapi Betina

@@ -46,12 +46,12 @@
                 </div>
 
                 <div>
-                    <label class="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1">Pilih Desa / Kelurahan <span class="text-rose-500">*</span></label>
+                    <label class="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1">Desa / Kelurahan <span class="text-rose-500">*</span></label>
                     <select name="village_id" required class="w-full px-4 py-3 bg-slate-950/80 border border-slate-800 rounded-xl text-sm text-white focus:outline-none focus:border-emerald-500">
                         @foreach($districts as $d)
                             <optgroup label="Kec. {{ $d->name }}">
                                 @foreach($d->villages as $v)
-                                <option value="{{ $v->id }}" {{ $cow->village_id == $v->id ? 'selected' : '' }}>Desa {{ $v->name }} ({{ $v->code }})</option>
+                                <option value="{{ $v->id }}" {{ $cow->village_id == $v->id ? 'selected' : '' }}>{{ $v->name }} ({{ $v->code }})</option>
                                 @endforeach
                             </optgroup>
                         @endforeach

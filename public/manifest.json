@@ -1,7 +1,7 @@
 {
   "name": "SiTernak-OK - Sistem Pemantauan Kehamilan Sapi",
   "short_name": "SiTernak-OK",
-  "description": "Aplikasi Pemantauan Kehamilan Sapi & Otomasi HPL Dinas Peternakan",
+  "description": "Aplikasi Pemantauan Kehamilan Sapi & Otomasi HPL Dinas Peternakan dan Perkebunan Provinsi Gorontalo",
   "start_url": "/dashboard",
   "display": "standalone",
   "background_color": "#0f172a",

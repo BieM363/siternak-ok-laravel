@@ -49,12 +49,16 @@ Route::get('/inseminators', [ReportController::class, 'inseminators'])->name('re
 Route::get('/farmers', [FarmerController::class, 'index'])->name('farmers.index');
 Route::get('/farmers/search-json', [FarmerController::class, 'searchJson'])->name('farmers.search-json');
 
-// Operator & Administrasi Interactive Actions (Wajib Auth Login)
-Route::middleware(['auth', 'role:admin,operator'])->group(function () {
-    // Pendaftaran Sapi Betina Induk Baru & Rekam IB (Dapat Diinput & Dihapus oleh Operator & Admin)
+// Operator ONLY Routes: Pendaftaran Inseminasi Buatan (IB) Baru
+Route::middleware(['auth', 'role:operator'])->group(function () {
     Route::get('/cows-create', [CowController::class, 'create'])->name('cows.create');
-    Route::get('/cows-auto-nik', [CowController::class, 'getAutoNik'])->name('cows.auto-nik');
     Route::post('/cows', [CowController::class, 'store'])->name('cows.store');
+    Route::post('/pregnancy', [PregnancyController::class, 'store'])->name('pregnancy.store');
+});
+
+// Operator & Administrasi Shared Actions (Wajib Auth Login)
+Route::middleware(['auth', 'role:admin,operator'])->group(function () {
+    Route::get('/cows-auto-nik', [CowController::class, 'getAutoNik'])->name('cows.auto-nik');
     Route::get('/cows/{id}/edit', [CowController::class, 'edit'])->name('cows.edit');
     Route::put('/cows/{id}', [CowController::class, 'update'])->name('cows.update');
     Route::delete('/cows/{id}', [CowController::class, 'destroy'])->name('cows.destroy');
@@ -62,6 +66,7 @@ Route::middleware(['auth', 'role:admin,operator'])->group(function () {
     // Manajemen Database Straw Pejantan IB
     Route::get('/straws', [BullStrawController::class, 'index'])->name('straws.index');
     Route::post('/straws', [BullStrawController::class, 'store'])->name('straws.store');
+    Route::put('/straws/{id}', [BullStrawController::class, 'update'])->name('straws.update');
     Route::delete('/straws/{id}', [BullStrawController::class, 'destroy'])->name('straws.destroy');
 
     // Update Status Kehamilan, Tandai Gagal & Trigger Cron
@@ -80,20 +85,21 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     // Hapus Data Anak Sapi
     Route::delete('/calves/{id}', [CalfController::class, 'destroy'])->name('calves.destroy');
 
-    // Rekam Kebuntingan (Input IB)
-    Route::post('/pregnancy', [PregnancyController::class, 'store'])->name('pregnancy.store');
-
-    // Manajemen Peternak Actions
+    // Manajemen Peternak Actions (Tambah, Edit & Hapus)
     Route::post('/farmers', [FarmerController::class, 'store'])->name('farmers.store');
+    Route::put('/farmers/{id}', [FarmerController::class, 'update'])->name('farmers.update');
     Route::delete('/farmers/{id}', [FarmerController::class, 'destroy'])->name('farmers.destroy');
 
     // Manajemen Hirarki Wilayah (Kabupaten, Kecamatan, Desa)
     Route::get('/regions', [RegionController::class, 'index'])->name('regions.index');
     Route::post('/regions/regency', [RegionController::class, 'storeRegency'])->name('regions.store-regency');
+    Route::put('/regions/regency/{id}', [RegionController::class, 'updateRegency'])->name('regions.update-regency');
     Route::post('/regions/district', [RegionController::class, 'storeDistrict'])->name('regions.store-district');
+    Route::put('/regions/district/{id}', [RegionController::class, 'updateDistrict'])->name('regions.update-district');
     Route::post('/regions/village', [RegionController::class, 'storeVillage'])->name('regions.store-village');
+    Route::put('/regions/village/{id}', [RegionController::class, 'updateVillage'])->name('regions.update-village');
 
-    // Manajemen User & Operator
+    // Manajemen User & Role (Admin Provinsi, Admin Kota, Admin Kab & Operator)
     Route::get('/users', [UserController::class, 'index'])->name('users.index');
     Route::post('/users', [UserController::class, 'store'])->name('users.store');
     Route::put('/users/{id}', [UserController::class, 'update'])->name('users.update');

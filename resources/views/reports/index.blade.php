@@ -15,23 +15,23 @@
             <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Cetak dan rekapitulasi data kelahiran anak sapi hasil Inseminasi Buatan (IB), metrik CR & CvR.</p>
         </div>
 
-        <div class="flex items-center space-x-2 flex-shrink-0">
+        <div class="flex flex-wrap sm:flex-nowrap items-center gap-2 w-full sm:w-auto">
             <!-- Link ke Leaderboard Inseminator -->
-            <a href="{{ route('reports.inseminators') }}" class="px-4 py-2.5 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-xs rounded-xl shadow transition-all flex items-center space-x-2 whitespace-nowrap">
+            <a href="{{ route('reports.inseminators') }}" class="flex-1 sm:flex-initial px-4 py-2.5 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-xs rounded-xl shadow transition-all flex items-center justify-center space-x-2 whitespace-nowrap">
                 <i class="fa-solid fa-trophy"></i>
                 <span>Leaderboard Inseminator</span>
             </a>
 
             <!-- PDF Export Button -->
-            <a href="{{ route('reports.pdf', request()->query()) }}" target="_blank" class="px-4 py-2.5 bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs rounded-xl shadow transition-all flex items-center space-x-2 whitespace-nowrap">
+            <a href="{{ route('reports.pdf', request()->query()) }}" target="_blank" class="flex-1 sm:flex-initial px-4 py-2.5 bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs rounded-xl shadow transition-all flex items-center justify-center space-x-2 whitespace-nowrap">
                 <i class="fa-solid fa-file-pdf"></i>
                 <span>Export PDF</span>
             </a>
 
             <!-- Excel Export Button -->
-            <a href="{{ route('reports.excel', request()->query()) }}" class="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-xl shadow transition-all flex items-center space-x-2 whitespace-nowrap">
+            <a href="{{ route('reports.excel', request()->query()) }}" class="flex-1 sm:flex-initial px-4 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-xl shadow transition-all flex items-center justify-center space-x-2 whitespace-nowrap">
                 <i class="fa-solid fa-file-excel"></i>
-                <span>Export Excel / CSV</span>
+                <span>Export Excel</span>
             </a>
         </div>
     </div>

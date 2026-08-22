@@ -1,235 +1,264 @@
-# 🐄 SiTernak-OK — Sistem Pemantauan Kehamilan Sapi (Dinas Peternakan)
+# 🐄 SiTernak-OK — Sistem Pemantauan Kehamilan Sapi
+### **Dinas Peternakan dan Perkebunan Provinsi Gorontalo**
 
-Aplikasi berbasis web **Laravel 11** yang dirancang khusus untuk **Dinas Peternakan & Kesehatan Hewan** guna memantau siklus kebuntingan sapi betina, memperhitungkan Hari Perkiraan Lahir (HPL), memberikan pengingat (reminder) berkala, mencatat kelahiran anak sapi (pedet), mengelola master Kode Straw Pejantan IB, serta menyajikan Leaderboard Performa Inseminator.
+Aplikasi sistem informasi berbasis web (**Laravel**) yang dirancang khusus untuk **Dinas Peternakan dan Perkebunan Provinsi Gorontalo** guna memantau siklus kebuntingan sapi betina hasil Inseminasi Buatan (IB), memperhitungkan Hari Perkiraan Lahir (HPL), mengotomatisasi pengingat (*milestone reminder*), mencatat kelahiran anak sapi (*pedet*), mengelola master Kode Straw Pejantan IB, mengelola data administratif wilayah se-Provinsi Gorontalo (Kabupaten/Kota, Kecamatan, Desa/Kelurahan), serta menyajikan papan peringkat (*Leaderboard*) performa inseminator.
 
 ---
 
 ## 📌 Daftar Isi
 1. [Fitur Utama & Alur Bisnis](#-fitur-utama--alur-bisnis)
-2. [Aturan Siklus Kebuntingan & Reminder 3 Hari](#-aturan-siklus-kebuntingan--reminder-3-hari)
-3. [Hak Akses Pengguna & Hierarki Regional (Provinsi vs Kabupaten/Kota)](#-hak-akses-pengguna--hierarki-regional)
+2. [Hierarki Hak Akses & Tampilan Home Berbasis Role](#-hierarki-hak-akses--tampilan-home-berbasis-role)
+3. [Siklus Kebuntingan & Otomatisasi Reminder 3 Hari](#-siklus-kebuntingan--otomatisasi-reminder-3-hari)
 4. [Master Kode Straw Pejantan IB & Promosi Pedet Betina](#-master-kode-straw-pejantan-ib--promosi-pedet-betina)
-5. [Notifikasi Peramban & Integrasi Google Calendar](#-notifikasi-peramban--integrasi-google-calendar)
-6. [Persyaratan Sistem](#-persyaratan-sistem)
-7. [Cara Install & Setup Database MySQL XAMPP](#-cara-install--setup-database-mysql-xampp)
-8. [Kredensial Akun Login Demo](#-kredensial-akun-login-demo)
-9. [Struktur Folder Utama](#-struktur-folder-utama)
+5. [Pengelolaan Wilayah Administratif Gorontalo](#-pengelolaan-wilayah-administratif-gorontalo)
+6. [Privasi & Keamanan Data (Sensor NIK Publik)](#-privasi--keamanan-data-sensor-nik-publik)
+7. [Persyaratan Sistem](#-persyaratan-sistem)
+8. [Panduan Instalasi & Setup Database](#-panduan-instalasi--setup-database)
+9. [Kredensial Akun Login Demo](#-kredensial-akun-login-demo)
+10. [Struktur Folder & Arsitektur Kode](#-struktur-folder--arsitektur-kode)
 
 ---
 
 ## 🌟 Fitur Utama & Alur Bisnis
 
-1. **Formulasi NIK Sapi Otomatis (Hierarki Wilayah)**:
-   - Format NIK Sapi: `[Kode_Kecamatan].[Kode_Desa].[Tahun].[Nomor_Urut_4_Digit]` (Contoh: `35.07.12.2001.26.0001`).
-   - Struktur hirarki wilayah: **Kabupaten/Kota -> Kecamatan -> Desa/Kelurahan**.
+1. **Formulasi NIK Sapi Otomatis Berbasis Wilayah Gorontalo**:
+   - Format NIK Sapi: `[Kode_Kecamatan].[Kode_Desa].[Tahun].[Nomor_Urut_4_Digit]` (Contoh: `75.02.01.2001.26.0001`).
+   - Struktur hirarki wilayah mencakup **6 Kabupaten/Kota, 77 Kecamatan, dan 722 Desa/Kelurahan** di seluruh Provinsi Gorontalo.
 
 2. **Khusus Ternak Sapi Betina**:
-   - Seluruh populasi utama adalah sapi betina (induk) yang dipantau kehamilannya.
+   - Seluruh populasi ternak utama dalam sistem ini adalah sapi betina produktif yang dipantau siklus kehamilannya pasca-IB.
 
-3. **Master Database Kode Straw Pejantan IB**:
-   - Pilihan Kode Straw Pejantan (misal: `LIM-9901`, `SIM-5520`, `ANG-7712`, `PO-1002`) dari BBIB Singosari / Balai Inseminasi yang dapat dipilih via dropdown otomatis saat mendaftarkan sapi induk baru.
+3. **Master Database Kode Straw Pejantan IB (Bisa Tambah, Edit, Hapus)**:
+   - Manajemen kode semen beku pejantan (misal: `LIM-8890`, `SIM-5520`, `PO-1102`, `BRM-9912`) dari BBIB Singosari/BIB Lembang dengan fitur status aktif/nonaktif dan pemilihan otomatis saat pendaftaran IB baru.
 
-4. **Pemisahan Hak Akses Regional (Provinsi vs Kabupaten/Kota & Operator)**:
-   - **Admin Provinsi**: Dapat melihat dan mengelola seluruh data sapi, peternak, inseminator, dan wilayah se-provinsi.
-   - **Admin Kabupaten/Kota**: Terkunci khusus pada wilayah Kabupaten/Kota masing-masing (misal: Admin Kab. Malang hanya mengelola data Kab. Malang).
-   - **Operator / Inseminator**: Memiliki hak menginput sapi induk baru, mengedit data sapi, mengonfirmasi status kebuntingan, menandai sapi gagal/keguguran, serta menghapus data sapi yang gagal.
+4. **Pendaftaran IB Baru Khusus Operator Inseminator**:
+   - Petugas inseminator lapangan memiliki kewenangan khusus mendaftarkan rekam IB baru dan sapi betina baru, sementara admin wilayah fokus pada supervisi dan administrasi data.
 
-5. **Dua Menu Terpisah: Leaderboard Inseminator & Rekapan Kelahiran Pedet**:
-   - **Leaderboard Inseminator**: Peringkat kinerja inseminator berdasarkan total pelayanan IB, angka kebuntingan positif, pedet lahir, dan nilai *Conception Rate* (CR %).
-   - **Rekapan Data Kelahiran Pedet**: Rekapitulasi kelahiran bulanan anak sapi, rincian silsilah induk & peternak, metrik CR & *Calving Rate* (CvR %), serta filter gender pedet.
+5. **Peringkat Kinerja & Rekapitulasi Kelahiran**:
+   - **Leaderboard Inseminator**: Memperingkatkan inseminator berdasarkan total tindakan IB, kebuntingan positif, pedet lahir, serta nilai *Conception Rate* (CR %).
+   - **Rekapan Kelahiran Pedet**: Menampilkan statistik kelahiran bulanan, rasio kelamin pedet (Jantan vs Betina), *Calving Rate* (CvR %), dan silsilah induk.
 
-6. **Promosi Anak Sapi Betina ("Tarik ke Sapi Siap IB")**:
-   - Anak sapi (pedet) betina yang sudah lahir dapat dipromosikan langsung menjadi Sapi Induk Siap IB hanya dengan 1-klik, secara otomatis membuatkan NIK dan rekam data sapi betina baru.
+6. **Promosi Pedet Betina ("Tarik ke Sapi Siap IB")**:
+   - Anak sapi betina yang lahir dapat langsung dipromosikan menjadi sapi indukan baru dengan 1-klik, otomatis mengalokasikan NIK ternak induk baru.
 
-7. **Export Laporan PDF & Excel**:
-   - Laporan rekapan kelahiran dan performa dapat di-export ke format **PDF (Kop Surat Resmi Dinas)** dan **Excel (CSV)**.
+7. **Ekspor Laporan Resmi (PDF & Excel)**:
+   - Cetak laporan rekapitulasi kelahiran berformat **PDF resmi dengan Kop Dinas Peternakan dan Perkebunan Provinsi Gorontalo** serta ekspor data ke **Excel / CSV**.
 
-8. **Desain Modern Top Navigation Bar & Mode Terang/Gelap**:
-   - Tampilan UI berbasis **Vanilla CSS + Tailwind + Alpine.js** dengan Top Sticky Navigation Bar, kontras terang (Light Mode) yang tinggi, dan tombol aksi tanpa bentrok (`whitespace-nowrap`).
+8. **Antarmuka Modern & Optimalisasi Layar Ponsel (*Mobile UI/UX*)**:
+   - Tampilan responsif dengan Tailwind CSS & Alpine.js, mode Gelap/Terang, tombol aksi adaptif, serta menu drawer terisolasi di root overlay agar tidak menimpa konten ponsel.
 
 ---
 
-## ⏰ Aturan Siklus Kebuntingan & Reminder 3 Hari
+## 👥 Hierarki Hak Akses & Tampilan Home Berbasis Role
 
-Setelah sapi betina menerima suntik **Inseminasi Buatan (IB)**, sistem otomatis menghitung tanggal milestone:
+Halaman depan (**Home**) dan dashboard secara dinamis menyesuaikan banner, statistik ringkas, dan 6 kartu aksi cepat sesuai peran pengguna:
 
-```
-[Hari 0] Suntik IB 
-   └───► [Hari 30 Pasca IB]   : Estimasi 30 Hari (Konfirmasi Birahi Kembali / Bunting Awal)
-   └───► [Hari 90 Pasca IB]   : Konfirmasi Kebuntingan (PKB oleh Dokter/Inseminator)
-   └───► [Hari 245 Pasca IB]  : Sapi Bunting Siap Melahirkan (Persiapan Kandang Melahirkan)
-   └───► [Hari 283 Pasca IB]  : HPL (Hari Perkiraan Lahir Standard)
-   └───► [Jendela 50 Hari]    : Jendela Fase Melahirkan (s/d HPL + 50 Hari / 333 Hari)
-```
-
-### ⚡ Otomatisasi Reminder Max 3 Hari & Tombol Manual
-* **Aturan**: Jika suatu jadwal konfirmasi (Hari 30, Hari 90, atau Hari 245/Melahirkan) melewati **3 hari tanpa konfirmasi manual** dari Operator, sistem secara **otomatis memajukan fase sapi** ke tahapan berikutnya agar siklus pemantauan tidak terputus.
-* **Tombol Check Auto-Advance**: Pengguna/Admin dapat menekan tombol **Check Auto-Advance (3 Hari)** di Dashboard untuk memicu verifikasi milestone secara instan.
-* **Perintah Artisan**: `php artisan ternak:update-pregnancy-status` (dapat dipasang pada Cron Job OS).
+| Role Akun | Scope Wilayah | Tema Visual | Hak Akses & Fitur Utama |
+| :--- | :--- | :--- | :--- |
+| 👑 **Admin Provinsi** | Seluruh Prov. Gorontalo (6 Kab/Kota) | *Royal Purple & Emerald* | **Super Admin**: Kelola seluruh sapi se-provinsi, peternak, data wilayah (Kab/Kota, Kec, Desa), kelola user/role, master straw, dan rekapitulasi laporan provinsi. |
+| 🏛️ **Admin Kota Gorontalo** | Kota Gorontalo (9 Kec & 50 Kelurahan) | *Modern Teal & Cyan* | **Admin Kota**: Menggunakan terminologi **Kelurahan**, mengedit data 50 kelurahan & kecamatan kota, data peternak kota, user/operator kota, dan laporan kelahiran kota. |
+| 🛡️ **Admin Kabupaten** | Kabupaten Lokal (Kab. Gorontalo, Boalemo, Bone Bolango, Pohuwato, Gorut) | *Ocean Sapphire Blue* | **Admin Kab**: Menggunakan terminologi **Desa**, mengedit data desa & kecamatan lokal, peternak lokal, operator lokal, dan laporan lokal. |
+| 💉 **Operator Lapangan** | Wilayah Pelayanan IB Sendiri | *High-Energy Emerald & Amber* | **Petugas Inseminator**: Pendaftaran IB & Sapi Baru, konfirmasi milestone kebuntingan (Batas 3 Hari), tandai gagal/gugur, database straw, dan leaderboard skor IB. |
+| 👁️ **Pengunjung / Tamu** | Seluruh Wilayah (Read-Only) | *Clean Slate Blue* | **Publik**: Mode pemantauan umum, melihat statistik agregat dan leaderboard. NIK Peternak disensor otomatis demi privasi. |
 
 ---
 
-## 👥 Hak Akses Pengguna & Hierarki Regional
+## ⏰ Siklus Kebuntingan & Otomatisasi Reminder 3 Hari
 
-Aplikasi mendukung **Multi-level Role & Scope Regional**:
+Setelah sapi betina diinseminasi, sistem otomatis membentuk 4 milestone utama:
 
-| Role Hak Akses | Scope Wilayah | Hak Akses & Operasional |
-| :--- | :--- | :--- |
-| 🏛️ **Admin Provinsi** | Seluruh Provinsi (Semua Kab/Kota) | Full Access: Kelola seluruh data sapi, peternak, wilayah, user, master straw, dan laporan. |
-| 🏢 **Admin Kabupaten/Kota** | Terkunci 1 Kabupaten/Kota | Kelola data sapi, peternak, kecamatan/desa, dan operator di wilayah Kabupaten/Kota sendiri. |
-| 👷 **Operator / Inseminator** | Terkunci Data IB Sendiri / Wilayah | Input Sapi Induk Baru, Konfirmasi YA/TIDAK, Tandai Gagal/Keguguran, Hapus Sapi Gagal, & Tarik Pedet ke Sapi IB. |
-| 👁️ **Tamu (Public View)** | Semua Wilayah (Read-Only) | Membaca data populasi sapi, statistik kehamilan, dan laporan tanpa hak modifikasi. |
+```
+[Hari 0] Suntik Inseminasi Buatan (IB)
+   │
+   ├──► [Hari 30 Pasca IB]   : Estimasi 30 Hari (Cek Birahi Kembali / Bunting Awal)
+   ├──► [Hari 90 Pasca IB]   : Pemeriksaan Kebuntingan (PKB 90 Hari oleh Petugas)
+   ├──► [Hari 245 Pasca IB]  : Persiapan Kandang Melahirkan (Siap Melahirkan)
+   └──► [Hari 283 Pasca IB]  : HPL (Hari Perkiraan Lahir Normal, Jendela s/d +50 Hari)
+```
+
+### ⚡ Aturan Auto-Advance 3 Hari
+* Jika jadwal milestone (Hari 30, 90, atau 245) melewati **3 hari kalender tanpa konfirmasi manual**, sistem otomatis memajukan fase sapi ke tahap berikutnya agar rantai pemantauan tidak berhenti.
+* Tombol **Check Auto-Advance (3 Hari)** tersedia pada sub-header untuk simulasi atau eksekusi instan.
+* Perintah Artisan Scheduler:
+  ```bash
+  php artisan ternak:update-pregnancy-status
+  ```
 
 ---
 
 ## 🧪 Master Kode Straw Pejantan IB & Promosi Pedet Betina
 
 ### 🧬 Master Kode Straw Pejantan (`BullStraw`)
-* Pengelolaan master Kode Straw Pejantan IB (misal: `LIM-9901`, `SIM-5520`, `ANG-7712`, `PO-1002`) di menu `/straws`.
-* Saat mendaftarkan atau mengedit sapi betina, Operator cukup memilih Kode Straw Pejantan dari dropdown interaktif tanpa mengetik manual.
+* Dikelola melalui menu khusus `/straws`.
+* Fitur mencakup: **Tambah Straw Baru**, **Edit Data Straw** (Kode unik, Nama Bull, Ras, Balai Produsen, Status Aktif/Nonaktif, Catatan Genetik), dan **Hapus Straw**.
+* Pilihan kode straw otomatis muncul di form pendaftaran IB sapi baru.
 
-### 🐄 Promosi Pedet Betina ("Tarik ke Sapi Siap IB")
-* Di menu Data Anak Sapi (`/calves`), setiap pedet berjenis kelamin **Betina** memiliki tombol **"Tarik ke Sapi Siap IB"**.
-* Mengklik tombol ini otomatis mempromosikan pedet tersebut menjadi sapi betina induk di tabel `cows`, sehingga siap menerima siklus IB berikutnya.
+### 🐄 Promosi Pedet Betina
+* Pada menu Data Anak Sapi (`/calves`), setiap pedet betina memiliki tombol **"Tarik ke Sapi Siap IB"**.
+* Aksi ini otomatis mempromosikan pedet menjadi sapi betina indukan di tabel `cows` dengan NIK induk baru.
 
 ---
 
-## 🔔 Notifikasi Peramban & Integrasi Google Calendar
+## 🗺️ Pengelolaan Wilayah Administratif Gorontalo
 
-### 📅 1. Integrasi Google Calendar ("+ Google Calendar")
-Setiap rekam kebuntingan sapi dilengkapi tombol **"+ Google Calendar"**.
-* Mengklik tombol ini langsung membuka Google Calendar (HP/Desktop) dengan pre-filled Title, Tanggal Event Milestone (30 Hari, 90 Hari, 245 Hari, atau HPL), Detail NIK Sapi, Nama Peternak, dan Lokasi Wilayah Dinas.
+Data seluruh wilayah Provinsi Gorontalo tersimpan lengkap dan dapat dikelola pada menu `/regions`:
 
-### 🔔 2. Browser Notification API (Notifikasi Peramban)
-Aplikasi mendukung **Web Notification API**.
-* Pengguna dapat mengklik **"Tampilkan Notifikasi HP/Peramban"**.
-* Peramban (Chrome, Firefox, Edge, Safari di HP & PC) akan memunculkan popup notifikasi sistem secara otomatis ketika ada pengingat milestone / HPL yang jatuh tempo (Batas Max 3 Hari).
+* **Admin Provinsi**: Dapat menambah dan mengedit nama/kode **Kabupaten/Kota**, **Kecamatan**, dan **Desa/Kelurahan**.
+* **Admin Kota**: Dapat mengedit nama/kode **Kecamatan** dan **Kelurahan** di Kota Gorontalo.
+* **Admin Kabupaten**: Dapat mengedit nama/kode **Kecamatan** dan **Desa** di Kabupaten terkait.
+
+---
+
+## 🔒 Privasi & Keamanan Data (Sensor NIK Publik)
+
+* **Pengunjung Publik / Tamu**: NIK KTP Peternak disensor otomatis menjadi `7502************` atau disembunyikan pada seluruh kartu detail sapi dan direktori guna mematuhi prinsip perlindungan data pribadi (UU PDP).
+* **Pengguna Login (Admin & Operator)**: NIK KTP Peternak tampil lengkap untuk keperluan verifikasi lapangan.
 
 ---
 
 ## 🛠️ Persyaratan Sistem
 
-- PHP 8.2 atau lebih baru
-- Web Server XAMPP / Nginx / Apache
-- Database MySQL / MariaDB / SQLite
-- Composer package manager
+- **PHP**: Versi 8.2 atau lebih baru
+- **Composer**: Package Manager PHP
+- **Node.js & NPM**: Untuk build asset front-end
+- **Database**: SQLite (Default bawaan langsung siap pakai) atau MySQL / MariaDB (XAMPP)
 
 ---
 
-## 🚀 Cara Install & Setup Database MySQL XAMPP
+## 🚀 Panduan Instalasi & Setup Database
 
-1. **Clone repositori dari GitHub**:
+### Opsi A: Menggunakan Database SQLite (Paling Cepat & Langsung Jalan)
+
+1. **Clone Repositori**:
    ```bash
    git clone https://github.com/BieM363/siternak-ok-laravel.git
    cd siternak-ok-laravel
    ```
 
-2. **Install dependensi PHP via Composer**:
+2. **Install Dependensi**:
    ```bash
    composer install
+   npm install
    ```
 
-3. **Pengaturan Berkas `.env`**:
-   - Salin `.env.example` menjadi `.env`:
-     ```bash
-     cp .env.example .env
-     ```
-   - Konfigurasi database MySQL XAMPP:
-     ```env
-     DB_CONNECTION=mysql
-     DB_HOST=127.0.0.1
-     DB_PORT=3306
-     DB_DATABASE=siternak_ok
-     DB_USERNAME=root
-     DB_PASSWORD=
-     ```
-
-4. **Jalankan Migration & Seeder**:
-   Buat database `siternak_ok` di phpMyAdmin, lalu jalankan:
+3. **Setup Environment**:
+   Salin `.env.example` ke `.env`:
    ```bash
+   cp .env.example .env
    php artisan key:generate
-   php artisan migrate:fresh --seed
+   ```
+   Pastikan pengaturan di `.env`:
+   ```env
+   DB_CONNECTION=sqlite
    ```
 
-5. **Jalankan Aplikasi**:
+4. **Migrasi & Seeding Database Lengkap**:
+   ```bash
+   php artisan migrate:fresh --seed
+   npm run build
+   ```
+
+5. **Jalankan Server Lokal**:
    ```bash
    php artisan serve
    ```
-   Akses aplikasi di browser: `http://localhost:8000`.
+   Buka di browser: `http://127.0.0.1:8000`.
+
+---
+
+### Opsi B: Menggunakan Database MySQL (XAMPP)
+
+1. Buat database baru bernama `siternak_ok` di **phpMyAdmin** (`http://localhost/phpmyadmin`).
+2. Ubah konfigurasi `.env`:
+   ```env
+   DB_CONNECTION=mysql
+   DB_HOST=127.0.0.1
+   DB_PORT=3306
+   DB_DATABASE=siternak_ok
+   DB_USERNAME=root
+   DB_PASSWORD=
+   ```
+3. Jalankan migrasi dan seed data Gorontalo:
+   ```bash
+   php artisan migrate:fresh --seed
+   npm run build
+   php artisan serve
+   ```
 
 ---
 
 ## 🔑 Kredensial Akun Login Demo
 
-Gunakan akun demo berikut untuk menguji isolasi hak akses regional dan role:
+Semua password akun demo di bawah adalah: `password`
 
-1. **Admin Provinsi (Full Akses Seluruh Jawa Timur)**
-   - **Email**: `admin.provinsi@siternak.go.id`
-   - **Password**: `password`
-   - **Fungsi**: Akses dan mengelola seluruh data kabupaten/kota se-provinsi.
-
-2. **Admin Kabupaten Malang**
-   - **Email**: `admin.malang@siternak.go.id`
-   - **Password**: `password`
-   - **Fungsi**: Terkunci mengelola data populasi sapi & petugas di Kab. Malang.
-
-3. **Admin Kabupaten Pasuruan**
-   - **Email**: `admin.pasuruan@siternak.go.id`
-   - **Password**: `password`
-   - **Fungsi**: Terkunci mengelola data populasi sapi & petugas di Kab. Pasuruan.
-
-4. **Operator / Inseminator (Budi Inseminator)**
-   - **Email**: `operator@siternak.go.id`
-   - **Password**: `password`
-   - **Fungsi**: Menginput sapi betina baru, memilih Kode Straw, konfirmasi YA/TIDAK, tandai gagal, dan hapus sapi gagal.
-
-5. **Tamu (Public / Read-Only)**
-   - **Email**: `tamu@siternak.go.id`
-   - **Password**: `password`
-   - **Fungsi**: Membaca data populasi sapi, leaderboard inseminator, dan laporan tanpa hak aksi modifikasi.
+| Peran / Jabatan | Email Login | Password | Cakupan Wilayah |
+| :--- | :--- | :--- | :--- |
+| **Admin Provinsi Gorontalo** | `admin@siternak.go.id` | `password` | Seluruh 6 Kab/Kota se-Gorontalo |
+| **Admin Kota Gorontalo** | `admin.kotagorontalo@siternak.go.id` | `password` | Khusus 9 Kec & 50 Kelurahan Kota |
+| **Admin Kab. Gorontalo** | `admin.gorontalo@siternak.go.id` | `password` | Khusus Kabupaten Gorontalo |
+| **Admin Kab. Boalemo** | `admin.boalemo@siternak.go.id` | `password` | Khusus Kabupaten Boalemo |
+| **Admin Kab. Bone Bolango** | `admin.bonebolango@siternak.go.id` | `password` | Khusus Kabupaten Bone Bolango |
+| **Admin Kab. Pohuwato** | `admin.pohuwato@siternak.go.id` | `password` | Khusus Kabupaten Pohuwato |
+| **Admin Kab. Gorontalo Utara**| `admin.gorut@siternak.go.id` | `password` | Khusus Kabupaten Gorontalo Utara |
+| **Operator Inseminator (Budi)**| `operator@siternak.go.id` | `password` | Lapangan Inseminasi Kab. Gorontalo |
+| **Operator Inseminator (Ahmad)**| `operator.kota@siternak.go.id` | `password` | Lapangan Inseminasi Kota Gorontalo |
+| **Tamu / Pengunjung Publik** | *(Tanpa Login)* | - | Akses Publik / Read-Only |
 
 ---
 
-## 📂 Struktur Folder Utama
+## 📂 Struktur Folder & Arsitektur Kode
 
 ```
 siternak-ok-laravel/
 ├── app/
 │   ├── Console/Commands/
-│   │   └── AutoAdvancePregnancyPhases.php  # Command otomatisasi 3 hari tanpa konfirmasi
-│   ├── Http/
-│   │   ├── Controllers/
-│   │   │   ├── AuthController.php
-│   │   │   ├── BullStrawController.php    # Master Kode Straw Pejantan
-│   │   │   ├── CalfController.php          # Data Anak Sapi & Promosi Pedet Betina
-│   │   │   ├── CowController.php           # Scoping data per Operator & Regional
-│   │   │   ├── DashboardController.php     # Dashboard stats, auto-advance, & reminder
-│   │   │   ├── FarmerController.php        # Data Peternak (NIK KTP & Nama)
-│   │   │   ├── PregnancyController.php    # Logika konfirmasi YA/TIDAK & input pedet
-│   │   │   ├── RegionController.php       # Hirarki Kabupaten, Kecamatan, Desa
-│   │   │   ├── ReportController.php       # Leaderboard Inseminator & Rekapan Kelahiran
-│   │   │   └── UserController.php         # Manajemen Pengguna & Scope Regional
-│   │   └── Middleware/
-│   │       └── RoleMiddleware.php         # Middleware proteksi role & regional
+│   │   ├── AutoAdvancePregnancyPhases.php  # Otomatisasi milestone 3 hari tanpa konfirmasi
+│   │   └── ScrapeGorontaloRegions.php      # Command scraping data 6 Kab/Kota se-Gorontalo
+│   ├── Http/Controllers/
+│   │   ├── AuthController.php              # Login, Logout, dan Landing Page Home per-Role
+│   │   ├── BullStrawController.php         # Manajemen Database Straw Pejantan (CRUD)
+│   │   ├── CalfController.php              # Data Anak Sapi & Promosi Pedet Betina
+│   │   ├── CowController.php               # Direktori Sapi Betina & Scoping Regional
+│   │   ├── DashboardController.php         # Dashboard utama, status kebuntingan, filter
+│   │   ├── FarmerController.php            # Data Peternak & Proteksi NIK
+│   │   ├── PregnancyController.php         # Pendaftaran IB, Konfirmasi & Tandai Gagal
+│   │   ├── RegionController.php            # Manajemen Hirarki Wilayah (CRUD Kab, Kec, Desa/Kel)
+│   │   ├── ReportController.php            # Leaderboard Inseminator & Rekapitulasi Kelahiran
+│   │   └── UserController.php              # Manajemen Akun & Role Pengguna
 │   ├── Models/
-│   │   ├── BullStraw.php                  # Model Master Kode Straw Pejantan
-│   │   ├── Calf.php                       # Model Anak Sapi (Jantan/Betina) & Promosi
-│   │   ├── Cow.php                        # Model Sapi Betina & scopeForOperator
-│   │   ├── District.php                   # Model Kecamatan
-│   │   ├── Farmer.php                     # Model Peternak
-│   │   ├── PregnancyRecord.php            # Model Pemantauan Kebuntingan & Google Calendar URL
-│   │   ├── Regency.php                    # Model Kabupaten/Kota
-│   │   ├── User.php                       # Model User, Admin Provinsi, Admin Kab, Operator
-│   │   └── Village.php                    # Model Desa
+│   │   ├── BullStraw.php                   # Model Kode Straw Pejantan
+│   │   ├── Calf.php                        # Model Anak Sapi (Pedet)
+│   │   ├── Cow.php                         # Model Sapi Indukan Betina
+│   │   ├── District.php                    # Model Kecamatan
+│   │   ├── Farmer.php                      # Model Peternak
+│   │   ├── PregnancyRecord.php             # Model Rekam Kebuntingan & HPL
+│   │   ├── Regency.php                     # Model Kabupaten / Kota
+│   │   ├── User.php                        # Model Pengguna & Helper Role
+│   │   └── Village.php                     # Model Desa / Kelurahan
 │   └── Services/
-│       └── CattleNikGenerator.php         # Service Generator NIK Sapi
+│       └── CattleNikGenerator.php          # Formulasi NIK Sapi Berbasis Kode Wilayah
 ├── database/
-│   ├── migrations/                        # Skema tabel database (termasuk bull_straws & regency_id)
-│   └── seeders/DatabaseSeeder.php         # Seeder data awal & demo regional
-├── resources/views/                       # Seluruh tampilan Blade UI (Top Nav, Light/Dark Mode)
-├── routes/web.php                         # Rute web & pembatasan middleware
-└── README.md                              # Dokumentasi resmi aplikasi
+│   ├── data/gorontalo_regions.json         # Data master 6 Kab/Kota, 77 Kec, 722 Desa se-Gorontalo
+│   ├── migrations/                         # Skema database terstruktur
+│   └── seeders/
+│       ├── DatabaseSeeder.php              # Seeder wilayah, akun demo, straw, peternak & sapi
+│       └── ReadyToGiveBirthSeeder.php      # Data uji coba sapi bunting siap melahirkan
+├── resources/views/                        # Antarmuka Blade UI (Tailwind + Alpine.js)
+│   ├── auth/login.blade.php                # Form login petugas/admin
+│   ├── calves/                             # Tampilan data anak sapi
+│   ├── cows/                               # Direktori sapi, detail kartu digital & QR code
+│   ├── farmers/                            # Direktori peternak
+│   ├── layouts/app.blade.php               # Layout utama, mobile drawer & navbar
+│   ├── regions/index.blade.php             # Manajemen wilayah & modal edit
+│   ├── reports/                            # Leaderboard & rekapan kelahiran
+│   ├── straws/index.blade.php              # Database straw pejantan & modal edit
+│   ├── users/index.blade.php               # Kelola pengguna & modal edit role
+│   ├── dashboard.blade.php                 # Dashboard monitoring interaktif
+│   └── home.blade.php                      # Landing page adaptif per-role
+├── routes/web.php                          # Definisi rute & proteksi middleware
+└── README.md                               # Dokumentasi resmi aplikasi
 ```
 
 ---
-*Dibuat untuk Dinas Peternakan & Kesehatan Hewan — SiTernak-OK.*
+
+*Dikembangkan untuk **Dinas Peternakan dan Perkebunan Provinsi Gorontalo** — SiTernak-OK.*

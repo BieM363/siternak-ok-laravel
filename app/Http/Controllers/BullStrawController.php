@@ -39,6 +39,31 @@ class BullStrawController extends Controller
         return back()->with('success', "Kode Straw Pejantan {$request->code} berhasil ditambahkan ke database.");
     }
 
+    public function update(Request $request, $id)
+    {
+        $straw = BullStraw::findOrFail($id);
+
+        $request->validate([
+            'code' => 'required|string|max:50|unique:bull_straws,code,' . $straw->id,
+            'bull_name' => 'required|string|max:100',
+            'breed' => 'required|string|max:50',
+            'producer' => 'nullable|string|max:100',
+            'is_active' => 'nullable',
+            'notes' => 'nullable|string',
+        ]);
+
+        $straw->update([
+            'code' => strtoupper(trim($request->code)),
+            'bull_name' => $request->bull_name,
+            'breed' => $request->breed,
+            'producer' => $request->producer ?: 'BBIB Singosari',
+            'is_active' => $request->has('is_active') ? (bool)$request->is_active : true,
+            'notes' => $request->notes,
+        ]);
+
+        return back()->with('success', "Data Kode Straw {$straw->code} berhasil diperbarui.");
+    }
+
     public function destroy($id)
     {
         $straw = BullStraw::findOrFail($id);

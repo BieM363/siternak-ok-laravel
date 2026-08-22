@@ -12,15 +12,33 @@ use App\Models\PregnancyRecord;
 class AuthController extends Controller
 {
     /**
-     * Tampilan Landing Page / Home Utama (Publik)
+     * Tampilan Landing Page / Home Utama (Disesuaikan Per-Role)
      */
     public function showHome()
     {
-        $totalCows = Cow::count();
-        $totalCalves = Calf::count();
-        $totalIb = PregnancyRecord::count();
+        $user = Auth::user();
 
-        return view('home', compact('totalCows', 'totalCalves', 'totalIb'));
+        if ($user && $user->isAdminKabupaten()) {
+            $totalCows = Cow::where('regency_id', $user->regency_id)->count();
+            $totalCalves = Calf::whereHas('cow', fn($q) => $q->where('regency_id', $user->regency_id))->count();
+            $totalIb = PregnancyRecord::whereHas('cow', fn($q) => $q->where('regency_id', $user->regency_id))->count();
+            $totalFarmers = \App\Models\Farmer::where('regency_id', $user->regency_id)->count();
+            $totalInseminators = \App\Models\User::where('role', 'operator')->where('regency_id', $user->regency_id)->count();
+        } elseif ($user && $user->isOperator()) {
+            $totalCows = Cow::forOperator($user)->count();
+            $totalCalves = Calf::whereHas('cow', fn($q) => $q->forOperator($user))->count();
+            $totalIb = PregnancyRecord::where('operator_id', $user->id)->count();
+            $totalFarmers = \App\Models\Farmer::count();
+            $totalInseminators = \App\Models\User::where('role', 'operator')->count();
+        } else {
+            $totalCows = Cow::count();
+            $totalCalves = Calf::count();
+            $totalIb = PregnancyRecord::count();
+            $totalFarmers = \App\Models\Farmer::count();
+            $totalInseminators = \App\Models\User::where('role', 'operator')->count();
+        }
+
+        return view('home', compact('totalCows', 'totalCalves', 'totalIb', 'totalFarmers', 'totalInseminators'));
     }
 
     /**
