@@ -135,15 +135,22 @@
         <div class="absolute -right-8 -bottom-8 w-44 h-44 bg-emerald-500/10 rounded-full blur-2xl pointer-events-none"></div>
         <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-5 relative z-10">
             <div class="space-y-1.5">
-                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-[11px] font-black uppercase border border-emerald-500/40">
-                    <i class="fa-solid fa-syringe text-emerald-400"></i>
-                    <span>Petugas Inseminator IB Lapangan Resmi</span>
+                <div class="flex flex-wrap items-center gap-2">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-[11px] font-black uppercase border border-emerald-500/40">
+                        <i class="fa-solid fa-syringe text-emerald-400"></i>
+                        <span>Petugas Inseminator IB Lapangan Resmi</span>
+                    </div>
+                    <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/20 text-amber-300 text-[11px] font-black border border-amber-500/40">
+                        <i class="fa-solid fa-stopwatch text-amber-400"></i>
+                        <span>Sesi Kerja 8 Jam:</span>
+                        <span data-operator-countdown class="font-mono text-white">08:00:00</span>
+                    </div>
                 </div>
                 <h2 class="text-lg sm:text-2xl font-black tracking-tight text-white">
                     Pusat Operasional Pelayanan IB & Monitoring Kebuntingan
                 </h2>
                 <p class="text-xs text-emerald-200/80 max-w-2xl">
-                    Selamat bertugas di lapangan, <strong class="text-white">{{ auth()->user()->name }}</strong> ({{ auth()->user()->regency->name ?? 'Provinsi Gorontalo' }}). Lakukan pencatatan tindakan suntik IB dan konfirmasi milestone kebuntingan secara berkala.
+                    Selamat bertugas di lapangan, <strong class="text-white">{{ auth()->user()->name }}</strong> ({{ auth()->user()->regency->name ?? 'Provinsi Gorontalo' }}). Waktu login dibatasi maksimal <strong>8 jam</strong> melalui cronjob otomatis dengan dukungan penuh notifikasi peramban ponsel (HP).
                 </p>
             </div>
 
@@ -153,11 +160,15 @@
                     <i class="fa-solid fa-plus text-sm"></i>
                     <span>Pendaftaran IB Baru</span>
                 </a>
+                <button type="button" onclick="window.SiTernakNotifier && window.SiTernakNotifier.testMobileNotification()" class="px-3.5 py-2.5 bg-amber-500 hover:bg-amber-400 text-slate-950 rounded-xl text-xs font-extrabold transition shadow-lg flex items-center gap-1.5">
+                    <i class="fa-solid fa-mobile-screen-button"></i>
+                    <span>Tes Notifikasi HP</span>
+                </button>
                 <a href="{{ route('straws.index') }}" class="px-3 py-2 bg-purple-600/80 hover:bg-purple-600 text-white rounded-xl text-xs font-bold transition shadow border border-purple-400/30 flex items-center gap-1.5">
                     <i class="fa-solid fa-vial"></i>
                     <span>Cek Straw</span>
                 </a>
-                <a href="{{ route('reports.inseminators') }}" class="px-3 py-2 bg-amber-600/80 hover:bg-amber-600 text-white rounded-xl text-xs font-bold transition shadow border border-amber-400/30 flex items-center gap-1.5">
+                <a href="{{ route('reports.inseminators') }}" class="px-3 py-2 bg-slate-800/90 hover:bg-slate-700 text-amber-300 rounded-xl text-xs font-bold transition shadow border border-slate-700 flex items-center gap-1.5">
                     <i class="fa-solid fa-trophy"></i>
                     <span>Leaderboard IB</span>
                 </a>
@@ -199,6 +210,7 @@
 @if(isset($confirmationReminders) && $confirmationReminders->count() > 0)
 
 <div
+    id="reminder-section"
     class="glass-card p-4 sm:p-6 rounded-3xl border-2 border-emerald-500/60
            bg-gradient-to-r from-emerald-950/90 via-slate-900 to-teal-950/90
            shadow-2xl relative overflow-hidden text-white"
@@ -928,53 +940,99 @@
         >
 
             <div
-                class="flex items-center space-x-3
+                class="flex items-center justify-between
                        text-emerald-600
                        dark:text-emerald-400"
             >
-
-                <i class="fa-solid fa-bell text-2xl"></i>
-
-                <h4 class="font-extrabold text-sm">
-                    Notifikasi Pengingat Peramban/HP
-                </h4>
-
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-2xl bg-emerald-500/15 flex items-center justify-center">
+                        <i class="fa-solid fa-mobile-screen-button text-xl"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-extrabold text-sm text-slate-900 dark:text-white">
+                            Notifikasi Peramban Ponsel & Sesi 8 Jam
+                        </h4>
+                        <p class="text-[11px] text-slate-500 dark:text-slate-400">
+                            Dukungan Semua Browser HP (Chrome, Safari, Firefox, Samsung, dll.)
+                        </p>
+                    </div>
+                </div>
+                <button @click="showPushModal = false" type="button" class="text-slate-400 hover:text-slate-600 dark:hover:text-white p-1">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
             </div>
 
-            <p class="text-xs text-slate-600 dark:text-slate-300">
-                Sistem SiTernak-OK secara otomatis mengirimkan
-                notifikasi pengingat ke peramban dan HP Anda ketika
-                terdapat sapi betina yang memasuki jadwal konfirmasi
-                dengan batas maksimal 3 hari.
+            <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+                Dirancang khusus bagi <strong>Operator Inseminator yang turun lapangan menggunakan HP</strong> tanpa perlu membawa laptop. Sistem mengirimkan notifikasi langsung ke peramban ponsel Anda selama sesi login kerja <strong>8 jam</strong> aktif.
             </p>
+
+            @if(auth()->check() && auth()->user()->isOperator())
+            <div class="bg-emerald-50 dark:bg-emerald-950/60 p-3.5 rounded-2xl border border-emerald-200 dark:border-emerald-800/80 space-y-1.5 text-xs">
+                <div class="flex items-center justify-between">
+                    <span class="font-bold text-emerald-900 dark:text-emerald-300 flex items-center gap-1.5">
+                        <i class="fa-solid fa-clock"></i> Sisa Waktu Login (Maks 8 Jam):
+                    </span>
+                    <span data-operator-countdown class="font-mono font-black text-emerald-700 dark:text-emerald-300 bg-white dark:bg-slate-900 px-2 py-0.5 rounded border border-emerald-200 dark:border-emerald-800">
+                        08:00:00
+                    </span>
+                </div>
+                <p class="text-[11px] text-slate-600 dark:text-slate-400">
+                    Cronjob (<code class="text-emerald-600 dark:text-emerald-400 font-bold">ternak:operator-session-cron</code>) otomatis mengakhiri sesi setelah 8 jam dan menyinkronkan pengingat 3 hari.
+                </p>
+            </div>
+            @endif
 
             <div
                 class="bg-slate-100 dark:bg-slate-950
-                       p-3 rounded-xl
+                       p-3.5 rounded-2xl
                        border border-slate-200 dark:border-slate-800
-                       text-xs font-mono"
+                       text-xs space-y-2"
             >
-                Status Push Notification:
-
-                <strong class="text-emerald-600 dark:text-emerald-400">
-                    AKTIF
-                </strong>
+                <div class="flex items-center justify-between">
+                    <span class="font-semibold text-slate-600 dark:text-slate-400">Status Notifikasi Peramban:</span>
+                    <span data-browser-perm-badge class="px-2 py-0.5 rounded text-[10px] font-extrabold bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300">
+                        AKTIF
+                    </span>
+                </div>
+                <div class="flex items-center justify-between text-[11px]">
+                    <span class="text-slate-500">Antrean Sapi Butuh Konfirmasi:</span>
+                    <strong class="text-amber-600 dark:text-amber-400 font-bold">{{ $confirmationReminders->count() }} Sapi Betina</strong>
+                </div>
             </div>
 
-            <div class="flex justify-end">
+            <div class="space-y-2 pt-1">
+                <button
+                    data-btn-request-perm
+                    type="button"
+                    onclick="window.SiTernakNotifier && window.SiTernakNotifier.requestPermission()"
+                    class="w-full py-2.5 px-4 bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold text-xs rounded-xl shadow transition flex items-center justify-center gap-2"
+                >
+                    <i class="fa-solid fa-bell"></i>
+                    <span>Izinkan Notifikasi Sistem pada Peramban HP Ini</span>
+                </button>
 
+                <button
+                    type="button"
+                    @click="showPushModal = false; window.SiTernakNotifier && window.SiTernakNotifier.syncCronAndNotify()"
+                    class="w-full py-2.5 px-4 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-xl shadow-lg transition flex items-center justify-center gap-2"
+                >
+                    <i class="fa-solid fa-paper-plane"></i>
+                    <span>Kirim Uji Notifikasi ke Peramban Ponsel Sekarang</span>
+                </button>
+            </div>
+
+            <div class="flex justify-end pt-1">
                 <button
                     @click="showPushModal = false"
                     type="button"
                     class="px-4 py-2
-                           bg-emerald-600
-                           hover:bg-emerald-500
-                           text-white font-bold
+                           bg-slate-200 dark:bg-slate-800
+                           hover:bg-slate-300 dark:hover:bg-slate-700
+                           text-slate-700 dark:text-slate-300 font-bold
                            text-xs rounded-xl"
                 >
                     Tutup
                 </button>
-
             </div>
 
         </div>

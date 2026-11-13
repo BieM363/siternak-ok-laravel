@@ -421,14 +421,16 @@ public function updateStatus(Request $request, $id)
      */
     public function triggerCron()
     {
-        Artisan::call('ternak:update-pregnancy-status');
+        Artisan::call('ternak:operator-session-cron');
+        $sessionCronOutput = trim(Artisan::output());
 
-        $output = Artisan::output();
+        Artisan::call('ternak:update-pregnancy-status');
+        $output = trim(Artisan::output());
 
         return back()->with(
             'success',
-            'Otomatisasi status berhasil dijalankan. ' .
-            trim($output)
+            'Otomatisasi Cronjob (Sesi 8 Jam Operator & Status Kebuntingan) berhasil dijalankan. ' .
+            $output . ($sessionCronOutput ? ' | ' . $sessionCronOutput : '')
         );
     }
 }

@@ -48,6 +48,10 @@ Aplikasi sistem informasi berbasis web (**Laravel**) yang dirancang khusus untuk
 8. **Antarmuka Modern & Optimalisasi Layar Ponsel (*Mobile UI/UX*)**:
    - Tampilan responsif dengan Tailwind CSS & Alpine.js, mode Gelap/Terang, tombol aksi adaptif, serta menu drawer terisolasi di root overlay agar tidak menimpa konten ponsel.
 
+9. **Cronjob Sesi Login 8 Jam Operator & Notifikasi Peramban Ponsel (HP) Saat Turun Lapangan**:
+   - Waktu login **Operator Inseminator** dibatasi maksimal **8 jam kerja** (`480 menit`) melalui *middleware* dan *cronjob* otomatis (`ternak:operator-session-cron`), dilengkapi penghitung waktu mundur (*live countdown* `08:00:00`) di layar HP.
+   - Pengingat konfirmasi sapi dikirimkan melalui **Service Worker (`/sw.js`) & Banner Push Melayang** yang kompatibel di semua peramban ponsel (**Chrome Android, Safari iOS, Samsung Internet, Firefox Mobile, Opera/Edge**) lengkap dengan getar (`vibrate`) dan nada dering, sehingga petugas di lapangan cukup menggunakan ponsel tanpa perlu membawa laptop.
+
 ---
 
 ## 👥 Hierarki Hak Akses & Tampilan Home Berbasis Role
@@ -77,12 +81,21 @@ Setelah sapi betina diinseminasi, sistem otomatis membentuk 4 milestone utama:
    └──► [Hari 283 Pasca IB]  : HPL (Hari Perkiraan Lahir Normal, Jendela s/d +50 Hari)
 ```
 
-### ⚡ Aturan Auto-Advance 3 Hari
+### ⚡ Aturan Auto-Advance 3 Hari & Cronjob Sesi 8 Jam Operator
 * Jika jadwal milestone (Hari 30, 90, atau 245) melewati **3 hari kalender tanpa konfirmasi manual**, sistem otomatis memajukan fase sapi ke tahap berikutnya agar rantai pemantauan tidak berhenti.
-* Tombol **Check Auto-Advance (3 Hari)** tersedia pada sub-header untuk simulasi atau eksekusi instan.
+* Tombol **Check Auto-Advance (3 Hari)** dan **Tes Notifikasi HP** tersedia pada header/dashboard untuk simulasi atau eksekusi instan.
+* **Cronjob Sesi 8 Jam & Notifikasi Peramban Ponsel**:
+  * Memastikan sesi login operator lapangan berakhir otomatis setelah **8 jam** sejak login, memberikan peringatan saat tersisa **15 menit**, serta menyinkronkan pengingat konfirmasi sapi ke peramban ponsel.
 * Perintah Artisan Scheduler:
   ```bash
+  # Menjalankan cronjob pembatasan sesi 8 jam operator & sinkronisasi pengingat HP
+  php artisan ternak:operator-session-cron
+
+  # Menjalankan pengecekan auto-advance status kebuntingan 3 hari
   php artisan ternak:update-pregnancy-status
+
+  # Menjalankan worker penjadwal otomatis (berjalan terus di latar belakang)
+  php artisan schedule:work
   ```
 
 ---
@@ -214,18 +227,25 @@ siternak-ok-laravel/
 ├── app/
 │   ├── Console/Commands/
 │   │   ├── AutoAdvancePregnancyPhases.php  # Otomatisasi milestone 3 hari tanpa konfirmasi
-│   │   └── ScrapeGorontaloRegions.php      # Command scraping data 6 Kab/Kota se-Gorontalo
-│   ├── Http/Controllers/
-│   │   ├── AuthController.php              # Login, Logout, dan Landing Page Home per-Role
-│   │   ├── BullStrawController.php         # Manajemen Database Straw Pejantan (CRUD)
-│   │   ├── CalfController.php              # Data Anak Sapi & Promosi Pedet Betina
-│   │   ├── CowController.php               # Direktori Sapi Betina & Scoping Regional
-│   │   ├── DashboardController.php         # Dashboard utama, status kebuntingan, filter
-│   │   ├── FarmerController.php            # Data Peternak & Proteksi NIK
-│   │   ├── PregnancyController.php         # Pendaftaran IB, Konfirmasi & Tandai Gagal
-│   │   ├── RegionController.php            # Manajemen Hirarki Wilayah (CRUD Kab, Kec, Desa/Kel)
-│   │   ├── ReportController.php            # Leaderboard Inseminator & Rekapitulasi Kelahiran
-│   │   └── UserController.php              # Manajemen Akun & Role Pengguna
+│   │   ├── OperatorSessionCron.php         # Cronjob batas login 8 jam operator & pengingat HP
+│   │   ├── ScrapeGorontaloRegions.php      # Command scraping data 6 Kab/Kota se-Gorontalo
+│   │   └── UpdatePregnancyStatus.php       # Command update otomatis status kebuntingan sapi
+│   ├── Http/
+│   │   ├── Controllers/
+│   │   │   ├── AuthController.php          # Login (sesi 8 jam operator), Logout & Home per-Role
+│   │   │   ├── BullStrawController.php     # Manajemen Database Straw Pejantan (CRUD)
+│   │   │   ├── CalfController.php          # Data Anak Sapi & Promosi Pedet Betina
+│   │   │   ├── CowController.php           # Direktori Sapi Betina & Scoping Regional
+│   │   │   ├── DashboardController.php     # Dashboard utama, status kebuntingan, filter
+│   │   │   ├── FarmerController.php        # Data Peternak & Proteksi NIK
+│   │   │   ├── NotificationController.php  # API polling notifikasi peramban ponsel & sesi 8 jam
+│   │   │   ├── PregnancyController.php     # Pendaftaran IB, Konfirmasi & Tandai Gagal
+│   │   │   ├── RegionController.php        # Manajemen Hirarki Wilayah (CRUD Kab, Kec, Desa/Kel)
+│   │   │   ├── ReportController.php        # Leaderboard Inseminator & Rekapitulasi Kelahiran
+│   │   │   └── UserController.php          # Manajemen Akun & Role Pengguna
+│   │   └── Middleware/
+│   │       ├── OperatorSessionTimeout.php  # Proteksi batas waktu login maksimal 8 jam operator
+│   │       └── RoleMiddleware.php          # Proteksi hak akses berbasis role
 │   ├── Models/
 │   │   ├── BullStraw.php                   # Model Kode Straw Pejantan
 │   │   ├── Calf.php                        # Model Anak Sapi (Pedet)
@@ -234,7 +254,7 @@ siternak-ok-laravel/
 │   │   ├── Farmer.php                      # Model Peternak
 │   │   ├── PregnancyRecord.php             # Model Rekam Kebuntingan & HPL
 │   │   ├── Regency.php                     # Model Kabupaten / Kota
-│   │   ├── User.php                        # Model Pengguna & Helper Role
+│   │   ├── User.php                        # Model Pengguna, Role & Helper Sesi 8 Jam
 │   │   └── Village.php                     # Model Desa / Kelurahan
 │   └── Services/
 │       └── CattleNikGenerator.php          # Formulasi NIK Sapi Berbasis Kode Wilayah
@@ -244,19 +264,25 @@ siternak-ok-laravel/
 │   └── seeders/
 │       ├── DatabaseSeeder.php              # Seeder wilayah, akun demo, straw, peternak & sapi
 │       └── ReadyToGiveBirthSeeder.php      # Data uji coba sapi bunting siap melahirkan
+├── public/
+│   ├── manifest.json                       # Konfigurasi Web App Manifest (PWA Ponsel)
+│   └── sw.js                               # Service Worker untuk Notifikasi Peramban Ponsel
 ├── resources/views/                        # Antarmuka Blade UI (Tailwind + Alpine.js)
 │   ├── auth/login.blade.php                # Form login petugas/admin
 │   ├── calves/                             # Tampilan data anak sapi
 │   ├── cows/                               # Direktori sapi, detail kartu digital & QR code
 │   ├── farmers/                            # Direktori peternak
-│   ├── layouts/app.blade.php               # Layout utama, mobile drawer & navbar
+│   ├── layouts/app.blade.php               # Layout utama, notifikasi HP, countdown 8 jam & navbar
 │   ├── regions/index.blade.php             # Manajemen wilayah & modal edit
 │   ├── reports/                            # Leaderboard & rekapan kelahiran
 │   ├── straws/index.blade.php              # Database straw pejantan & modal edit
 │   ├── users/index.blade.php               # Kelola pengguna & modal edit role
 │   ├── dashboard.blade.php                 # Dashboard monitoring interaktif
 │   └── home.blade.php                      # Landing page adaptif per-role
-├── routes/web.php                          # Definisi rute & proteksi middleware
+├── routes/
+│   ├── console.php                         # Jadwal Cronjob (Sesi 8 Jam & Auto-Advance)
+│   └── web.php                             # Definisi rute & proteksi middleware
+├── PANDUAN_PRESENTASI_SITERNAK.md          # Buku saku penjelasan aplikasi untuk presentasi
 └── README.md                               # Dokumentasi resmi aplikasi
 ```
 

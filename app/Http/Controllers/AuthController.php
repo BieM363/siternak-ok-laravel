@@ -70,10 +70,45 @@ class AuthController extends Controller
             'password' => 'required',
         ]);
 
-        if (Auth::attempt($credentials, $request->boolean('remember'))) {
+        $candidate = User::where('email', $credentials['email'])->first();
+        $remember = ($candidate && $candidate->isOperator()) ? false : $request->boolean('remember');
+
+        if (Auth::attempt($credentials, $remember)) {
             $request->session()->regenerate();
+
+            $user = Auth::user();
+            $loginAt = now();
+
+            if ($user->isOperator()) {
+                $expiresAt = $loginAt->copy()->addHours(User::OPERATOR_SESSION_HOURS);
+
+                $user->update([
+                    'last_login_at' => $loginAt,
+                    'login_expires_at' => $expiresAt,
+                ]);
+
+                session([
+                    'operator_login_at' => $loginAt->timestamp,
+                    'operator_expires_at' => $expiresAt->timestamp,
+                    'just_logged_in_notify' => true,
+                ]);
+
+                return redirect()->intended(route('dashboard'))
+                    ->with(
+                        'success',
+                        'Selamat bertugas di lapangan, ' . $user->name . '! Sesi login Operator berlaku selama 8 jam (berakhir pukul ' . $expiresAt->format('H:i') . '). Notifikasi peramban ponsel telah diaktifkan.'
+                    );
+            }
+
+            $user->update([
+                'last_login_at' => $loginAt,
+                'login_expires_at' => null,
+            ]);
+
+            session(['just_logged_in_notify' => true]);
+
             return redirect()->intended(route('dashboard'))
-                ->with('success', 'Selamat datang kembali, ' . Auth::user()->name . '!');
+                ->with('success', 'Selamat datang kembali, ' . $user->name . '!');
         }
 
         return back()->withErrors([
@@ -88,6 +123,10 @@ class AuthController extends Controller
 
     public function logout(Request $request)
     {
+        if (Auth::check()) {
+            Auth::user()->update(['login_expires_at' => null]);
+        }
+
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();

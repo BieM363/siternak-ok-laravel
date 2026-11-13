@@ -267,6 +267,9 @@ class DatabaseSeeder extends Seeder
         // 6. Jalankan ReadyToGiveBirthSeeder satu kali
         $this->call(ReadyToGiveBirthSeeder::class);
 
+        // 7. Jalankan BoalemoInseminationSeeder
+        $this->call(BoalemoInseminationSeeder::class);
+
         $this->command->info('Seeding database Gorontalo selesai dengan sukses!');
     }
 }

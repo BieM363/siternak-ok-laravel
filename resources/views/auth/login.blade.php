@@ -127,7 +127,12 @@
                 </div>
 
                 <!-- Group Operator -->
-                <p class="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider pt-2">Akses Operator Inseminator</p>
+                <div class="flex items-center justify-between pt-2">
+                    <p class="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">Akses Operator Inseminator</p>
+                    <span class="px-2 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800 text-[9px] font-bold text-emerald-700 dark:text-emerald-300 flex items-center gap-1">
+                        <i class="fa-solid fa-mobile-screen-button"></i> Sesi 8 Jam & Notif HP
+                    </span>
+                </div>
                 <div class="grid grid-cols-2 gap-2">
                     <button onclick="setCredentials('operator@siternak.go.id', 'password')" class="px-2.5 py-2.5 bg-amber-50 dark:bg-amber-950/40 hover:bg-amber-100 dark:hover:bg-amber-900/60 border border-amber-200 dark:border-amber-800/60 text-amber-700 dark:text-amber-300 text-[11px] font-semibold rounded-xl transition-all text-center">
                         <span class="block text-[9px] text-amber-600 dark:text-amber-400 font-bold uppercase">Operator A</span>
@@ -138,6 +143,10 @@
                         Taufik (Inseminator Gorontalo)
                     </button>
                 </div>
+                <p class="text-[10px] text-slate-500 dark:text-slate-400 leading-relaxed pt-1">
+                    <i class="fa-solid fa-stopwatch text-emerald-500 mr-1"></i>
+                    Khusus <strong>Operator Lapangan</strong>: Waktu login aktif dibatasi <strong>8 jam</strong> (via Cronjob) dengan notifikasi otomatis ke peramban ponsel (HP).
+                </p>
             </div>
 
             <a href="{{ route('home') }}" class="w-full py-2.5 px-4 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 font-semibold text-xs rounded-xl border border-slate-200 dark:border-slate-700 transition-all flex items-center justify-center space-x-2">

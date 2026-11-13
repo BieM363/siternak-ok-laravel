@@ -11,6 +11,7 @@ use App\Http\Controllers\FarmerController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CalfController;
 use App\Http\Controllers\BullStrawController;
+use App\Http\Controllers\NotificationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -72,6 +73,10 @@ Route::middleware(['auth', 'role:admin,operator'])->group(function () {
     // Update Status Kehamilan, Tandai Gagal & Trigger Cron
     Route::put('/pregnancy/{id}/update-status', [PregnancyController::class, 'updateStatus'])->name('pregnancy.update-status');
     Route::post('/pregnancy/trigger-cron', [PregnancyController::class, 'triggerCron'])->name('pregnancy.trigger-cron');
+
+    // Endpoint Notifikasi Peramban Ponsel & Pemantauan Sesi Login 8 Jam Operator
+    Route::get('/notifications/poll', [NotificationController::class, 'poll'])->name('notifications.poll');
+    Route::post('/notifications/sync-cron', [NotificationController::class, 'syncCron'])->name('notifications.sync-cron');
 
     // Edit, Update & Promosikan Anak Sapi
     Route::get('/calves/{id}/edit', [CalfController::class, 'edit'])->name('calves.edit');

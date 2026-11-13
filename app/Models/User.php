@@ -17,6 +17,8 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable;
 
+    public const OPERATOR_SESSION_HOURS = 8;
+
     protected $fillable = [
         'name',
         'email',
@@ -24,6 +26,8 @@ class User extends Authenticatable
         'role', // 'admin', 'operator', 'guest'
         'regency_id',
         'phone',
+        'last_login_at',
+        'login_expires_at',
     ];
 
     protected $hidden = [
@@ -36,6 +40,8 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'last_login_at' => 'datetime',
+            'login_expires_at' => 'datetime',
         ];
     }
 
@@ -125,5 +131,24 @@ class User extends Authenticatable
     public function isGuest(): bool
     {
         return strtolower($this->role) === 'guest';
+    }
+
+    /**
+     * Mengembalikan sisa detik waktu login operator (batas 8 jam)
+     */
+    public function getRemainingSessionSeconds(): ?int
+    {
+        if (!$this->isOperator()) {
+            return null;
+        }
+
+        $expiresAtTimestamp = session('operator_expires_at')
+            ?? ($this->login_expires_at ? $this->login_expires_at->timestamp : null);
+
+        if (!$expiresAtTimestamp) {
+            return self::OPERATOR_SESSION_HOURS * 3600;
+        }
+
+        return max(0, (int) ($expiresAtTimestamp - now()->timestamp));
     }
 }
