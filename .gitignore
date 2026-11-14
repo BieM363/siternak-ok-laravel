@@ -32,3 +32,4 @@ database/*.sqlite-journal
 /.devin
 /.gemini
 skills-lock.json
+/launcher/cloudflared.exe

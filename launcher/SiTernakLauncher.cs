@@ -7,6 +7,7 @@ using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -16,33 +17,46 @@ namespace SiTernakLauncher
     {
         private string projectRoot;
         private string phpPath;
+        private string cloudflaredPath;
         private int serverPort = 8000;
         private string lanIp = "127.0.0.1";
+        private string cloudflareUrl = "";
 
         private Process webServerProcess;
         private Process schedulerProcess;
+        private Process cloudflareProcess;
         private System.Windows.Forms.Timer cronWatchTimer;
         private bool isShuttingDown = false;
         private bool browserOpenedOnce = false;
 
+        private static readonly Regex TryCloudflareRegex = new Regex(
+            @"https://[a-zA-Z0-9\-]+\.trycloudflare\.com",
+            RegexOptions.Compiled | RegexOptions.IgnoreCase
+        );
+
         // UI Controls
         private Label lblWebStatus;
         private Label lblCronStatus;
+        private Label lblCloudflareStatus;
         private Label lblLocalUrl;
-        private Label lblLanUrl;
+        private TextBox txtCloudflareUrl;
+        private PictureBox picQrCode;
+        private Label lblQrCaption;
         private TextBox txtLog;
         private Button btnOpenWeb;
-        private Button btnOpenLogin;
+        private Button btnOpenCloudflare;
+        private Button btnCopyCloudflare;
         private Button btnTriggerNotif;
-        private Button btnCopyLan;
         private Button btnRestart;
         private Button btnStop;
         private NotifyIcon trayIcon;
 
         public MainForm(bool autoOpenBrowser)
         {
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
             this.projectRoot = DetectProjectRoot();
             this.phpPath = DetectPhpExecutable();
+            this.cloudflaredPath = DetectCloudflaredExecutable(this.projectRoot);
             this.lanIp = DetectLocalLanIp();
 
             InitializeUi();
@@ -67,11 +81,11 @@ namespace SiTernakLauncher
 
         private void InitializeUi()
         {
-            this.Text = "SiTernak-OK — Peluncur Web & Server Notifikasi (Dinas Peternakan Gorontalo)";
-            this.Size = new Size(780, 560);
-            this.MinimumSize = new Size(740, 520);
+            this.Text = "SiTernak-OK — Peluncur Web, Cloudflare Tunnel & Notifikasi 8 Jam";
+            this.Size = new Size(860, 620);
+            this.MinimumSize = new Size(820, 580);
             this.StartPosition = FormStartPosition.CenterScreen;
-            this.BackColor = Color.FromArgb(241, 245, 249); // Slate-100
+            this.BackColor = Color.FromArgb(241, 245, 249);
             this.Font = new Font("Segoe UI", 9.5F, FontStyle.Regular);
             this.Icon = SystemIcons.Shield;
 
@@ -80,23 +94,23 @@ namespace SiTernakLauncher
             {
                 Dock = DockStyle.Top,
                 Height = 76,
-                BackColor = Color.FromArgb(15, 23, 42), // Slate-900
+                BackColor = Color.FromArgb(15, 23, 42),
                 Padding = new Padding(20, 14, 20, 14)
             };
 
             Label lblTitle = new Label
             {
-                Text = "SiTernak-OK — Server Web & Cronjob Notifikasi 8 Jam",
+                Text = "SiTernak-OK — Server Web, Cloudflare HTTPS & Cronjob Notifikasi 8 Jam",
                 ForeColor = Color.White,
-                Font = new Font("Segoe UI Semibold", 13.5F, FontStyle.Bold),
+                Font = new Font("Segoe UI Semibold", 13.0F, FontStyle.Bold),
                 AutoSize = true,
                 Location = new Point(20, 14)
             };
 
             Label lblSubtitle = new Label
             {
-                Text = "Dinas Peternakan dan Perkebunan Provinsi Gorontalo • Sistem Pemantauan IB & Kelahiran Sapi",
-                ForeColor = Color.FromArgb(16, 185, 129), // Emerald-500
+                Text = "Dinas Peternakan dan Perkebunan Provinsi Gorontalo • Akses Langsung Laptop & Browser HP via Cloudflare Tunnel",
+                ForeColor = Color.FromArgb(16, 185, 129),
                 Font = new Font("Segoe UI", 9.0F, FontStyle.Regular),
                 AutoSize = true,
                 Location = new Point(20, 44)
@@ -105,11 +119,11 @@ namespace SiTernakLauncher
             headerPanel.Controls.Add(lblTitle);
             headerPanel.Controls.Add(lblSubtitle);
 
-            // Status Card Panel
+            // Status & QR Card Panel
             Panel statusCard = new Panel
             {
-                Location = new Point(18, 90),
-                Size = new Size(728, 122),
+                Location = new Point(18, 88),
+                Size = new Size(808, 176),
                 Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right,
                 BackColor = Color.White,
                 BorderStyle = BorderStyle.FixedSingle
@@ -117,8 +131,8 @@ namespace SiTernakLauncher
 
             lblWebStatus = new Label
             {
-                Text = "Status Web Server: Menyiapkan layanan...",
-                Font = new Font("Segoe UI Semibold", 10.0F, FontStyle.Bold),
+                Text = "Status Web Server        : Menyiapkan layanan...",
+                Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold),
                 ForeColor = Color.FromArgb(217, 119, 6),
                 AutoSize = true,
                 Location = new Point(16, 14)
@@ -126,107 +140,175 @@ namespace SiTernakLauncher
 
             lblCronStatus = new Label
             {
-                Text = "Status Notifikasi & Sesi 8 Jam: Menyiapkan cronjob...",
+                Text = "Status Cron Notifikasi   : Menyiapkan cronjob sesi 8 jam & pengingat 3 hari...",
                 Font = new Font("Segoe UI Semibold", 9.5F, FontStyle.Bold),
                 ForeColor = Color.FromArgb(13, 148, 136),
                 AutoSize = true,
-                Location = new Point(16, 40)
+                Location = new Point(16, 38)
+            };
+
+            lblCloudflareStatus = new Label
+            {
+                Text = "Status Cloudflare Tunnel : Menghubungkan ke jaringan Cloudflare HTTPS...",
+                Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold),
+                ForeColor = Color.FromArgb(2, 132, 199),
+                AutoSize = true,
+                Location = new Point(16, 62)
             };
 
             lblLocalUrl = new Label
             {
-                Text = "Akses Laptop / PC  : http://127.0.0.1:" + serverPort,
-                Font = new Font("Consolas", 10.0F, FontStyle.Bold),
-                ForeColor = Color.FromArgb(15, 23, 42),
+                Text = "URL Laptop (Lokal)       : http://127.0.0.1:" + serverPort + "   |   LAN: http://" + lanIp + ":" + serverPort,
+                Font = new Font("Consolas", 9.75F, FontStyle.Regular),
+                ForeColor = Color.FromArgb(51, 65, 85),
                 AutoSize = true,
-                Location = new Point(16, 68)
+                Location = new Point(16, 90)
             };
 
-            lblLanUrl = new Label
+            Label lblCfPrompt = new Label
             {
-                Text = "Akses Browser HP   : http://" + lanIp + ":" + serverPort + "  (Satu jaringan Wi-Fi / Hotspot)",
-                Font = new Font("Consolas", 10.0F, FontStyle.Bold),
+                Text = "Link Publik HP (HTTPS) :",
+                Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold),
                 ForeColor = Color.FromArgb(5, 150, 105),
                 AutoSize = true,
-                Location = new Point(16, 92)
+                Location = new Point(16, 122)
+            };
+
+            txtCloudflareUrl = new TextBox
+            {
+                Text = "Sedang membuat link HTTPS *.trycloudflare.com (tunggu 3-8 detik)...",
+                Font = new Font("Consolas", 10.5F, FontStyle.Bold),
+                ForeColor = Color.FromArgb(5, 150, 105),
+                BackColor = Color.FromArgb(240, 253, 244),
+                ReadOnly = true,
+                BorderStyle = BorderStyle.FixedSingle,
+                Location = new Point(182, 119),
+                Size = new Size(445, 28)
+            };
+
+            Label lblHint = new Label
+            {
+                Text = "Buka link HTTPS di atas dari browser HP mana saja (Wi-Fi / Data Seluler) atau scan QR di kanan.",
+                Font = new Font("Segoe UI", 8.5F, FontStyle.Regular),
+                ForeColor = Color.FromArgb(100, 116, 139),
+                AutoSize = true,
+                Location = new Point(16, 150)
+            };
+
+            // QR Code Box on Right Side of Status Card
+            picQrCode = new PictureBox
+            {
+                Location = new Point(650, 10),
+                Size = new Size(136, 136),
+                BorderStyle = BorderStyle.FixedSingle,
+                BackColor = Color.FromArgb(248, 250, 252),
+                SizeMode = PictureBoxSizeMode.StretchImage
+            };
+
+            lblQrCaption = new Label
+            {
+                Text = "Menunggu QR HP...",
+                Font = new Font("Segoe UI Semibold", 8.25F, FontStyle.Bold),
+                ForeColor = Color.FromArgb(71, 85, 105),
+                AutoSize = false,
+                TextAlign = ContentAlignment.MiddleCenter,
+                Location = new Point(642, 149),
+                Size = new Size(152, 20)
             };
 
             statusCard.Controls.Add(lblWebStatus);
             statusCard.Controls.Add(lblCronStatus);
+            statusCard.Controls.Add(lblCloudflareStatus);
             statusCard.Controls.Add(lblLocalUrl);
-            statusCard.Controls.Add(lblLanUrl);
+            statusCard.Controls.Add(lblCfPrompt);
+            statusCard.Controls.Add(txtCloudflareUrl);
+            statusCard.Controls.Add(lblHint);
+            statusCard.Controls.Add(picQrCode);
+            statusCard.Controls.Add(lblQrCaption);
 
             // Action Buttons Row
             FlowLayoutPanel actionPanel = new FlowLayoutPanel
             {
-                Location = new Point(18, 222),
-                Size = new Size(728, 44),
+                Location = new Point(18, 274),
+                Size = new Size(808, 44),
                 Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right,
                 FlowDirection = FlowDirection.LeftToRight,
                 WrapContents = false,
                 BackColor = Color.Transparent
             };
 
-            btnOpenWeb = CreateButton("Buka Web Utama", Color.FromArgb(5, 150, 105), Color.White, 138);
-            btnOpenWeb.Click += (s, e) => OpenUrl("http://127.0.0.1:" + serverPort);
-
-            btnOpenLogin = CreateButton("Buka Login Demo", Color.FromArgb(13, 148, 136), Color.White, 136);
-            btnOpenLogin.Click += (s, e) => OpenUrl("http://127.0.0.1:" + serverPort + "/login");
-
-            btnTriggerNotif = CreateButton("Sinkronkan Notifikasi Sekarang", Color.FromArgb(217, 119, 6), Color.White, 200);
-            btnTriggerNotif.Click += (s, e) => ThreadPool.QueueUserWorkItem(_ => RunCronCommandsOnce(true));
-
-            btnCopyLan = CreateButton("Salin URL HP", Color.FromArgb(2, 132, 199), Color.White, 112);
-            btnCopyLan.Click += (s, e) =>
+            btnOpenCloudflare = CreateButton("Buka Link Cloudflare (HTTPS)", Color.FromArgb(5, 150, 105), Color.White, 196);
+            btnOpenCloudflare.Click += (s, e) =>
             {
-                string url = "http://" + lanIp + ":" + serverPort;
-                Clipboard.SetText(url);
-                AppendLog("[INFO] URL Akses HP disalin ke clipboard: " + url);
-                ShowBalloon("URL Akses HP Disalin", "Tempelkan " + url + " di browser HP yang terhubung ke Wi-Fi/Hotspot yang sama.");
+                if (!string.IsNullOrEmpty(cloudflareUrl))
+                {
+                    OpenUrl(cloudflareUrl);
+                }
+                else
+                {
+                    OpenUrl("http://127.0.0.1:" + serverPort);
+                }
             };
 
-            btnRestart = CreateButton("Restart", Color.FromArgb(71, 85, 105), Color.White, 68);
+            btnCopyCloudflare = CreateButton("Salin Link Cloudflare HP", Color.FromArgb(2, 132, 199), Color.White, 168);
+            btnCopyCloudflare.Click += (s, e) =>
+            {
+                string target = !string.IsNullOrEmpty(cloudflareUrl)
+                    ? cloudflareUrl
+                    : ("http://127.0.0.1:" + serverPort);
+                Clipboard.SetText(target);
+                AppendLog("[CLIPBOARD] Link berhasil disalin: " + target);
+                ShowBalloon("Link Disalin", "Tempelkan " + target + " di browser HP Anda.");
+            };
+
+            btnOpenWeb = CreateButton("Buka Localhost", Color.FromArgb(13, 148, 136), Color.White, 118);
+            btnOpenWeb.Click += (s, e) => OpenUrl("http://127.0.0.1:" + serverPort);
+
+            btnTriggerNotif = CreateButton("Sinkronkan Notifikasi", Color.FromArgb(217, 119, 6), Color.White, 158);
+            btnTriggerNotif.Click += (s, e) => ThreadPool.QueueUserWorkItem(_ => RunCronCommandsOnce(true));
+
+            btnRestart = CreateButton("Restart", Color.FromArgb(71, 85, 105), Color.White, 72);
             btnRestart.Click += (s, e) =>
             {
                 ThreadPool.QueueUserWorkItem(_ =>
                 {
-                    AppendLog("[SISTEM] Me-restart server web dan cronjob notifikasi...");
+                    AppendLog("[SISTEM] Me-restart Web Server, Cloudflare Tunnel & Cronjob...");
                     StopAllServices();
                     Thread.Sleep(600);
                     StartAllServices(false);
                 });
             };
 
-            btnStop = CreateButton("Stop", Color.FromArgb(225, 29, 72), Color.White, 54);
+            btnStop = CreateButton("Stop", Color.FromArgb(225, 29, 72), Color.White, 60);
             btnStop.Click += (s, e) =>
             {
                 StopAllServices();
                 UpdateStatusLabels(false);
-                AppendLog("[SISTEM] Layanan Web Server & Cronjob Notifikasi dihentikan.");
+                AppendLog("[SISTEM] Seluruh layanan dihentikan.");
             };
 
+            actionPanel.Controls.Add(btnOpenCloudflare);
+            actionPanel.Controls.Add(btnCopyCloudflare);
             actionPanel.Controls.Add(btnOpenWeb);
-            actionPanel.Controls.Add(btnOpenLogin);
             actionPanel.Controls.Add(btnTriggerNotif);
-            actionPanel.Controls.Add(btnCopyLan);
             actionPanel.Controls.Add(btnRestart);
             actionPanel.Controls.Add(btnStop);
 
             // Log Header Label
             Label lblLogHeader = new Label
             {
-                Text = "Log Aktivitas Server Web & Cronjob Notifikasi Real-Time:",
+                Text = "Log Aktivitas Web Server, Cloudflare Tunnel & Notifikasi 8 Jam Real-Time:",
                 Font = new Font("Segoe UI Semibold", 9.0F, FontStyle.Bold),
                 ForeColor = Color.FromArgb(51, 65, 85),
                 AutoSize = true,
-                Location = new Point(18, 272)
+                Location = new Point(18, 324)
             };
 
             // Log Viewer TextBox
             txtLog = new TextBox
             {
-                Location = new Point(18, 294),
-                Size = new Size(728, 210),
+                Location = new Point(18, 346),
+                Size = new Size(808, 220),
                 Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right,
                 Multiline = true,
                 ReadOnly = true,
@@ -243,7 +325,7 @@ namespace SiTernakLauncher
             this.Controls.Add(lblLogHeader);
             this.Controls.Add(txtLog);
 
-            // Periodic timer every 60 seconds as failsafe cron runner in addition to schedule:work
+            // Periodic timer every 60 seconds for cron sync
             cronWatchTimer = new System.Windows.Forms.Timer();
             cronWatchTimer.Interval = 60000;
             cronWatchTimer.Tick += (s, e) =>
@@ -279,7 +361,7 @@ namespace SiTernakLauncher
             trayIcon = new NotifyIcon
             {
                 Icon = SystemIcons.Shield,
-                Text = "SiTernak-OK Server & Notifikasi",
+                Text = "SiTernak-OK (Web + Cloudflare + Notifikasi)",
                 Visible = true
             };
             trayIcon.DoubleClick += (s, e) =>
@@ -305,11 +387,11 @@ namespace SiTernakLauncher
 
         public void StartAllServices(bool openBrowserWhenReady)
         {
-            AppendLog("==================================================================");
-            AppendLog(" Memulai SiTernak-OK (Web Server + Engine Notifikasi 8 Jam)");
-            AppendLog(" Lokasi Proyek : " + projectRoot);
+            AppendLog("======================================================================");
+            AppendLog(" Memulai SiTernak-OK (Web Server + Cloudflare Tunnel + Notifikasi 8 Jam)");
+            AppendLog(" Folder Proyek : " + projectRoot);
             AppendLog(" Runtime PHP   : " + (string.IsNullOrEmpty(phpPath) ? "TIDAK DITEMUKAN" : phpPath));
-            AppendLog("==================================================================");
+            AppendLog("======================================================================");
 
             if (string.IsNullOrEmpty(phpPath) || !File.Exists(phpPath))
             {
@@ -327,32 +409,32 @@ namespace SiTernakLauncher
 
             EnsureEnvironmentAndDatabase();
 
-            // 1. Run initial cron & notification sync right away
+            // 1. Run initial cron & notification sync
             RunCronCommandsOnce(false);
 
-            // 2. Start Laravel Web Server on 0.0.0.0:8000 (or next free port if occupied by another app)
+            // 2. Start Laravel Web Server on 0.0.0.0:8000
             StartWebServer();
 
-            // 3. Start Laravel Scheduler Worker (php artisan schedule:work)
+            // 3. Start Laravel Scheduler Worker
             StartSchedulerWorker();
 
             UpdateStatusLabels(true);
 
-            // Wait briefly for port to listen, then open browser
+            // Wait for local web server port 8000 to listen
+            for (int i = 0; i < 25; i++)
+            {
+                if (IsPortListening("127.0.0.1", serverPort)) break;
+                Thread.Sleep(200);
+            }
+
+            // 4. Start Cloudflare Quick Tunnel pointing to http://127.0.0.1:8000
+            StartCloudflareTunnel();
+
             if (openBrowserWhenReady && !browserOpenedOnce)
             {
                 browserOpenedOnce = true;
-                for (int i = 0; i < 25; i++)
-                {
-                    if (IsPortListening("127.0.0.1", serverPort)) break;
-                    Thread.Sleep(200);
-                }
                 string url = "http://127.0.0.1:" + serverPort;
-                AppendLog("[BROWSER] Membuka peramban otomatis ke " + url);
-                ShowBalloon(
-                    "SiTernak-OK Aktif",
-                    "Server Web & Notifikasi 8 Jam berjalan di " + url + " (Akses HP: http://" + lanIp + ":" + serverPort + ")"
-                );
+                AppendLog("[BROWSER] Membuka peramban lokal ke " + url);
                 OpenUrl(url);
             }
         }
@@ -402,11 +484,11 @@ namespace SiTernakLauncher
             }
 
             string args = string.Format("artisan serve --host=0.0.0.0 --port={0}", serverPort);
-            webServerProcess = CreateBackgroundPhpProcess(args, "[WEB]");
+            webServerProcess = CreateBackgroundProcess(phpPath, args, "[WEB]", null);
             webServerProcess.Start();
             webServerProcess.BeginOutputReadLine();
             webServerProcess.BeginErrorReadLine();
-            AppendLog(string.Format("[WEB] Server dijalankan pada http://127.0.0.1:{0} dan http://{1}:{0}", serverPort, lanIp));
+            AppendLog(string.Format("[WEB] Server lokal aktif di http://127.0.0.1:{0}", serverPort));
         }
 
         private void StartSchedulerWorker()
@@ -416,11 +498,112 @@ namespace SiTernakLauncher
                 return;
             }
 
-            schedulerProcess = CreateBackgroundPhpProcess("artisan schedule:work", "[CRON]");
+            schedulerProcess = CreateBackgroundProcess(phpPath, "artisan schedule:work", "[CRON]", null);
             schedulerProcess.Start();
             schedulerProcess.BeginOutputReadLine();
             schedulerProcess.BeginErrorReadLine();
             AppendLog("[CRON] Worker penjadwalan otomatis (schedule:work) aktif.");
+        }
+
+        private void StartCloudflareTunnel()
+        {
+            if (cloudflareProcess != null && !cloudflareProcess.HasExited)
+            {
+                return;
+            }
+
+            this.cloudflaredPath = DetectCloudflaredExecutable(this.projectRoot);
+            if (string.IsNullOrEmpty(this.cloudflaredPath) || !File.Exists(this.cloudflaredPath))
+            {
+                AppendLog("[CLOUDFLARE] Mengunduh cloudflared.exe resmi dari GitHub...");
+                UpdateCloudflareUi("", "Mengunduh komponen Cloudflare Tunnel...");
+                string targetPath = Path.Combine(projectRoot, "launcher", "cloudflared.exe");
+                try
+                {
+                    Directory.CreateDirectory(Path.GetDirectoryName(targetPath));
+                    using (WebClient wc = new WebClient())
+                    {
+                        wc.DownloadFile(
+                            "https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-windows-amd64.exe",
+                            targetPath
+                        );
+                    }
+                    this.cloudflaredPath = targetPath;
+                    AppendLog("[CLOUDFLARE] Unduhan cloudflared.exe selesai.");
+                }
+                catch (Exception ex)
+                {
+                    AppendLog("[CLOUDFLARE-ERROR] Gagal mengunduh cloudflared.exe: " + ex.Message);
+                    UpdateCloudflareUi("", "Gagal mengunduh cloudflared.exe");
+                    return;
+                }
+            }
+
+            cloudflareUrl = "";
+            UpdateCloudflareUi("", "Menghubungkan tunnel HTTPS ke Cloudflare...");
+
+            string cfArgs = string.Format("tunnel --url http://127.0.0.1:{0} --no-autoupdate", serverPort);
+            cloudflareProcess = CreateBackgroundProcess(this.cloudflaredPath, cfArgs, "[CF]", OnCloudflareOutputLine);
+            cloudflareProcess.Start();
+            cloudflareProcess.BeginOutputReadLine();
+            cloudflareProcess.BeginErrorReadLine();
+            AppendLog("[CLOUDFLARE] Menjalankan Cloudflare Quick Tunnel untuk http://127.0.0.1:" + serverPort + " ...");
+        }
+
+        private void OnCloudflareOutputLine(string line)
+        {
+            if (string.IsNullOrEmpty(line)) return;
+
+            Match match = TryCloudflareRegex.Match(line);
+            if (match.Success)
+            {
+                string detectedUrl = match.Value.Trim();
+                if ( !string.Equals(cloudflareUrl, detectedUrl, StringComparison.OrdinalIgnoreCase))
+                {
+                    cloudflareUrl = detectedUrl;
+                    AppendLog("======================================================================");
+                    AppendLog(" [CLOUDFLARE SIAP] Link Akses HP & Publik (HTTPS): " + cloudflareUrl);
+                    AppendLog("======================================================================");
+                    UpdateCloudflareUi(cloudflareUrl, "AKTIF — Tunnel HTTPS Siap Diakses dari HP Mana Saja!");
+                    ShowBalloon(
+                        "Link Cloudflare HP Siap!",
+                        "URL " + cloudflareUrl + " telah disalin ke clipboard. Buka di HP atau scan QR Code!"
+                    );
+                }
+            }
+        }
+
+        private void UpdateCloudflareUi(string url, string statusText)
+        {
+            if (this.InvokeRequired)
+            {
+                this.BeginInvoke(new Action<string, string>(UpdateCloudflareUi), url, statusText);
+                return;
+            }
+
+            lblCloudflareStatus.Text = "Status Cloudflare Tunnel : " + statusText;
+            if (!string.IsNullOrEmpty(url))
+            {
+                lblCloudflareStatus.ForeColor = Color.FromArgb(5, 150, 105);
+                txtCloudflareUrl.Text = url;
+                lblQrCaption.Text = "Scan QR dari Kamera HP";
+                try
+                {
+                    Clipboard.SetText(url);
+                }
+                catch { }
+
+                try
+                {
+                    string qrApi = "https://api.qrserver.com/v1/create-qr-code/?size=160x160&margin=6&data=" + Uri.EscapeDataString(url);
+                    picQrCode.LoadAsync(qrApi);
+                }
+                catch { }
+            }
+            else
+            {
+                lblCloudflareStatus.ForeColor = Color.FromArgb(2, 132, 199);
+            }
         }
 
         public void RunCronCommandsOnce(bool showToast)
@@ -481,11 +664,11 @@ namespace SiTernakLauncher
             }
         }
 
-        private Process CreateBackgroundPhpProcess(string arguments, string prefix)
+        private Process CreateBackgroundProcess(string exePath, string arguments, string prefix, Action<string> lineHook)
         {
             ProcessStartInfo psi = new ProcessStartInfo
             {
-                FileName = phpPath,
+                FileName = exePath,
                 Arguments = arguments,
                 WorkingDirectory = projectRoot,
                 UseShellExecute = false,
@@ -501,6 +684,7 @@ namespace SiTernakLauncher
             {
                 if (!string.IsNullOrWhiteSpace(e.Data))
                 {
+                    if (lineHook != null) lineHook(e.Data);
                     AppendLog(prefix + " " + e.Data);
                 }
             };
@@ -508,6 +692,7 @@ namespace SiTernakLauncher
             {
                 if (!string.IsNullOrWhiteSpace(e.Data))
                 {
+                    if (lineHook != null) lineHook(e.Data);
                     AppendLog(prefix + " " + e.Data);
                 }
             };
@@ -516,6 +701,7 @@ namespace SiTernakLauncher
 
         public void StopAllServices()
         {
+            KillProcessSafe(ref cloudflareProcess);
             KillProcessSafe(ref webServerProcess);
             KillProcessSafe(ref schedulerProcess);
         }
@@ -569,17 +755,19 @@ namespace SiTernakLauncher
 
             if (running)
             {
-                lblWebStatus.Text = "Status Web Server: AKTIF (Siap Diakses di Laptop & HP)";
+                lblWebStatus.Text = "Status Web Server        : AKTIF (http://127.0.0.1:" + serverPort + ")";
                 lblWebStatus.ForeColor = Color.FromArgb(5, 150, 105);
-                lblCronStatus.Text = "Status Notifikasi & Sesi 8 Jam: AKTIF (Cronjob Berjalan Otomatis Setiap Menit)";
+                lblCronStatus.Text = "Status Cron Notifikasi   : AKTIF (Otomatis Setiap Menit)";
                 lblCronStatus.ForeColor = Color.FromArgb(13, 148, 136);
             }
             else
             {
-                lblWebStatus.Text = "Status Web Server: BERHENTI";
+                lblWebStatus.Text = "Status Web Server        : BERHENTI";
                 lblWebStatus.ForeColor = Color.FromArgb(225, 29, 72);
-                lblCronStatus.Text = "Status Notifikasi & Sesi 8 Jam: BERHENTI";
+                lblCronStatus.Text = "Status Cron Notifikasi   : BERHENTI";
                 lblCronStatus.ForeColor = Color.FromArgb(100, 116, 139);
+                lblCloudflareStatus.Text = "Status Cloudflare Tunnel : BERHENTI";
+                lblCloudflareStatus.ForeColor = Color.FromArgb(100, 116, 139);
             }
         }
 
@@ -655,9 +843,40 @@ namespace SiTernakLauncher
             return Directory.GetCurrentDirectory();
         }
 
+        private static string DetectCloudflaredExecutable(string root)
+        {
+            string[] localCandidates = new string[]
+            {
+                Path.Combine(root, "launcher", "cloudflared.exe"),
+                Path.Combine(root, "cloudflared.exe")
+            };
+
+            foreach (string c in localCandidates)
+            {
+                if (File.Exists(c))
+                {
+                    FileInfo fi = new FileInfo(c);
+                    if (fi.Length > 1000000) return c;
+                }
+            }
+
+            string pathEnv = Environment.GetEnvironmentVariable("PATH") ?? "";
+            foreach (string dir in pathEnv.Split(Path.PathSeparator))
+            {
+                try
+                {
+                    if (string.IsNullOrWhiteSpace(dir)) continue;
+                    string candidate = Path.Combine(dir.Trim(), "cloudflared.exe");
+                    if (File.Exists(candidate)) return candidate;
+                }
+                catch { }
+            }
+
+            return "";
+        }
+
         private static string DetectPhpExecutable()
         {
-            // 1. Check standard locations first
             string[] candidates = new string[]
             {
                 @"C:\xampp\php\php.exe",
@@ -670,7 +889,6 @@ namespace SiTernakLauncher
                 if (File.Exists(c)) return c;
             }
 
-            // 2. Search PATH environment variable
             string pathEnv = Environment.GetEnvironmentVariable("PATH") ?? "";
             foreach (string dir in pathEnv.Split(Path.PathSeparator))
             {
@@ -683,7 +901,6 @@ namespace SiTernakLauncher
                 catch { }
             }
 
-            // 3. Search Laragon PHP subdirectories if installed
             string[] laragonRoots = new string[] { @"C:\laragon\bin\php", @"D:\laragon\bin\php" };
             foreach (string root in laragonRoots)
             {
