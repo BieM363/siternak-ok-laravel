@@ -134,6 +134,25 @@ class User extends Authenticatable
     }
 
     /**
+     * Mengembalikan timestamp kadaluarsa sesi 8 jam operator yang konsisten
+     */
+    public function getOperatorExpiresAtTimestamp(): ?int
+    {
+        if (!$this->isOperator()) {
+            return null;
+        }
+
+        $sessionExp = session('operator_expires_at');
+        $dbExp = $this->login_expires_at ? $this->login_expires_at->timestamp : null;
+
+        if ($sessionExp && $dbExp) {
+            return (int) $sessionExp;
+        }
+
+        return $sessionExp ? (int) $sessionExp : ($dbExp ? (int) $dbExp : null);
+    }
+
+    /**
      * Mengembalikan sisa detik waktu login operator (batas 8 jam)
      */
     public function getRemainingSessionSeconds(): ?int
@@ -142,13 +161,31 @@ class User extends Authenticatable
             return null;
         }
 
-        $expiresAtTimestamp = session('operator_expires_at')
-            ?? ($this->login_expires_at ? $this->login_expires_at->timestamp : null);
+        $expiresAtTimestamp = $this->getOperatorExpiresAtTimestamp();
 
         if (!$expiresAtTimestamp) {
             return self::OPERATOR_SESSION_HOURS * 3600;
         }
 
-        return max(0, (int) ($expiresAtTimestamp - now()->timestamp));
+        $remaining = (int) ($expiresAtTimestamp - now()->timestamp);
+
+        return max(0, min(self::OPERATOR_SESSION_HOURS * 3600, $remaining));
+    }
+
+    /**
+     * Mengembalikan sisa waktu login operator dalam format HH:MM:SS untuk render langsung di Blade
+     */
+    public function getFormattedRemainingSession(): string
+    {
+        $seconds = $this->getRemainingSessionSeconds();
+        if ($seconds === null) {
+            return '08:00:00';
+        }
+
+        $h = str_pad((string) floor($seconds / 3600), 2, '0', STR_PAD_LEFT);
+        $m = str_pad((string) floor(($seconds % 3600) / 60), 2, '0', STR_PAD_LEFT);
+        $s = str_pad((string) ($seconds % 60), 2, '0', STR_PAD_LEFT);
+
+        return "{$h}:{$m}:{$s}";
     }
 }

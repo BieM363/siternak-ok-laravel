@@ -24,10 +24,31 @@ class OperatorSessionTimeout
                 $nowTimestamp = now()->timestamp;
 
                 // Ambil waktu kadaluarsa sesi 8 jam dari session atau database user
-                $expiresAt = session('operator_expires_at')
-                    ?? ($user->login_expires_at ? $user->login_expires_at->timestamp : null);
+                $sessionExpiresAt = session('operator_expires_at');
+                $dbExpiresAt = ($user->login_expires_at && $user->login_expires_at->timestamp > $nowTimestamp)
+                    ? $user->login_expires_at->timestamp
+                    : null;
 
-                // Jika belum tercatat (mis. sesi lama), inisialisasi batas 8 jam dari sekarang
+                $expiresAt = $sessionExpiresAt ?? $dbExpiresAt;
+
+                // Sinkronkan jika salah satu kosong agar tidak ke-reset saat pindah halaman Blade
+                if ($sessionExpiresAt && !$dbExpiresAt && $sessionExpiresAt > $nowTimestamp) {
+                    $loginTimestamp = session('operator_login_at', $sessionExpiresAt - (User::OPERATOR_SESSION_HOURS * 3600));
+                    $user->update([
+                        'last_login_at' => \Carbon\Carbon::createFromTimestamp($loginTimestamp),
+                        'login_expires_at' => \Carbon\Carbon::createFromTimestamp($sessionExpiresAt),
+                    ]);
+                } elseif (!$sessionExpiresAt && $dbExpiresAt) {
+                    $loginTimestamp = $user->last_login_at
+                        ? $user->last_login_at->timestamp
+                        : ($dbExpiresAt - (User::OPERATOR_SESSION_HOURS * 3600));
+                    session([
+                        'operator_login_at' => $loginTimestamp,
+                        'operator_expires_at' => $dbExpiresAt,
+                    ]);
+                }
+
+                // Jika belum tercatat sama sekali di keduanya, inisialisasi batas 8 jam satu kali
                 if (!$expiresAt) {
                     $loginAt = now();
                     $expiresCarbon = $loginAt->copy()->addHours(User::OPERATOR_SESSION_HOURS);

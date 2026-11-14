@@ -138,7 +138,7 @@
                         <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-amber-950 text-amber-300 text-[11px] font-bold border border-amber-700/60 tabular-nums">
                             <i class="fa-solid fa-stopwatch text-amber-400"></i>
                             <span>Sesi 8 Jam:</span>
-                            <span data-operator-countdown class="font-mono text-white">08:00:00</span>
+                            <span data-operator-countdown class="font-mono text-white">{{ auth()->user()->getFormattedRemainingSession() }}</span>
                         </span>
                     </div>
                     <p class="text-xs text-slate-300 max-w-2xl leading-relaxed">

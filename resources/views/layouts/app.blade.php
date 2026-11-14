@@ -268,7 +268,7 @@
                     <div class="hidden md:flex items-center gap-1.5 px-3 py-2 bg-emerald-50 dark:bg-emerald-950/70 border border-emerald-200 dark:border-emerald-800/80 rounded-xl text-xs font-bold text-emerald-800 dark:text-emerald-300" title="Batas waktu login operator lapangan maksimal 8 jam">
                         <i class="fa-solid fa-stopwatch text-emerald-600 dark:text-emerald-400" aria-hidden="true"></i>
                         <span class="text-[11px] uppercase tracking-wider text-slate-600 dark:text-slate-400">Sesi 8 Jam:</span>
-                        <span data-operator-countdown class="font-mono font-extrabold text-emerald-800 dark:text-emerald-300 tabular-nums">08:00:00</span>
+                        <span data-operator-countdown class="font-mono font-extrabold text-emerald-800 dark:text-emerald-300 tabular-nums">{{ auth()->user()->getFormattedRemainingSession() }}</span>
                     </div>
                     @endif
 
@@ -307,7 +307,7 @@
                                         <i class="fa-solid fa-clock" aria-hidden="true"></i> Sesi Login Operator (Maks 8 Jam)
                                     </span>
                                     <span data-operator-countdown class="font-mono font-black text-xs text-emerald-800 dark:text-emerald-300 bg-white dark:bg-slate-900 px-2 py-0.5 rounded border border-emerald-200 dark:border-emerald-800 tabular-nums">
-                                        08:00:00
+                                        {{ auth()->user()->getFormattedRemainingSession() }}
                                     </span>
                                 </div>
                                 <div class="w-full bg-emerald-200 dark:bg-slate-800 h-1.5 rounded-full overflow-hidden">
@@ -462,7 +462,7 @@
                         <span class="font-bold text-emerald-900 dark:text-emerald-300 flex items-center gap-1.5">
                             <i class="fa-solid fa-stopwatch text-emerald-600 dark:text-emerald-400" aria-hidden="true"></i> Sesi Kerja 8 Jam:
                         </span>
-                        <span data-operator-countdown class="font-mono font-black text-emerald-800 dark:text-emerald-300 tabular-nums">08:00:00</span>
+                        <span data-operator-countdown class="font-mono font-black text-emerald-800 dark:text-emerald-300 tabular-nums">{{ auth()->user()->getFormattedRemainingSession() }}</span>
                     </div>
                     <button type="button" @click="mobileMenuOpen = false; window.SiTernakNotifier && window.SiTernakNotifier.testMobileNotification()"
                         class="min-h-[42px] w-full py-2 px-3 bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold text-xs rounded-xl shadow-sm flex items-center justify-center gap-1.5">
@@ -549,7 +549,7 @@
                         <i class="fa-solid fa-stopwatch text-emerald-600 dark:text-emerald-400 shrink-0" aria-hidden="true"></i>
                         <span class="truncate">Batas Login (8 Jam):</span>
                     </span>
-                    <span data-operator-countdown class="font-mono font-black text-emerald-800 dark:text-emerald-300 tabular-nums shrink-0">08:00:00</span>
+                    <span data-operator-countdown class="font-mono font-black text-emerald-800 dark:text-emerald-300 tabular-nums shrink-0">{{ auth()->user()->getFormattedRemainingSession() }}</span>
                 </div>
 
                 <form action="{{ route('pregnancy.trigger-cron') }}" method="POST" class="w-full sm:w-auto min-w-0">
@@ -644,9 +644,29 @@
             const CSRF_TOKEN = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
 
             const INITIAL_REMAINING_SECONDS = @json(auth()->user()->getRemainingSessionSeconds());
-            let expiresAtTimestamp = INITIAL_REMAINING_SECONDS !== null
-                ? Math.floor(Date.now() / 1000) + Number(INITIAL_REMAINING_SECONDS)
-                : null;
+            const SERVER_EXPIRES_AT = @json(auth()->user()->getOperatorExpiresAtTimestamp());
+            const MAX_OPERATOR_SECONDS = 8 * 3600;
+
+            let clientDeadlineMs = null;
+            if (IS_OPERATOR && INITIAL_REMAINING_SECONDS !== null) {
+                const clampedInitialSec = Math.max(0, Math.min(MAX_OPERATOR_SECONDS, Number(INITIAL_REMAINING_SECONDS)));
+                const storedServerExp = sessionStorage.getItem('siternak_operator_server_exp');
+                const storedDeadlineMs = Number(sessionStorage.getItem('siternak_operator_deadline_ms') || 0);
+
+                if (
+                    SERVER_EXPIRES_AT &&
+                    storedServerExp === String(SERVER_EXPIRES_AT) &&
+                    storedDeadlineMs > Date.now()
+                ) {
+                    clientDeadlineMs = storedDeadlineMs;
+                } else {
+                    clientDeadlineMs = Date.now() + (clampedInitialSec * 1000);
+                    if (SERVER_EXPIRES_AT) {
+                        sessionStorage.setItem('siternak_operator_server_exp', String(SERVER_EXPIRES_AT));
+                    }
+                    sessionStorage.setItem('siternak_operator_deadline_ms', String(clientDeadlineMs));
+                }
+            }
 
             let latestReminders = [];
             let swRegistration = null;
@@ -952,10 +972,9 @@
             }
 
             function tickOperatorCountdown() {
-                if (!IS_OPERATOR || !expiresAtTimestamp) return;
+                if (!IS_OPERATOR || !clientDeadlineMs) return;
 
-                const nowSec = Math.floor(Date.now() / 1000);
-                const remaining = Math.max(0, expiresAtTimestamp - nowSec);
+                const remaining = Math.max(0, Math.min(MAX_OPERATOR_SECONDS, Math.floor((clientDeadlineMs - Date.now()) / 1000)));
                 const formatted = formatDuration(remaining);
 
                 document.querySelectorAll('[data-operator-countdown]').forEach(function(el) {
@@ -967,7 +986,7 @@
 
                 const progressEl = document.getElementById('operator-session-progress');
                 if (progressEl) {
-                    const pct = Math.min(100, Math.max(0, (remaining / (8 * 3600)) * 100));
+                    const pct = Math.min(100, Math.max(0, (remaining / MAX_OPERATOR_SECONDS) * 100));
                     progressEl.style.width = pct.toFixed(1) + '%';
                 }
 
@@ -1017,7 +1036,21 @@
                     }
 
                     if (data.session && data.session.is_operator) {
-                        expiresAtTimestamp = data.session.expires_at_timestamp;
+                        if (typeof data.session.remaining_seconds === 'number') {
+                            const serverRemSec = Math.max(0, Math.min(MAX_OPERATOR_SECONDS, Number(data.session.remaining_seconds)));
+                            const newDeadlineMs = Date.now() + (serverRemSec * 1000);
+                            const storedServerExp = sessionStorage.getItem('siternak_operator_server_exp');
+
+                            if (
+                                !clientDeadlineMs ||
+                                String(data.session.expires_at_timestamp) !== storedServerExp ||
+                                Math.abs(newDeadlineMs - clientDeadlineMs) > 5000
+                            ) {
+                                clientDeadlineMs = newDeadlineMs;
+                                sessionStorage.setItem('siternak_operator_server_exp', String(data.session.expires_at_timestamp));
+                                sessionStorage.setItem('siternak_operator_deadline_ms', String(clientDeadlineMs));
+                            }
+                        }
                         const loginTimeEl = document.getElementById('operator-login-time');
                         const expireTimeEl = document.getElementById('operator-expire-time');
                         if (loginTimeEl) loginTimeEl.textContent = data.session.login_at_formatted;
@@ -1098,7 +1131,14 @@
                 poll: pollServerNotifications
             };
 
+            if (IS_OPERATOR) {
+                tickOperatorCountdown();
+            }
+
             document.addEventListener('DOMContentLoaded', function() {
+                if (IS_OPERATOR) {
+                    tickOperatorCountdown();
+                }
                 updatePermissionUI();
                 pollServerNotifications(false);
 
