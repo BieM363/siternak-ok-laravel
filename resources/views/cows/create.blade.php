@@ -82,12 +82,12 @@
                     </div>
                 </div>
 
-                <div class="bg-emerald-50 dark:bg-slate-950 p-4 rounded-xl border border-emerald-300 dark:border-emerald-800 flex items-center justify-between">
-                    <div class="space-y-0.5">
+                <div class="bg-emerald-50 dark:bg-slate-950 p-4 rounded-xl border border-emerald-300 dark:border-emerald-800 flex items-center justify-between gap-3 min-w-0">
+                    <div class="space-y-0.5 min-w-0">
                         <p class="text-[10px] sm:text-[11px] font-bold text-emerald-800 dark:text-emerald-300 uppercase tracking-wider">
                             <i class="fa-solid fa-barcode mr-1"></i> Formulasi NIK Sapi Betina Otomatis:
                         </p>
-                        <p class="font-mono text-base sm:text-xl font-black text-emerald-700 dark:text-emerald-400 tracking-wider tabular-nums" x-text="generatedNik || 'Pilih wilayah desa/kelurahan di atas...'"></p>
+                        <p class="font-mono text-sm sm:text-xl font-black text-emerald-700 dark:text-emerald-400 tracking-wider tabular-nums break-all" x-text="generatedNik || 'Pilih wilayah desa/kelurahan di atas...'"></p>
                     </div>
                     <div class="w-10 h-10 rounded-xl bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-400 flex items-center justify-center font-bold text-lg border border-emerald-300 dark:border-emerald-800 shrink-0">
                         <i class="fa-solid fa-cow"></i>

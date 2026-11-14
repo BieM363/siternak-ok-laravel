@@ -78,7 +78,58 @@
             </h2>
         </div>
 
-        <div class="overflow-x-auto">
+        <div class="md:hidden divide-y divide-slate-200 dark:divide-slate-800 bg-white dark:bg-slate-900">
+            @forelse($calves as $calf)
+            <div class="p-4 space-y-2.5">
+                <div class="flex items-start justify-between gap-2">
+                    <span class="font-mono text-xs font-bold text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-slate-950 px-2.5 py-1 rounded-lg border border-emerald-200 dark:border-slate-800 tabular-nums break-all">
+                        {{ $calf->calf_nik }}
+                    </span>
+                    <span class="px-2.5 py-1 rounded-lg text-[10px] font-extrabold uppercase shrink-0 {{ $calf->gender == 'Jantan' ? 'bg-sky-50 dark:bg-sky-950 text-sky-800 dark:text-sky-300 border border-sky-200 dark:border-sky-800' : 'bg-amber-50 dark:bg-amber-950 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-800' }}">
+                        {{ $calf->gender }}
+                    </span>
+                </div>
+
+                <div>
+                    <p class="font-extrabold text-sm text-slate-900 dark:text-white">
+                        {{ $calf->name }} <span class="text-xs font-semibold text-slate-500">({{ $calf->breed ?? '-' }})</span>
+                    </p>
+                    <p class="text-xs text-slate-600 dark:text-slate-300 mt-0.5 tabular-nums">
+                        Lahir: <strong class="text-slate-900 dark:text-white">{{ $calf->birth_date ? \Carbon\Carbon::parse($calf->birth_date)->translatedFormat('d M Y') : '-' }}</strong>
+                        &bull; Induk: <strong class="text-slate-800 dark:text-slate-200">{{ $calf->motherCow->name ?? 'Induk Sapi' }}</strong>
+                    </p>
+                    <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
+                        Peternak: {{ $calf->motherCow->farmer->name ?? '-' }} ({{ $calf->motherCow->district->name ?? '-' }}) &bull; IB: {{ $calf->pregnancyRecord->officer_name ?? '-' }}
+                    </p>
+                </div>
+
+                <div class="flex flex-wrap items-center gap-2 pt-1">
+                    <a href="{{ route('calves.show', $calf->id) }}" class="flex-1 min-h-[36px] inline-flex items-center justify-center gap-1.5 px-3 py-1.5 bg-sky-50 dark:bg-sky-950 text-sky-700 dark:text-sky-300 rounded-xl text-xs font-bold border border-sky-200 dark:border-sky-800">
+                        <i class="fa-solid fa-eye"></i> Detail
+                    </a>
+                    @if(auth()->check() && (auth()->user()->isAdmin() || auth()->user()->isOperator()))
+                        <a href="{{ route('calves.edit', $calf->id) }}" class="min-h-[36px] inline-flex items-center justify-center gap-1.5 px-3 py-1.5 bg-amber-50 dark:bg-amber-950 text-amber-700 dark:text-amber-300 rounded-xl text-xs font-bold border border-amber-200 dark:border-amber-800">
+                            <i class="fa-solid fa-pen-to-square"></i> Edit
+                        </a>
+                        @if($calf->gender == 'Betina' && !$calf->is_promoted)
+                        <form action="{{ route('calves.promote', $calf->id) }}" method="POST" onsubmit="return confirm('Promosikan anak sapi betina ini menjadi Sapi Siap IB?');" class="w-full">
+                            @csrf
+                            <button type="submit" class="w-full min-h-[36px] px-3 py-1.5 bg-emerald-700 hover:bg-emerald-600 text-white rounded-xl text-xs font-extrabold flex items-center justify-center gap-1.5">
+                                <i class="fa-solid fa-angles-up"></i> Tarik ke Sapi Siap IB
+                            </button>
+                        </form>
+                        @endif
+                    @endif
+                </div>
+            </div>
+            @empty
+            <div class="py-8 px-4 text-center text-xs text-slate-500 dark:text-slate-400">
+                Belum ada data anak sapi (pedet) yang sesuai dengan filter.
+            </div>
+            @endforelse
+        </div>
+
+        <div class="hidden md:block overflow-x-auto">
             <table class="w-full text-left border-collapse text-xs">
                 <thead>
                     <tr class="bg-slate-100 dark:bg-slate-950 border-b border-slate-200 dark:border-slate-800 text-[11px] uppercase tracking-wider text-slate-700 dark:text-slate-300 font-extrabold">

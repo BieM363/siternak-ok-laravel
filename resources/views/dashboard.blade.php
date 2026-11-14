@@ -24,22 +24,22 @@
                     </p>
                 </div>
 
-                <div class="flex flex-wrap items-center gap-2 w-full lg:w-auto">
-                    <a href="{{ route('farmers.index') }}" class="min-h-[38px] px-3.5 py-2 bg-emerald-700 hover:bg-emerald-600 text-white rounded-xl text-xs font-bold transition flex items-center gap-1.5">
-                        <i class="fa-solid fa-users"></i>
-                        <span>Data Peternak</span>
+                <div class="grid grid-cols-2 sm:flex sm:flex-wrap items-center gap-2 w-full lg:w-auto">
+                    <a href="{{ route('farmers.index') }}" class="min-h-[38px] px-3 py-2 bg-emerald-700 hover:bg-emerald-600 text-white rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5">
+                        <i class="fa-solid fa-users shrink-0"></i>
+                        <span class="truncate">Data Peternak</span>
                     </a>
-                    <a href="{{ route('regions.index') }}" class="min-h-[38px] px-3.5 py-2 bg-teal-700 hover:bg-teal-600 text-white rounded-xl text-xs font-bold transition flex items-center gap-1.5">
-                        <i class="fa-solid fa-map-location-dot"></i>
-                        <span>Wilayah Gorontalo</span>
+                    <a href="{{ route('regions.index') }}" class="min-h-[38px] px-3 py-2 bg-teal-700 hover:bg-teal-600 text-white rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5">
+                        <i class="fa-solid fa-map-location-dot shrink-0"></i>
+                        <span class="truncate">Wilayah</span>
                     </a>
-                    <a href="{{ route('users.index') }}" class="min-h-[38px] px-3.5 py-2 bg-sky-700 hover:bg-sky-600 text-white rounded-xl text-xs font-bold transition flex items-center gap-1.5">
-                        <i class="fa-solid fa-user-gear"></i>
-                        <span>Kelola Pengguna</span>
+                    <a href="{{ route('users.index') }}" class="min-h-[38px] px-3 py-2 bg-sky-700 hover:bg-sky-600 text-white rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5">
+                        <i class="fa-solid fa-user-gear shrink-0"></i>
+                        <span class="truncate">Kelola User</span>
                     </a>
-                    <a href="{{ route('straws.index') }}" class="min-h-[38px] px-3.5 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-xl text-xs font-bold transition border border-slate-700 flex items-center gap-1.5">
-                        <i class="fa-solid fa-vial text-teal-400"></i>
-                        <span>Straw Pejantan</span>
+                    <a href="{{ route('straws.index') }}" class="min-h-[38px] px-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-xl text-xs font-bold transition border border-slate-700 flex items-center justify-center gap-1.5">
+                        <i class="fa-solid fa-vial text-teal-400 shrink-0"></i>
+                        <span class="truncate">Straw IB</span>
                     </a>
                 </div>
             </div>
@@ -146,22 +146,22 @@
                     </p>
                 </div>
 
-                <div class="flex flex-wrap items-center gap-2 w-full lg:w-auto">
-                    <a href="{{ route('cows.create') }}" class="min-h-[40px] px-4 py-2.5 bg-emerald-700 hover:bg-emerald-600 text-white rounded-xl text-xs font-extrabold transition flex items-center gap-2">
-                        <i class="fa-solid fa-plus text-sm"></i>
-                        <span>Pendaftaran IB Baru</span>
+                <div class="grid grid-cols-2 sm:flex sm:flex-wrap items-center gap-2 w-full lg:w-auto">
+                    <a href="{{ route('cows.create') }}" class="min-h-[40px] px-3 py-2.5 bg-emerald-700 hover:bg-emerald-600 text-white rounded-xl text-xs font-extrabold transition flex items-center justify-center gap-1.5">
+                        <i class="fa-solid fa-plus text-sm shrink-0"></i>
+                        <span class="truncate">Daftar IB Baru</span>
                     </a>
-                    <button type="button" onclick="window.SiTernakNotifier && window.SiTernakNotifier.testMobileNotification()" class="min-h-[40px] px-3.5 py-2.5 bg-amber-500 hover:bg-amber-400 text-slate-950 rounded-xl text-xs font-extrabold transition flex items-center gap-1.5">
-                        <i class="fa-solid fa-mobile-screen-button"></i>
-                        <span>Tes Notifikasi HP</span>
+                    <button type="button" onclick="window.SiTernakNotifier && window.SiTernakNotifier.testMobileNotification()" class="min-h-[40px] px-3 py-2.5 bg-amber-500 hover:bg-amber-400 text-slate-950 rounded-xl text-xs font-extrabold transition flex items-center justify-center gap-1.5">
+                        <i class="fa-solid fa-mobile-screen-button shrink-0"></i>
+                        <span class="truncate">Tes Notifikasi HP</span>
                     </button>
-                    <a href="{{ route('straws.index') }}" class="min-h-[40px] px-3.5 py-2 bg-slate-800 hover:bg-slate-700 text-teal-300 rounded-xl text-xs font-bold transition border border-slate-700 flex items-center gap-1.5">
-                        <i class="fa-solid fa-vial"></i>
-                        <span>Cek Straw</span>
+                    <a href="{{ route('straws.index') }}" class="min-h-[40px] px-3 py-2 bg-slate-800 hover:bg-slate-700 text-teal-300 rounded-xl text-xs font-bold transition border border-slate-700 flex items-center justify-center gap-1.5">
+                        <i class="fa-solid fa-vial shrink-0"></i>
+                        <span class="truncate">Cek Straw</span>
                     </a>
-                    <a href="{{ route('reports.inseminators') }}" class="min-h-[40px] px-3.5 py-2 bg-slate-800 hover:bg-slate-700 text-amber-300 rounded-xl text-xs font-bold transition border border-slate-700 flex items-center gap-1.5">
-                        <i class="fa-solid fa-trophy"></i>
-                        <span>Leaderboard IB</span>
+                    <a href="{{ route('reports.inseminators') }}" class="min-h-[40px] px-3 py-2 bg-slate-800 hover:bg-slate-700 text-amber-300 rounded-xl text-xs font-bold transition border border-slate-700 flex items-center justify-center gap-1.5">
+                        <i class="fa-solid fa-trophy shrink-0"></i>
+                        <span class="truncate">Leaderboard IB</span>
                     </a>
                 </div>
             </div>
@@ -766,15 +766,94 @@
     </div>
 
     <div class="glass-card rounded-2xl shadow-sm overflow-hidden border border-slate-200 dark:border-slate-800">
-        <div class="px-6 py-4 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between bg-slate-50 dark:bg-slate-900">
-            <h2 class="font-bold text-sm text-slate-900 dark:text-white flex items-center gap-2">
-                <i class="fa-solid fa-list-check text-emerald-600 dark:text-emerald-400"></i>
-                Daftar Pemantauan Kehamilan, Tanggal Milestone &amp; Sisa Hari
+        <div class="px-4 sm:px-6 py-4 border-b border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 bg-slate-50 dark:bg-slate-900">
+            <h2 class="font-bold text-xs sm:text-sm text-slate-900 dark:text-white flex items-center gap-2">
+                <i class="fa-solid fa-list-check text-emerald-600 dark:text-emerald-400 shrink-0"></i>
+                <span>Daftar Pemantauan Kehamilan, Tanggal Milestone &amp; Sisa Hari</span>
             </h2>
-            <span class="text-xs text-slate-500 dark:text-slate-400 tabular-nums">Menampilkan {{ $records->count() }} dari {{ $records->total() }} Sapi</span>
+            <span class="text-[11px] sm:text-xs text-slate-500 dark:text-slate-400 tabular-nums shrink-0">Menampilkan {{ $records->count() }} dari {{ $records->total() }} Sapi</span>
         </div>
 
-        <div class="overflow-x-auto">
+        <div class="md:hidden divide-y divide-slate-200 dark:divide-slate-800 bg-white dark:bg-slate-900">
+            @forelse($records as $rec)
+            @php
+                $badge = $rec->status_badge;
+                $gcalUrl = $rec->getGoogleCalendarUrl();
+            @endphp
+            <div class="p-4 space-y-3">
+                <div class="flex items-start justify-between gap-2">
+                    <span class="font-mono text-xs font-bold text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-slate-950 px-2.5 py-1 rounded-lg border border-emerald-200 dark:border-slate-800 tabular-nums break-all">
+                        {{ $rec->cow->cow_nik ?? 'N/A' }}
+                    </span>
+                    <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-[10px] font-bold border shrink-0 {{ $badge['bg'] }}">
+                        {{ $badge['label'] }}
+                    </span>
+                </div>
+
+                <div>
+                    <a href="{{ route('cows.show', $rec->cow->id) }}" class="font-extrabold text-sm text-slate-900 dark:text-white hover:text-emerald-700 dark:hover:text-emerald-400 transition-colors block">
+                        {{ $rec->cow->name ?? 'Sapi ' . $rec->cow->cow_nik }}
+                        <span class="text-xs font-medium text-slate-500 dark:text-slate-400">({{ $rec->cow->breed }})</span>
+                    </a>
+                    <p class="text-xs text-slate-600 dark:text-slate-300 mt-0.5">
+                        Peternak: <strong class="text-slate-900 dark:text-white">{{ $rec->cow->farmer->name ?? '-' }}</strong>
+                        @if(auth()->check() && !auth()->user()->isGuest())
+                        <span class="text-[11px] font-mono text-slate-500 dark:text-slate-400 tabular-nums">(NIK: {{ $rec->cow->farmer->nik ?? '-' }})</span>
+                        @endif
+                    </p>
+                    <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
+                        {{ $rec->cow->regency->name ?? '-' }} &bull; Kec. {{ $rec->cow->district->name ?? '-' }}
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-2 gap-2 p-2.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-[11px] tabular-nums">
+                    <div>
+                        <span class="text-slate-500 dark:text-slate-400 block text-[10px]">Tanggal IB &amp; Petugas</span>
+                        <strong class="text-slate-900 dark:text-white">{{ $rec->insemination_date ? $rec->insemination_date->format('d/m/Y') : '-' }}</strong>
+                        <span class="block text-[10px] text-slate-500 truncate">{{ $rec->officer_name ?? '-' }}</span>
+                    </div>
+                    <div>
+                        <span class="text-slate-500 dark:text-slate-400 block text-[10px]">Estimasi HPL (283 Hr)</span>
+                        <strong class="text-amber-700 dark:text-amber-300">{{ $rec->estimated_birth_date ? $rec->estimated_birth_date->format('d/m/Y') : '-' }}</strong>
+                        @if($rec->actual_birth_date)
+                        <span class="block text-[10px] text-teal-600 dark:text-teal-400 font-bold">Lahir: {{ $rec->actual_birth_date->format('d/m/Y') }}</span>
+                        @endif
+                    </div>
+                    <div class="col-span-2 pt-1.5 border-t border-slate-200 dark:border-slate-800 flex flex-wrap items-center justify-between gap-2 text-[10px]">
+                        <span>30 Hr: <strong class="text-sky-700 dark:text-sky-300">{{ $rec->day30_date ? $rec->day30_date->format('d/m/Y') : '-' }}</strong></span>
+                        <span>90 Hr: <strong class="text-emerald-700 dark:text-emerald-300">{{ $rec->day90_date ? $rec->day90_date->format('d/m/Y') : '-' }}</strong></span>
+                        <span>245 Hr: <strong class="text-amber-700 dark:text-amber-300">{{ $rec->day245_date ? $rec->day245_date->format('d/m/Y') : '-' }}</strong></span>
+                    </div>
+                </div>
+
+                <div class="flex flex-wrap items-center gap-2 pt-0.5">
+                    <a href="{{ route('cows.show', $rec->cow->id) }}" class="flex-1 min-h-[38px] inline-flex items-center justify-center gap-1.5 px-3 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-bold transition-colors">
+                        <i class="fa-solid fa-eye"></i> Detail Sapi
+                    </a>
+                    <a href="{{ $gcalUrl }}" target="_blank" rel="noopener noreferrer" class="min-h-[38px] inline-flex items-center justify-center gap-1 px-3 py-2 bg-sky-50 hover:bg-sky-100 dark:bg-sky-950 text-sky-700 dark:text-sky-300 rounded-xl text-xs font-bold border border-sky-200 dark:border-sky-800 transition-colors">
+                        <i class="fa-solid fa-calendar-plus"></i> + Cal
+                    </a>
+                    @if(auth()->check() && (auth()->user()->isOperator() || auth()->user()->isAdmin()) && $rec->status !== 'Gagal/Keguguran' && $rec->status !== 'Melahirkan (Selesai)')
+                    <form action="{{ route('pregnancy.update-status', $rec->id) }}" method="POST" onsubmit="return confirm('Tandai rekam IB sapi {{ $rec->cow->cow_nik }} GAGAL / KEGUGURAN?')" class="inline">
+                        @csrf
+                        @method('PUT')
+                        <input type="hidden" name="action" value="confirm_no">
+                        <button type="submit" class="min-h-[38px] px-3 py-2 bg-rose-50 hover:bg-rose-100 dark:bg-rose-950 text-rose-700 dark:text-rose-300 text-xs font-bold rounded-xl border border-rose-200 dark:border-rose-800 transition-colors">
+                            <i class="fa-solid fa-xmark mr-0.5"></i> Gagal
+                        </button>
+                    </form>
+                    @endif
+                </div>
+            </div>
+            @empty
+            <div class="px-6 py-10 text-center text-slate-500 dark:text-slate-400">
+                <i class="fa-solid fa-cow text-3xl mb-2 block text-slate-300 dark:text-slate-700"></i>
+                <p class="text-xs font-semibold">Tidak ada data kehamilan sapi yang cocok.</p>
+            </div>
+            @endforelse
+        </div>
+
+        <div class="hidden md:block overflow-x-auto">
             <table class="w-full text-left text-xs text-slate-800 dark:text-slate-300 border-collapse">
                 <thead class="bg-slate-100 dark:bg-slate-950 text-slate-700 dark:text-slate-300 font-extrabold uppercase tracking-wider border-b border-slate-200 dark:border-slate-800">
                     <tr>

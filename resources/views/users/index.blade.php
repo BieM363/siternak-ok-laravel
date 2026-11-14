@@ -31,7 +31,82 @@
     </div>
 
     <div class="glass-card rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 shadow-sm">
-        <div class="overflow-x-auto">
+        <div class="md:hidden divide-y divide-slate-200 dark:divide-slate-800 bg-white dark:bg-slate-900">
+            @forelse($users as $u)
+                @php
+                    $roleBadge = match($u->role) {
+                        'admin' => $u->isAdminProvinsi() ? 'bg-emerald-50 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 border-emerald-200 dark:border-emerald-700' : ($u->isAdminKota() ? 'bg-teal-50 dark:bg-teal-950 text-teal-800 dark:text-teal-300 border-teal-200 dark:border-teal-700' : 'bg-sky-50 dark:bg-sky-950 text-sky-800 dark:text-sky-300 border-sky-200 dark:border-sky-700'),
+                        'operator' => 'bg-amber-50 dark:bg-amber-950 text-amber-800 dark:text-amber-300 border-amber-200 dark:border-amber-700',
+                        default => 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border-slate-300 dark:border-slate-700',
+                    };
+                    $roleName = match($u->role) {
+                        'admin' => $u->isAdminProvinsi() ? 'ADMIN PROVINSI' : ($u->isAdminKota() ? 'ADMIN KOTA' : 'ADMIN KABUPATEN'),
+                        'operator' => 'OPERATOR / INSEMINATOR',
+                        default => 'PENGGUNA',
+                    };
+                @endphp
+                <div class="p-4 space-y-2.5">
+                    <div class="flex items-start justify-between gap-2">
+                        <div class="flex items-center gap-2.5 min-w-0">
+                            <div class="w-9 h-9 rounded-lg bg-emerald-50 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-400 font-bold flex items-center justify-center text-xs border border-emerald-200 dark:border-emerald-800 shrink-0">
+                                {{ strtoupper(substr($u->name, 0, 1)) }}
+                            </div>
+                            <div class="min-w-0">
+                                <h3 class="text-slate-900 dark:text-white font-extrabold text-sm truncate">{{ $u->name }}</h3>
+                                <p class="text-[11px] text-slate-600 dark:text-slate-400 font-mono truncate">{{ $u->email }}</p>
+                            </div>
+                        </div>
+                        <span class="px-2 py-0.5 rounded-lg text-[10px] font-extrabold uppercase border shrink-0 {{ $roleBadge }}">
+                            {{ $roleName }}
+                        </span>
+                    </div>
+
+                    <div class="flex items-center justify-between pt-2 border-t border-slate-100 dark:border-slate-800 text-xs">
+                        <div>
+                            @if($u->isAdminProvinsi())
+                                <span class="text-[11px] font-bold text-emerald-700 dark:text-emerald-400">
+                                    <i class="fa-solid fa-layer-group mr-1"></i>Provinsi Gorontalo
+                                </span>
+                            @elseif($u->regency)
+                                <span class="text-[11px] font-bold text-teal-700 dark:text-teal-400">
+                                    <i class="fa-solid fa-location-dot mr-1"></i>{{ $u->regency->name }}
+                                </span>
+                            @else
+                                <span class="text-slate-500 italic text-[11px]">Semua Wilayah</span>
+                            @endif
+                        </div>
+
+                        @if($u->id !== auth()->id())
+                            <div class="flex items-center gap-1.5">
+                                <button
+                                    type="button"
+                                    @click="editUserData = { id: {{ $u->id }}, name: '{{ addslashes($u->name) }}', email: '{{ $u->email }}', role: '{{ $u->role }}', regency_id: '{{ $u->regency_id ?? '' }}', phone: '{{ $u->phone ?? '' }}' }; openEditUserModal = true"
+                                    aria-label="Edit user {{ $u->name }}"
+                                    class="min-h-[34px] px-3 py-1.5 bg-amber-50 hover:bg-amber-100 dark:bg-amber-950 dark:hover:bg-amber-900 text-amber-700 dark:text-amber-300 rounded-lg text-[11px] font-bold border border-amber-200 dark:border-amber-800 transition"
+                                >
+                                    <i class="fa-solid fa-pen-to-square mr-1"></i>Edit
+                                </button>
+                                <form action="{{ route('users.destroy', $u->id) }}" method="POST" onsubmit="return confirm('Hapus pengguna ini?')" class="inline">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" aria-label="Hapus user {{ $u->name }}" class="min-w-[34px] min-h-[34px] px-2.5 py-1.5 bg-rose-50 hover:bg-rose-100 dark:bg-rose-950 dark:hover:bg-rose-900 text-rose-700 dark:text-rose-300 rounded-lg text-[11px] font-bold border border-rose-200 dark:border-rose-800 transition">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        @else
+                            <span class="text-[10px] text-slate-400 font-mono italic">Akun Anda</span>
+                        @endif
+                    </div>
+                </div>
+            @empty
+                <div class="p-6 text-center text-slate-500 dark:text-slate-400 text-xs">
+                    Tidak ada user ditemukan pada scope ini.
+                </div>
+            @endforelse
+        </div>
+
+        <div class="hidden md:block overflow-x-auto">
             <table class="w-full text-left text-xs text-slate-800 dark:text-slate-300 border-collapse">
                 <thead class="bg-slate-100 dark:bg-slate-950 text-slate-700 dark:text-slate-300 font-extrabold uppercase tracking-wider border-b border-slate-200 dark:border-slate-800">
                     <tr>

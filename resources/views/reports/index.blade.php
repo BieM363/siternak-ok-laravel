@@ -137,7 +137,51 @@
             </h2>
         </div>
 
-        <div class="overflow-x-auto">
+        <div class="md:hidden divide-y divide-slate-200 dark:divide-slate-800 bg-white dark:bg-slate-900">
+            @forelse($bornCalves as $calf)
+                <div class="p-4 space-y-2.5">
+                    <div class="flex items-start justify-between gap-2">
+                        <div class="min-w-0">
+                            <span class="inline-block px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-950 font-mono font-bold text-emerald-700 dark:text-emerald-400 border border-slate-200 dark:border-slate-800 text-[11px] tabular-nums break-all">
+                                {{ $calf->calf_nik }}
+                            </span>
+                            <h3 class="font-extrabold text-sm text-slate-900 dark:text-white mt-1">
+                                {{ $calf->name }}
+                            </h3>
+                        </div>
+                        <span class="px-2 py-0.5 rounded text-[10px] font-extrabold uppercase shrink-0 {{ $calf->gender == 'Jantan' ? 'bg-sky-50 dark:bg-sky-950 text-sky-800 dark:text-sky-300 border border-sky-200 dark:border-sky-800' : 'bg-amber-50 dark:bg-amber-950 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-800' }}">
+                            {{ $calf->gender }} ({{ $calf->breed ?? '-' }})
+                        </span>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2 text-[11px] bg-slate-50 dark:bg-slate-950/60 p-2.5 rounded-xl border border-slate-200 dark:border-slate-800">
+                        <div>
+                            <span class="block text-[10px] uppercase font-bold text-slate-500">Tgl Lahir</span>
+                            <span class="font-bold text-slate-800 dark:text-slate-200 tabular-nums">
+                                {{ $calf->birth_date ? \Carbon\Carbon::parse($calf->birth_date)->translatedFormat('d M Y') : '-' }}
+                            </span>
+                        </div>
+                        <div>
+                            <span class="block text-[10px] uppercase font-bold text-slate-500">Induk Sapi</span>
+                            <span class="font-bold text-slate-800 dark:text-slate-200">{{ $calf->motherCow->name ?? 'Induk Sapi' }}</span>
+                        </div>
+                        <div>
+                            <span class="block text-[10px] uppercase font-bold text-slate-500">Peternak</span>
+                            <span class="font-bold text-slate-800 dark:text-slate-200">{{ $calf->motherCow->farmer->name ?? '-' }}</span>
+                        </div>
+                        <div>
+                            <span class="block text-[10px] uppercase font-bold text-slate-500">Inseminator</span>
+                            <span class="font-bold text-emerald-700 dark:text-emerald-400">{{ $calf->pregnancyRecord->officer_name ?? '-' }}</span>
+                        </div>
+                    </div>
+                </div>
+            @empty
+                <div class="p-6 text-center text-slate-500 dark:text-slate-400 text-xs">
+                    Belum ada data kelahiran pedet.
+                </div>
+            @endforelse
+        </div>
+
+        <div class="hidden md:block overflow-x-auto">
             <table class="w-full text-left border-collapse text-xs">
                 <thead>
                     <tr class="bg-slate-100 dark:bg-slate-950 border-b border-slate-200 dark:border-slate-800 text-[11px] uppercase tracking-wider text-slate-700 dark:text-slate-300 font-extrabold">

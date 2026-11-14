@@ -100,7 +100,51 @@
             </h2>
         </div>
 
-        <div class="overflow-x-auto">
+        <div class="md:hidden divide-y divide-slate-200 dark:divide-slate-800 bg-white dark:bg-slate-900">
+            @forelse($inseminatorRecap as $index => $row)
+            @php
+                $mobileRankBadgeClass = match($index) {
+                    0 => 'bg-amber-500 text-slate-950',
+                    1 => 'bg-slate-200 dark:bg-slate-700 text-slate-900 dark:text-white',
+                    2 => 'bg-amber-700 text-white',
+                    default => 'bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-white',
+                };
+            @endphp
+            <div class="p-4 space-y-2.5 tabular-nums">
+                <div class="flex items-center justify-between gap-2">
+                    <div class="flex items-center gap-2.5 min-w-0">
+                        <span class="w-7 h-7 rounded-lg {{ $mobileRankBadgeClass }} inline-flex items-center justify-center font-black text-xs shrink-0">
+                            #{{ $index + 1 }}
+                        </span>
+                        <span class="font-extrabold text-sm text-slate-900 dark:text-white truncate">{{ $row->officer_name }}</span>
+                    </div>
+                    <span class="px-2.5 py-1 rounded-lg text-xs font-extrabold shrink-0 {{ $row->cr >= 60 ? 'bg-emerald-50 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800' : ($row->cr >= 40 ? 'bg-amber-50 dark:bg-amber-950 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-800' : 'bg-rose-50 dark:bg-rose-950 text-rose-800 dark:text-rose-300 border border-rose-200 dark:border-rose-800') }}">
+                        CR {{ $row->cr }}%
+                    </span>
+                </div>
+                <div class="grid grid-cols-3 gap-2 p-2.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-center text-xs">
+                    <div>
+                        <span class="block text-[10px] text-slate-500">Pelayanan IB</span>
+                        <strong class="text-sky-700 dark:text-sky-400 text-sm">{{ number_format($row->total_ib) }}</strong>
+                    </div>
+                    <div>
+                        <span class="block text-[10px] text-slate-500">Sapi Bunting</span>
+                        <strong class="text-emerald-700 dark:text-emerald-400 text-sm">{{ number_format($row->total_bunting) }}</strong>
+                    </div>
+                    <div>
+                        <span class="block text-[10px] text-slate-500">Pedet Lahir</span>
+                        <strong class="text-teal-700 dark:text-teal-400 text-sm">{{ number_format($row->total_melahirkan) }}</strong>
+                    </div>
+                </div>
+            </div>
+            @empty
+            <div class="py-8 px-4 text-center text-xs text-slate-500 dark:text-slate-400">
+                Belum ada data inseminator yang sesuai dengan pencarian.
+            </div>
+            @endforelse
+        </div>
+
+        <div class="hidden md:block overflow-x-auto">
             <table class="w-full text-left border-collapse text-xs">
                 <thead>
                     <tr class="bg-slate-100 dark:bg-slate-950 border-b border-slate-200 dark:border-slate-800 text-[11px] uppercase tracking-wider text-slate-700 dark:text-slate-300 font-extrabold">

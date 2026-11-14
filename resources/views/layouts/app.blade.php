@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id" class="h-full" x-data="{ theme: localStorage.getItem('theme') || 'light' }" :class="{ 'dark': theme === 'dark' }">
+<html lang="id" class="h-full overflow-x-hidden max-w-full" x-data="{ theme: localStorage.getItem('theme') || 'light' }" :class="{ 'dark': theme === 'dark' }">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -47,6 +47,12 @@
     <style>
         [x-cloak] { display: none !important; }
 
+        html, body {
+            max-width: 100%;
+            width: 100%;
+            overflow-x: hidden;
+        }
+
         /* Browser Surface & Selection Styling */
         ::selection {
             background-color: rgba(16, 185, 129, 0.22);
@@ -84,6 +90,8 @@
             background: #ffffff;
             border: 1px solid #e2e8f0;
             box-shadow: 0 1px 3px 0 rgba(15, 23, 42, 0.06), 0 1px 2px -1px rgba(15, 23, 42, 0.04);
+            max-width: 100%;
+            min-width: 0;
         }
         .glass-header {
             background: rgba(255, 255, 255, 0.94);
@@ -163,20 +171,20 @@
         </div>
     </div>
 
-    <header class="glass-header sticky top-0 z-50 transition-colors">
-        <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-16 gap-2">
+    <header class="glass-header sticky top-0 z-50 w-full max-w-full transition-colors">
+        <div class="max-w-7xl w-full mx-auto px-3 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16 gap-2 min-w-0">
 
-                <div class="flex items-center space-x-2 sm:space-x-3 shrink-0">
-                    <a href="{{ route('home') }}" class="flex items-center space-x-2.5 group rounded-xl py-1">
+                <div class="flex items-center min-w-0 flex-1 lg:flex-initial">
+                    <a href="{{ route('home') }}" class="flex items-center space-x-2 sm:space-x-2.5 group rounded-xl py-1 min-w-0">
                         <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-emerald-600 flex items-center justify-center text-white shadow-sm shrink-0">
                             <i class="fa-solid fa-cow text-base sm:text-lg" aria-hidden="true"></i>
                         </div>
-                        <div class="flex flex-col">
-                            <span class="font-extrabold text-base sm:text-lg text-slate-900 dark:text-white tracking-tight leading-none">
+                        <div class="flex flex-col min-w-0">
+                            <span class="font-extrabold text-base sm:text-lg text-slate-900 dark:text-white tracking-tight leading-none truncate">
                                 SiTernak<span class="text-emerald-600 dark:text-emerald-400">-OK</span>
                             </span>
-                            <span class="text-[10px] text-slate-600 dark:text-slate-400 font-semibold tracking-wider uppercase mt-0.5 whitespace-nowrap">Disnakbun Gorontalo</span>
+                            <span class="text-[10px] text-slate-600 dark:text-slate-400 font-semibold tracking-wider uppercase mt-0.5 truncate">Disnakbun Gorontalo</span>
                         </div>
                     </a>
                 </div>
@@ -347,7 +355,7 @@
                         </div>
                     </div>
 
-                    <div class="relative" @click.away="userDropdownOpen = false">
+                    <div class="hidden sm:block relative" @click.away="userDropdownOpen = false">
                         <button @click="userDropdownOpen = !userDropdownOpen" :aria-expanded="userDropdownOpen.toString()" type="button" class="min-h-[40px] flex items-center space-x-2 p-1 sm:p-1.5 sm:pr-3 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-xl border border-slate-200 dark:border-slate-700 transition-colors">
                             <div class="w-8 h-8 rounded-lg bg-emerald-600 text-white font-bold text-xs flex items-center justify-center shadow-sm shrink-0">
                                 {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
@@ -525,44 +533,44 @@
         </div>
     </div>
 
-    <div class="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 py-3 px-3 sm:px-6 lg:px-8">
-        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-            <div class="flex items-center space-x-2.5 w-full sm:w-auto">
+    <div class="w-full max-w-full bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 py-3 px-3 sm:px-6 lg:px-8">
+        <div class="max-w-7xl w-full min-w-0 mx-auto flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2.5 sm:gap-3">
+            <div class="flex items-center space-x-2 w-full sm:w-auto min-w-0">
                 <span class="w-2 h-2 rounded-full bg-emerald-600 dark:bg-emerald-400 shrink-0" aria-hidden="true"></span>
-                <p class="text-sm sm:text-base font-extrabold text-slate-900 dark:text-white tracking-tight truncate">
+                <p class="text-sm sm:text-base font-extrabold text-slate-900 dark:text-white tracking-tight truncate min-w-0">
                     @yield('title', 'Pemantauan Kehamilan Sapi')
                 </p>
             </div>
 
-            <div class="flex flex-wrap sm:flex-nowrap items-center gap-2 w-full sm:w-auto justify-start sm:justify-end">
+            <div class="grid grid-cols-2 sm:flex sm:flex-nowrap items-center gap-2 w-full sm:w-auto min-w-0">
                 @if(auth()->check() && auth()->user()->isOperator())
-                <div class="md:hidden w-full flex items-center justify-between px-3 py-2 bg-emerald-50 dark:bg-emerald-950/80 border border-emerald-200 dark:border-emerald-800 rounded-xl text-xs font-bold text-emerald-900 dark:text-emerald-300">
-                    <span class="flex items-center gap-1.5">
-                        <i class="fa-solid fa-stopwatch text-emerald-600 dark:text-emerald-400" aria-hidden="true"></i>
-                        <span>Batas Login Operator (8 Jam):</span>
+                <div class="col-span-2 md:hidden w-full min-w-0 flex items-center justify-between gap-2 px-3 py-2 bg-emerald-50 dark:bg-emerald-950/80 border border-emerald-200 dark:border-emerald-800 rounded-xl text-xs font-bold text-emerald-900 dark:text-emerald-300">
+                    <span class="flex items-center gap-1.5 min-w-0 truncate">
+                        <i class="fa-solid fa-stopwatch text-emerald-600 dark:text-emerald-400 shrink-0" aria-hidden="true"></i>
+                        <span class="truncate">Batas Login (8 Jam):</span>
                     </span>
-                    <span data-operator-countdown class="font-mono font-black text-emerald-800 dark:text-emerald-300 tabular-nums">08:00:00</span>
+                    <span data-operator-countdown class="font-mono font-black text-emerald-800 dark:text-emerald-300 tabular-nums shrink-0">08:00:00</span>
                 </div>
 
-                <form action="{{ route('pregnancy.trigger-cron') }}" method="POST" class="flex-1 sm:flex-initial">
+                <form action="{{ route('pregnancy.trigger-cron') }}" method="POST" class="w-full sm:w-auto min-w-0">
                     @csrf
-                    <button type="submit" class="min-h-[40px] w-full sm:w-auto inline-flex items-center justify-center space-x-1.5 px-3.5 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-emerald-800 dark:text-emerald-300 rounded-xl text-xs font-bold border border-slate-200 dark:border-slate-700 transition-colors whitespace-nowrap" title="Jalankan sinkronisasi siklus 3 hari">
-                        <i class="fa-solid fa-rotate text-emerald-600 dark:text-emerald-400" aria-hidden="true"></i>
+                    <button type="submit" class="min-h-[40px] w-full sm:w-auto inline-flex items-center justify-center gap-1.5 px-3 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-emerald-800 dark:text-emerald-300 rounded-xl text-xs font-bold border border-slate-200 dark:border-slate-700 transition-colors truncate" title="Jalankan sinkronisasi siklus 3 hari">
+                        <i class="fa-solid fa-rotate text-emerald-600 dark:text-emerald-400 shrink-0" aria-hidden="true"></i>
                         <span class="hidden sm:inline">Sinkronisasi Milestone (3 Hari)</span>
-                        <span class="sm:hidden">Sinkron 3 Hari</span>
+                        <span class="sm:hidden truncate">Sinkron 3 Hari</span>
                     </button>
                 </form>
 
-                <a href="{{ route('cows.create') }}" class="min-h-[40px] flex-1 sm:flex-initial inline-flex items-center justify-center space-x-1.5 px-3.5 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-bold shadow-sm transition-colors whitespace-nowrap">
-                    <i class="fa-solid fa-plus" aria-hidden="true"></i>
-                    <span>Pendaftaran IB Baru</span>
+                <a href="{{ route('cows.create') }}" class="min-h-[40px] w-full sm:w-auto inline-flex items-center justify-center gap-1.5 px-3 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-bold shadow-sm transition-colors truncate">
+                    <i class="fa-solid fa-plus shrink-0" aria-hidden="true"></i>
+                    <span class="truncate">Pendaftaran IB Baru</span>
                 </a>
                 @endif
             </div>
         </div>
     </div>
 
-    <main id="main-content" class="max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-1 space-y-6">
+    <main id="main-content" class="max-w-7xl w-full min-w-0 max-w-full mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-6 flex-1 space-y-5 overflow-x-hidden">
 
         @if(!auth()->check() || auth()->user()->isGuest())
         <div class="bg-sky-50 dark:bg-slate-900 border border-sky-200 dark:border-slate-800 text-sky-950 dark:text-slate-200 px-4 py-3 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs shadow-sm">

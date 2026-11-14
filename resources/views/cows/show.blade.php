@@ -53,7 +53,7 @@
 
                 <div>
                     <span class="text-[10px] text-slate-400 uppercase font-bold tracking-widest block">NIK Ternak Sapi</span>
-                    <p class="font-mono text-lg font-extrabold text-emerald-400 tracking-wider mt-0.5 bg-slate-950 px-3 py-1 rounded-xl border border-slate-800 inline-block tabular-nums">
+                    <p class="font-mono text-sm sm:text-lg font-extrabold text-emerald-400 tracking-wider mt-0.5 bg-slate-950 px-3 py-1 rounded-xl border border-slate-800 inline-block tabular-nums break-all">
                         {{ $cow->cow_nik }}
                     </p>
                 </div>
@@ -89,8 +89,8 @@
             </div>
         </div>
 
-        <div class="lg:col-span-2 glass-card p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-between space-y-6">
-            <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-4">
+        <div class="lg:col-span-2 glass-card p-5 sm:p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-between space-y-6">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 border-b border-slate-200 dark:border-slate-800 pb-4">
                 <div class="flex items-center space-x-3">
                     <div class="w-10 h-10 rounded-xl bg-amber-50 dark:bg-amber-950 border border-amber-200 dark:border-amber-800 flex items-center justify-center text-amber-600 dark:text-amber-400 text-lg">
                         <i class="fa-solid fa-calculator"></i>
@@ -302,7 +302,7 @@
                         @endif
                     </div>
 
-                    <div class="flex items-center space-x-2">
+                    <div class="flex flex-wrap items-center gap-2 w-full sm:w-auto">
                         @if(auth()->check() && (auth()->user()->isOperator() || auth()->user()->isAdmin()) && $rec->status !== 'Gagal/Keguguran' && $rec->status !== 'Melahirkan (Selesai)')
                         <form action="{{ route('pregnancy.update-status', $rec->id) }}" method="POST" onsubmit="return confirm('Tandai rekam IB ini GAGAL / KEGUGURAN?')">
                             @csrf

@@ -55,7 +55,48 @@
     </div>
 
     <div class="glass-card rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 shadow-sm">
-        <div class="overflow-x-auto">
+        <div class="md:hidden divide-y divide-slate-200 dark:divide-slate-800 bg-white dark:bg-slate-900">
+            @forelse($straws as $straw)
+            <div class="p-4 space-y-2.5">
+                <div class="flex items-center justify-between gap-2">
+                    <span class="font-mono font-extrabold text-teal-700 dark:text-teal-400 text-sm tabular-nums">
+                        <i class="fa-solid fa-vial text-teal-600 dark:text-teal-400 mr-1.5"></i>{{ $straw->code }}
+                    </span>
+                    @if($straw->is_active)
+                        <span class="px-2.5 py-0.5 rounded-md text-[10px] font-extrabold bg-emerald-50 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-700 uppercase">
+                            Aktif
+                        </span>
+                    @else
+                        <span class="px-2.5 py-0.5 rounded-md text-[10px] font-extrabold bg-rose-50 dark:bg-rose-950 text-rose-800 dark:text-rose-300 border border-rose-200 dark:border-rose-700 uppercase">
+                            Nonaktif
+                        </span>
+                    @endif
+                </div>
+                <div>
+                    <p class="font-bold text-slate-900 dark:text-white text-sm">{{ $straw->bull_name }}</p>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                        Ras: <strong class="text-sky-700 dark:text-sky-300">{{ $straw->breed }}</strong> &bull; Produsen: {{ $straw->producer ?? 'BBIB Singosari' }}
+                    </p>
+                </div>
+                <div class="flex items-center gap-2 pt-1">
+                    <button type="button" @click="openEdit({{ json_encode($straw) }})" class="flex-1 min-h-[36px] px-3 py-1.5 bg-sky-50 dark:bg-sky-950 text-sky-700 dark:text-sky-300 rounded-xl text-xs font-bold border border-sky-200 dark:border-sky-800 flex items-center justify-center gap-1.5">
+                        <i class="fa-solid fa-pen-to-square"></i> Edit Straw
+                    </button>
+                    <form action="{{ route('straws.destroy', $straw->id) }}" method="POST" onsubmit="return confirm('Hapus Kode Straw {{ $straw->code }}?')">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="min-h-[36px] px-3 py-1.5 bg-rose-50 dark:bg-rose-950 text-rose-700 dark:text-rose-300 rounded-xl text-xs font-bold border border-rose-200 dark:border-rose-800 flex items-center justify-center gap-1">
+                            <i class="fa-solid fa-trash"></i> Hapus
+                        </button>
+                    </form>
+                </div>
+            </div>
+            @empty
+            <div class="py-8 px-4 text-center text-xs text-slate-500 dark:text-slate-400">Belum ada Kode Straw Pejantan terdaftar.</div>
+            @endforelse
+        </div>
+
+        <div class="hidden md:block overflow-x-auto">
             <table class="w-full text-left text-xs text-slate-800 dark:text-slate-300 border-collapse">
                 <thead class="bg-slate-100 dark:bg-slate-950 text-slate-700 dark:text-slate-400 font-extrabold uppercase tracking-wider border-b border-slate-200 dark:border-slate-800">
                     <tr>

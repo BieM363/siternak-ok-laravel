@@ -31,7 +31,63 @@
     </div>
 
     <div class="glass-card rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 shadow-sm">
-        <div class="overflow-x-auto">
+        <div class="md:hidden divide-y divide-slate-200 dark:divide-slate-800 bg-white dark:bg-slate-900">
+            @forelse($farmers as $farmer)
+                <div class="p-4 space-y-2.5">
+                    <div class="flex items-start justify-between gap-2">
+                        <div class="min-w-0">
+                            <span class="inline-block px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-950 font-mono text-emerald-700 dark:text-emerald-400 font-bold border border-slate-200 dark:border-slate-800 text-[11px] tabular-nums">
+                                @if(auth()->check() && !auth()->user()->isGuest())
+                                    {{ $farmer->nik }}
+                                @else
+                                    {{ substr($farmer->nik, 0, 6) . '******' . substr($farmer->nik, -4) }}
+                                @endif
+                            </span>
+                            <h3 class="font-extrabold text-sm text-slate-900 dark:text-white mt-1">
+                                {{ $farmer->name }}
+                            </h3>
+                            <p class="text-[11px] text-slate-600 dark:text-slate-400 mt-0.5">
+                                <strong class="text-slate-800 dark:text-slate-300">{{ $farmer->regency->name ?? '-' }}</strong> · Kec. {{ $farmer->district->name ?? '-' }}
+                            </p>
+                        </div>
+                        <span class="px-2.5 py-1 bg-emerald-50 dark:bg-slate-950 text-emerald-700 dark:text-emerald-400 font-extrabold text-[11px] rounded-lg border border-emerald-200 dark:border-slate-800 shrink-0 tabular-nums">
+                            {{ $farmer->cows->count() }} Ekor
+                        </span>
+                    </div>
+
+                    <div class="flex items-center justify-between pt-2 border-t border-slate-100 dark:border-slate-800 text-xs">
+                        <span class="text-slate-600 dark:text-slate-400 font-mono tabular-nums">
+                            <i class="fa-solid fa-phone mr-1 text-emerald-600"></i>{{ $farmer->phone ?? '-' }}
+                        </span>
+                        @if(auth()->check() && auth()->user()->isAdmin())
+                            <div class="flex items-center gap-1.5">
+                                <button
+                                    type="button"
+                                    @click="editData = { id: {{ $farmer->id }}, nik: '{{ $farmer->nik }}', name: '{{ addslashes($farmer->name) }}', phone: '{{ $farmer->phone ?? '' }}', address: '{{ addslashes($farmer->address ?? '') }}', village_id: '{{ $farmer->village_id }}' }; openEditModal = true"
+                                    aria-label="Edit data peternak {{ $farmer->name }}"
+                                    class="min-h-[34px] px-3 py-1.5 bg-amber-50 hover:bg-amber-100 dark:bg-amber-950 dark:hover:bg-amber-900 text-amber-700 dark:text-amber-300 rounded-lg text-[11px] font-bold border border-amber-200 dark:border-amber-800 transition"
+                                >
+                                    <i class="fa-solid fa-pen-to-square mr-1"></i>Edit
+                                </button>
+                                <form action="{{ route('farmers.destroy', $farmer->id) }}" method="POST" onsubmit="return confirm('Hapus peternak ini?')" class="inline">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" aria-label="Hapus peternak {{ $farmer->name }}" class="min-w-[34px] min-h-[34px] px-2.5 py-1.5 bg-rose-50 hover:bg-rose-100 dark:bg-rose-950 dark:hover:bg-rose-900 text-rose-700 dark:text-rose-300 rounded-lg text-[11px] font-bold border border-rose-200 dark:border-rose-800 transition">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        @endif
+                    </div>
+                </div>
+            @empty
+                <div class="p-6 text-center text-slate-500 dark:text-slate-400 text-xs">
+                    Belum ada data peternak terdaftar.
+                </div>
+            @endforelse
+        </div>
+
+        <div class="hidden md:block overflow-x-auto">
             <table class="w-full text-left text-xs text-slate-800 dark:text-slate-300 border-collapse">
                 <thead class="bg-slate-100 dark:bg-slate-950 text-slate-700 dark:text-slate-300 font-extrabold uppercase tracking-wider border-b border-slate-200 dark:border-slate-800">
                     <tr>

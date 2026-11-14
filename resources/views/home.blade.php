@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id" class="h-full" x-data="{ theme: localStorage.getItem('theme') || 'light' }" :class="{ 'dark': theme === 'dark' }">
+<html lang="id" class="h-full overflow-x-hidden max-w-full" x-data="{ theme: localStorage.getItem('theme') || 'light' }" :class="{ 'dark': theme === 'dark' }">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -36,6 +36,12 @@
     <style>
         [x-cloak] { display: none !important; }
 
+        html, body {
+            max-width: 100%;
+            width: 100%;
+            overflow-x: hidden;
+        }
+
         ::selection {
             background-color: rgba(16, 185, 129, 0.22);
             color: inherit;
@@ -66,12 +72,16 @@
             background: #ffffff;
             border: 1px solid #e2e8f0;
             box-shadow: 0 4px 16px -4px rgba(15, 23, 42, 0.06);
+            max-width: 100%;
+            min-width: 0;
         }
         .glass-card {
             background: #ffffff;
             border: 1px solid #e2e8f0;
             box-shadow: 0 1px 3px 0 rgba(15, 23, 42, 0.06), 0 1px 2px -1px rgba(15, 23, 42, 0.04);
             transition: border-color 0.2s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+            max-width: 100%;
+            min-width: 0;
         }
         .glass-card:hover {
             border-color: rgba(5, 150, 105, 0.45);
@@ -108,7 +118,7 @@
         }
     </style>
 </head>
-<body class="min-h-screen font-sans antialiased bg-slate-100 text-slate-900 dark:bg-slate-950 dark:text-slate-100 flex flex-col justify-between"
+<body class="min-h-screen font-sans antialiased bg-slate-100 text-slate-900 dark:bg-slate-950 dark:text-slate-100 flex flex-col justify-between overflow-x-hidden max-w-full"
       x-data="{ mobileNav: false }"
       @keydown.escape.window="mobileNav = false">
 
@@ -116,19 +126,20 @@
         Lewati ke konten utama
     </a>
 
-    <header class="sticky top-0 z-40 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 px-4 sm:px-6 py-3.5">
-        <div class="max-w-7xl mx-auto flex items-center justify-between gap-3">
+    <header class="sticky top-0 z-40 w-full max-w-full bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 px-3 sm:px-6 py-3">
+        <div class="max-w-7xl w-full min-w-0 mx-auto flex items-center justify-between gap-2 sm:gap-3">
 
-            <a href="{{ route('home') }}" class="flex items-center space-x-2.5 sm:space-x-3 shrink-0 rounded-xl py-0.5">
-                <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-emerald-600 flex items-center justify-center text-white font-bold shadow-sm">
-                    <i class="fa-solid fa-cow text-lg" aria-hidden="true"></i>
+            <a href="{{ route('home') }}" class="flex items-center space-x-2 sm:space-x-3 min-w-0 flex-1 lg:flex-initial rounded-xl py-0.5">
+                <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-emerald-600 flex items-center justify-center text-white font-bold shadow-sm shrink-0">
+                    <i class="fa-solid fa-cow text-base sm:text-lg" aria-hidden="true"></i>
                 </div>
-                <div>
-                    <span class="font-extrabold text-base sm:text-lg text-slate-900 dark:text-white tracking-tight">
+                <div class="min-w-0">
+                    <span class="block font-extrabold text-base sm:text-lg text-slate-900 dark:text-white tracking-tight leading-none truncate">
                         SiTernak<span class="text-emerald-600 dark:text-emerald-400">-OK</span>
                     </span>
-                    <p class="text-[10px] text-slate-600 dark:text-slate-400 font-semibold uppercase tracking-wider">
-                        Dinas Peternakan & Perkebunan Prov. Gorontalo
+                    <p class="text-[10px] text-slate-600 dark:text-slate-400 font-semibold uppercase tracking-wider mt-0.5 truncate">
+                        <span class="sm:hidden">Disnakbun Gorontalo</span>
+                        <span class="hidden sm:inline">Dinas Peternakan & Perkebunan Prov. Gorontalo</span>
                     </p>
                 </div>
             </a>
@@ -273,7 +284,7 @@
         </div>
     </header>
 
-    <main id="main-content" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10 space-y-8 sm:space-y-10 flex-1 w-full">
+    <main id="main-content" class="max-w-7xl w-full min-w-0 max-w-full mx-auto px-3 sm:px-6 lg:px-8 py-5 sm:py-10 space-y-6 sm:space-y-10 flex-1 overflow-x-hidden">
 
         @if(auth()->check())
 

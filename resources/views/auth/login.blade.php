@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id" class="h-full" x-data="{ theme: localStorage.getItem('theme') || 'light' }" :class="{ 'dark': theme === 'dark' }">
+<html lang="id" class="h-full overflow-x-hidden max-w-full" x-data="{ theme: localStorage.getItem('theme') || 'light' }" :class="{ 'dark': theme === 'dark' }">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -57,9 +57,9 @@
         }
     </style>
 </head>
-<body class="min-h-screen font-sans antialiased bg-slate-100 text-slate-900 dark:bg-slate-950 dark:text-slate-100 flex items-center justify-center p-4">
+<body class="min-h-screen font-sans antialiased bg-slate-100 text-slate-900 dark:bg-slate-950 dark:text-slate-100 flex items-center justify-center p-4 overflow-x-hidden max-w-full">
 
-    <main id="main-content" class="w-full max-w-lg space-y-6 my-6">
+    <main id="main-content" class="w-full max-w-lg min-w-0 space-y-6 my-6">
 
         <div class="text-center space-y-2">
             <div class="inline-flex w-14 h-14 rounded-2xl bg-emerald-600 items-center justify-center text-white shadow-sm mb-1">
