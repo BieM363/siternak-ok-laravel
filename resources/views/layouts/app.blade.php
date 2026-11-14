@@ -145,7 +145,11 @@
                     </div>
                     <p id="mobile-push-toast-title" class="font-extrabold text-xs text-white mt-0.5 truncate">SiTernak-OK Gorontalo</p>
                     <p id="mobile-push-toast-body" class="text-xs text-slate-300 mt-1 leading-relaxed line-clamp-3"></p>
-                    <div class="flex items-center gap-2 mt-3">
+                    <div class="flex flex-wrap items-center gap-2 mt-3">
+                        <button id="mobile-push-toast-perm-btn" type="button" onclick="window.SiTernakNotifier && window.SiTernakNotifier.requestPermission()" class="hidden min-h-[38px] px-3.5 py-1.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold text-xs rounded-xl transition flex items-center gap-1.5">
+                            <i class="fa-solid fa-bell" aria-hidden="true"></i>
+                            <span>Izinkan Notifikasi Bar HP</span>
+                        </button>
                         <a id="mobile-push-toast-link" href="{{ route('dashboard') }}#reminder-section" class="min-h-[38px] px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-xl transition flex items-center gap-1.5">
                             <i class="fa-solid fa-check-double" aria-hidden="true"></i>
                             <span>Buka & Konfirmasi</span>
@@ -642,7 +646,7 @@
             let warned15Min = false;
 
             if ('serviceWorker' in navigator) {
-                navigator.serviceWorker.register('/sw.js').then(function(reg) {
+                navigator.serviceWorker.register('/sw.js?v=3').then(function(reg) {
                     swRegistration = reg;
                 }).catch(function() {});
             }
@@ -650,7 +654,7 @@
             function playMobileAlertFeedback() {
                 try {
                     if ('vibrate' in navigator) {
-                        navigator.vibrate([200, 100, 200]);
+                        navigator.vibrate([250, 120, 250, 120, 350]);
                     }
                 } catch (e) {}
 
@@ -678,6 +682,7 @@
                 const titleEl = document.getElementById('mobile-push-toast-title');
                 const bodyEl = document.getElementById('mobile-push-toast-body');
                 const linkEl = document.getElementById('mobile-push-toast-link');
+                const permBtnEl = document.getElementById('mobile-push-toast-perm-btn');
 
                 if (!toastEl || !titleEl || !bodyEl) return;
 
@@ -687,11 +692,19 @@
                     linkEl.setAttribute('href', targetUrl);
                 }
 
+                if (permBtnEl) {
+                    if ('Notification' in window && Notification.permission !== 'granted') {
+                        permBtnEl.classList.remove('hidden');
+                    } else {
+                        permBtnEl.classList.add('hidden');
+                    }
+                }
+
                 toastEl.classList.remove('hidden');
                 if (toastTimeout) clearTimeout(toastTimeout);
                 toastTimeout = setTimeout(function() {
                     toastEl.classList.add('hidden');
-                }, 9000);
+                }, 11000);
             }
 
             function hideToast() {
@@ -699,71 +712,81 @@
                 if (toastEl) toastEl.classList.add('hidden');
             }
 
-            function dispatchUniversalNotification(title, body, targetUrl, tag) {
-                const url = targetUrl || DASHBOARD_REMINDER_URL;
-                playMobileAlertFeedback();
-                showInBrowserToast(title, body, url);
-
+            function sendNativeSystemNotification(title, body, url, tag) {
                 if (!('Notification' in window) || Notification.permission !== 'granted') {
                     return;
                 }
 
-                const payload = {
-                    title: title,
+                const uniqueTag = tag || ('siternak-' + Date.now());
+                const notifOptions = {
                     body: body,
-                    url: url,
-                    tag: tag || ('siternak-' + Date.now()),
-                    icon: 'https://cdn-icons-png.flaticon.com/512/2395/2395796.png',
-                    badge: 'https://cdn-icons-png.flaticon.com/512/2395/2395796.png'
+                    vibrate: [250, 120, 250, 120, 350],
+                    tag: uniqueTag,
+                    renotify: true,
+                    requireInteraction: false,
+                    data: { url: url }
                 };
 
-                if ('serviceWorker' in navigator) {
-                    navigator.serviceWorker.ready.then(function(reg) {
-                        if (reg && typeof reg.showNotification === 'function') {
-                            reg.showNotification(title, {
-                                body: body,
-                                icon: payload.icon,
-                                badge: payload.badge,
-                                vibrate: [200, 100, 200, 100, 300],
-                                tag: payload.tag,
-                                renotify: true,
-                                data: { url: url }
-                            });
-                        } else if (navigator.serviceWorker.controller) {
-                            navigator.serviceWorker.controller.postMessage({
-                                type: 'SHOW_NOTIFICATION',
-                                payload: payload
-                            });
-                        }
-                    }).catch(function() {
-                        try {
-                            const n = new Notification(title, { body: body, icon: payload.icon, tag: payload.tag });
-                            n.onclick = function() { window.location.href = url; };
-                        } catch (err) {}
-                    });
-                } else {
+                function fallbackWindowNotification() {
                     try {
-                        const n = new Notification(title, { body: body, icon: payload.icon, tag: payload.tag });
-                        n.onclick = function() { window.location.href = url; };
+                        const n = new Notification(title, {
+                            body: body,
+                            tag: uniqueTag
+                        });
+                        n.onclick = function() {
+                            window.focus();
+                            window.location.href = url;
+                        };
                     } catch (err) {}
                 }
+
+                if (swRegistration && typeof swRegistration.showNotification === 'function') {
+                    swRegistration.showNotification(title, notifOptions).catch(function() {
+                        fallbackWindowNotification();
+                    });
+                    return;
+                }
+
+                if ('serviceWorker' in navigator) {
+                    navigator.serviceWorker.register('/sw.js?v=3').then(function(reg) {
+                        swRegistration = reg;
+                        if (reg && typeof reg.showNotification === 'function') {
+                            return reg.showNotification(title, notifOptions);
+                        }
+                        return navigator.serviceWorker.ready.then(function(readyReg) {
+                            swRegistration = readyReg;
+                            return readyReg.showNotification(title, notifOptions);
+                        });
+                    }).catch(function() {
+                        fallbackWindowNotification();
+                    });
+                } else {
+                    fallbackWindowNotification();
+                }
+            }
+
+            function dispatchUniversalNotification(title, body, targetUrl, tag) {
+                const url = targetUrl || DASHBOARD_REMINDER_URL;
+                playMobileAlertFeedback();
+                showInBrowserToast(title, body, url);
+                sendNativeSystemNotification(title, body, url, tag);
             }
 
             function updatePermissionUI() {
                 const badges = document.querySelectorAll('#browser-perm-badge, [data-browser-perm-badge]');
-                const requestBtns = document.querySelectorAll('#btn-request-perm, [data-btn-request-perm]');
+                const requestBtns = document.querySelectorAll('#btn-request-perm, [data-btn-request-perm], #mobile-push-toast-perm-btn');
                 const hasNotifApi = ('Notification' in window);
                 const perm = hasNotifApi ? Notification.permission : 'unsupported';
 
                 badges.forEach(function(badge) {
                     if (perm === 'granted') {
-                        badge.textContent = 'AKTIF (Notifikasi Sistem HP & Peramban)';
+                        badge.textContent = 'AKTIF (Notifikasi Bar Sistem HP & Peramban)';
                         badge.className = 'px-2 py-0.5 rounded text-[10px] font-extrabold bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300';
                     } else if (perm === 'denied') {
-                        badge.textContent = 'AKTIF (Mode Banner Peramban Ponsel)';
-                        badge.className = 'px-2 py-0.5 rounded text-[10px] font-extrabold bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-300';
+                        badge.textContent = 'DIBLOKIR BROWSER (Ubah di Ikon Gembok URL)';
+                        badge.className = 'px-2 py-0.5 rounded text-[10px] font-extrabold bg-rose-100 dark:bg-rose-950 text-rose-800 dark:text-rose-300';
                     } else {
-                        badge.textContent = 'SIAP (Ketuk Aktifkan Izin HP)';
+                        badge.textContent = 'SIAP (Ketuk Tes / Aktifkan Izin HP)';
                         badge.className = 'px-2 py-0.5 rounded text-[10px] font-extrabold bg-sky-100 dark:bg-sky-950 text-sky-800 dark:text-sky-300';
                     }
                 });
@@ -777,51 +800,99 @@
                 });
             }
 
-            function requestPermission() {
+            function requestBrowserPermissionInteractive(onDone) {
                 if (!('Notification' in window)) {
-                    dispatchUniversalNotification(
-                        'Mode Notifikasi Peramban Ponsel Aktif',
-                        'Peramban Anda menggunakan notifikasi layar langsung. Sesi kerja operator berlaku 8 jam.',
-                        DASHBOARD_REMINDER_URL
-                    );
-                    updatePermissionUI();
+                    if (typeof onDone === 'function') onDone('unsupported');
                     return;
                 }
 
-                Notification.requestPermission().then(function(permission) {
-                    updatePermissionUI();
-                    if (permission === 'granted') {
-                        testMobileNotification();
-                    } else {
-                        dispatchUniversalNotification(
-                            'Notifikasi Banner Peramban Aktif',
-                            'Pengingat konfirmasi sapi tetap tampil langsung di layar peramban ponsel Anda selama sesi kerja 8 jam.',
-                            DASHBOARD_REMINDER_URL
-                        );
+                try {
+                    const reqResult = Notification.requestPermission(function(cbPerm) {
+                        updatePermissionUI();
+                        if (typeof onDone === 'function' && (!reqResult || typeof reqResult.then !== 'function')) {
+                            onDone(cbPerm);
+                        }
+                    });
+
+                    if (reqResult && typeof reqResult.then === 'function') {
+                        reqResult.then(function(perm) {
+                            updatePermissionUI();
+                            if (typeof onDone === 'function') onDone(perm);
+                        }).catch(function() {
+                            if (typeof onDone === 'function') onDone(Notification.permission);
+                        });
                     }
-                }).catch(function() {
-                    testMobileNotification();
+                } catch (e) {
+                    if (typeof onDone === 'function') onDone(Notification.permission);
+                }
+            }
+
+            function buildCurrentTestPayload() {
+                if (latestReminders.length > 0) {
+                    const first = latestReminders[0];
+                    const extra = latestReminders.length > 1 ? ' (+' + (latestReminders.length - 1) + ' sapi lainnya)' : '';
+                    return {
+                        title: 'Pengingat Lapangan: ' + latestReminders.length + ' Sapi Butuh Konfirmasi',
+                        body: first.cow_name + ' (' + first.cow_nik + ') masuk tahap ' + first.milestone_label + ' - Peternak: ' + first.farmer_name + extra,
+                        url: first.action_url || DASHBOARD_REMINDER_URL,
+                        tag: 'siternak-test-' + Date.now()
+                    };
+                }
+                return {
+                    title: 'Notifikasi Peramban Ponsel SiTernak-OK Aktif',
+                    body: 'Peramban HP Anda siap menerima pengingat konfirmasi kebuntingan sapi selama sesi kerja 8 jam di lapangan.',
+                    url: DASHBOARD_REMINDER_URL,
+                    tag: 'siternak-test-' + Date.now()
+                };
+            }
+
+            function requestPermission() {
+                requestBrowserPermissionInteractive(function(permission) {
+                    const payload = buildCurrentTestPayload();
+                    if (permission === 'granted') {
+                        dispatchUniversalNotification(payload.title, payload.body, payload.url, payload.tag);
+                    } else if (permission === 'denied') {
+                        dispatchUniversalNotification(
+                            'Izin Notifikasi Sistem Diblokir di Browser',
+                            'Ketuk ikon Gembok/Pengaturan di sebelah alamat URL atas browser HP Anda, lalu ubah Izin Notifikasi menjadi Izinkan (Allow).',
+                            DASHBOARD_REMINDER_URL,
+                            'siternak-perm-denied'
+                        );
+                    } else {
+                        dispatchUniversalNotification(payload.title, payload.body, payload.url, payload.tag);
+                    }
                 });
             }
 
             function testMobileNotification() {
-                if (latestReminders.length > 0) {
-                    const first = latestReminders[0];
-                    const extra = latestReminders.length > 1 ? ' (+' + (latestReminders.length - 1) + ' sapi lainnya)' : '';
-                    dispatchUniversalNotification(
-                        'Pengingat Lapangan: ' + latestReminders.length + ' Sapi Butuh Konfirmasi',
-                        first.cow_name + ' (' + first.cow_nik + ') masuk tahap ' + first.milestone_label + ' - Peternak: ' + first.farmer_name + extra,
-                        first.action_url || DASHBOARD_REMINDER_URL,
-                        'siternak-test-' + Date.now()
-                    );
-                } else {
-                    dispatchUniversalNotification(
-                        'Notifikasi Peramban Ponsel SiTernak-OK Aktif',
-                        'Peramban HP Anda siap menerima pengingat konfirmasi kebuntingan sapi selama sesi kerja 8 jam di lapangan.',
-                        DASHBOARD_REMINDER_URL,
-                        'siternak-test-' + Date.now()
-                    );
+                const payload = buildCurrentTestPayload();
+                if ('Notification' in window && Notification.permission === 'default') {
+                    requestBrowserPermissionInteractive(function(permission) {
+                        if (permission === 'denied') {
+                            dispatchUniversalNotification(
+                                'Izin Notifikasi Sistem Diblokir di Browser',
+                                'Ketuk ikon Gembok/Pengaturan di sebelah alamat URL atas browser HP Anda, lalu ubah Izin Notifikasi menjadi Izinkan (Allow).',
+                                DASHBOARD_REMINDER_URL,
+                                'siternak-perm-denied'
+                            );
+                        } else {
+                            dispatchUniversalNotification(payload.title, payload.body, payload.url, payload.tag);
+                        }
+                    });
+                    return;
                 }
+
+                if ('Notification' in window && Notification.permission === 'denied') {
+                    dispatchUniversalNotification(
+                        'Izin Notifikasi Sistem Diblokir di Browser',
+                        'Ketuk ikon Gembok/Pengaturan di sebelah alamat URL atas browser HP Anda, lalu ubah Izin Notifikasi menjadi Izinkan (Allow).',
+                        DASHBOARD_REMINDER_URL,
+                        'siternak-perm-denied'
+                    );
+                    return;
+                }
+
+                dispatchUniversalNotification(payload.title, payload.body, payload.url, payload.tag);
             }
 
             function renderDropdownReminders(reminders) {
@@ -976,27 +1047,39 @@
             }
 
             function syncCronAndNotify() {
-                fetch(SYNC_CRON_URL, {
-                    method: 'POST',
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': CSRF_TOKEN,
-                        'X-Requested-With': 'XMLHttpRequest'
-                    },
-                    credentials: 'same-origin'
-                })
-                .then(function(res) { return res.json(); })
-                .then(function(data) {
-                    if (data && Array.isArray(data.reminders)) {
-                        latestReminders = data.reminders;
-                        renderDropdownReminders(latestReminders);
-                    }
-                    testMobileNotification();
-                })
-                .catch(function() {
-                    testMobileNotification();
-                });
+                function runSyncFetch() {
+                    fetch(SYNC_CRON_URL, {
+                        method: 'POST',
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': CSRF_TOKEN,
+                            'X-Requested-With': 'XMLHttpRequest'
+                        },
+                        credentials: 'same-origin'
+                    })
+                    .then(function(res) { return res.json(); })
+                    .then(function(data) {
+                        if (data && Array.isArray(data.reminders)) {
+                            latestReminders = data.reminders;
+                            renderDropdownReminders(latestReminders);
+                        }
+                        const payload = buildCurrentTestPayload();
+                        dispatchUniversalNotification(payload.title, payload.body, payload.url, payload.tag);
+                    })
+                    .catch(function() {
+                        const payload = buildCurrentTestPayload();
+                        dispatchUniversalNotification(payload.title, payload.body, payload.url, payload.tag);
+                    });
+                }
+
+                if ('Notification' in window && Notification.permission === 'default') {
+                    requestBrowserPermissionInteractive(function() {
+                        runSyncFetch();
+                    });
+                } else {
+                    runSyncFetch();
+                }
             }
 
             window.SiTernakNotifier = {
@@ -1010,6 +1093,22 @@
             document.addEventListener('DOMContentLoaded', function() {
                 updatePermissionUI();
                 pollServerNotifications(false);
+
+                if ('Notification' in window && Notification.permission === 'default') {
+                    const askOnFirstTap = function() {
+                        document.removeEventListener('click', askOnFirstTap);
+                        if (Notification.permission === 'default') {
+                            requestBrowserPermissionInteractive(function(perm) {
+                                if (perm === 'granted') {
+                                    const payload = buildCurrentTestPayload();
+                                    sendNativeSystemNotification(payload.title, payload.body, payload.url, payload.tag);
+                                }
+                            });
+                        }
+                    };
+                    document.addEventListener('click', askOnFirstTap, { once: true });
+                }
+
                 if (IS_OPERATOR) {
                     setInterval(tickOperatorCountdown, 1000);
                 }
