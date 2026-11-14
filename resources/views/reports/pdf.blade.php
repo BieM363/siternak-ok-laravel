@@ -2,9 +2,18 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rekapan Kelahiran Bulanan Anak Sapi - Dinas Peternakan dan Perkebunan Provinsi Gorontalo</title>
     <style>
-        body { font-family: 'Times New Roman', Times, serif; font-size: 12px; color: #000; background: #fff; margin: 0; padding: 20px; }
+        body {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 12px;
+            color: #000;
+            background: #fff;
+            margin: 0;
+            padding: 20px;
+            font-variant-numeric: tabular-nums;
+        }
         .kop-header { text-align: center; border-bottom: 3px double #000; padding-bottom: 10px; margin-bottom: 20px; }
         .kop-header h2 { margin: 0; font-size: 16px; text-transform: uppercase; letter-spacing: 1px; }
         .kop-header h1 { margin: 2px 0; font-size: 18px; text-transform: uppercase; font-weight: bold; }
@@ -26,88 +35,85 @@
 </head>
 <body>
 
-    <!-- Printable Header Bar -->
-    <div class="no-print" style="margin-bottom: 20px; background: #0f172a; padding: 12px; border-radius: 8px; color: #fff; display: flex; justify-content: space-between; align-items: center;">
-        <span style="font-size: 13px; font-weight: bold;">Dokumen Laporan SiTernak-OK Siap Dicetak</span>
-        <button onclick="window.print()" style="background: #059669; color: #fff; border: none; padding: 8px 16px; border-radius: 6px; font-weight: bold; cursor: pointer;">
+    <div class="no-print" style="margin-bottom: 20px; background: #0f172a; padding: 12px 16px; border-radius: 8px; color: #fff; display: flex; justify-content: space-between; align-items: center;">
+        <span style="font-size: 13px; font-weight: bold; font-family: system-ui, sans-serif;">Dokumen Laporan SiTernak-OK Siap Dicetak</span>
+        <button type="button" onclick="window.print()" style="background: #047857; color: #fff; border: none; padding: 8px 16px; border-radius: 6px; font-weight: bold; cursor: pointer; font-family: system-ui, sans-serif;">
             Cetak / Download PDF
         </button>
     </div>
 
-    <!-- Kop Surat Dinas Peternakan dan Perkebunan Provinsi Gorontalo -->
-    <div class="kop-header">
+    <header class="kop-header">
         <h2>PEMERINTAH PROVINSI GORONTALO</h2>
         <h1>DINAS PETERNAKAN DAN PERKEBUNAN</h1>
         <p>Kompleks Perkantoran Blok Plan Ayula, Provinsi Gorontalo Telp. (0435) 821900 Email: disnakbun@gorontaloprov.go.id</p>
-    </div>
+    </header>
 
-    <!-- Document Title -->
-    <div class="title-section">
-        <h3>REKAPITULASI KELAHIRAN ANAK SAPI (PEDET)</h3>
-        <p>
-            @if(!empty($startDate) && !empty($endDate))
-                Periode: {{ \Carbon\Carbon::parse($startDate)->translatedFormat('d F Y') }} s/d {{ \Carbon\Carbon::parse($endDate)->translatedFormat('d F Y') }}
-            @elseif(!empty($startDate))
-                Mulai Tanggal: {{ \Carbon\Carbon::parse($startDate)->translatedFormat('d F Y') }}
-            @elseif(!empty($endDate))
-                Sampai Tanggal: {{ \Carbon\Carbon::parse($endDate)->translatedFormat('d F Y') }}
-            @elseif(isset($month) && isset($year))
-                Bulan: {{ $month }}/{{ $year }}
-            @else
-                Semua Periode
-            @endif
-            {{ !empty($calfGender) ? ' | Gender: ' . $calfGender : '' }}
-            {{ !empty($breedFilter) ? ' | Ras: ' . $breedFilter : '' }}
-            {{ !empty($officerName) ? ' | Inseminator: ' . $officerName : '' }}
-        </p>
-    </div>
-
-    <!-- Data Table -->
-    <table>
-        <thead>
-            <tr>
-                <th style="width: 30px;">No</th>
-                <th>NIK Anak Sapi</th>
-                <th>Jenis Kelamin</th>
-                <th>Tanggal Lahir</th>
-                <th>Berat Lahir (kg)</th>
-                <th>NIK Induk Sapi</th>
-                <th>Nama Peternak</th>
-                <th>NIK Peternak</th>
-                <th>Wilayah Dinas</th>
-            </tr>
-        </thead>
-        <tbody>
-            @forelse($bornCalves as $index => $row)
-            <tr>
-                <td class="text-center">{{ $index + 1 }}</td>
-                <td style="font-family: monospace; font-weight: bold;">{{ $row->calf_nik }}</td>
-                <td class="text-center" style="font-weight: bold;">{{ $row->gender }}</td>
-                <td class="text-center">{{ $row->birth_date ? $row->birth_date->format('d/m/Y') : '-' }}</td>
-                <td class="text-center">{{ $row->birth_weight ?? '-' }} kg</td>
-                <td style="font-family: monospace;">{{ $row->motherCow->cow_nik ?? '-' }}</td>
-                <td>{{ $row->motherCow->farmer->name ?? '-' }}</td>
-                <td style="font-family: monospace;">{{ $row->motherCow->farmer->nik ?? '-' }}</td>
-                <td>{{ $row->motherCow->regency->name ?? '-' }}, Kec. {{ $row->motherCow->district->name ?? '-' }}</td>
-            </tr>
-            @empty
-            <tr>
-                <td colspan="9" class="text-center">Tidak ada data rekam kelahiran anak sapi pada filter ini.</td>
-            </tr>
-            @endforelse
-        </tbody>
-    </table>
-
-    <!-- Signature Block -->
-    <div class="signature-section">
-        <div class="signature-box">
-            <p>Gorontalo, {{ \Carbon\Carbon::now()->translatedFormat('d F Y') }}</p>
-            <p>Kepala Dinas Peternakan dan Perkebunan<br>Provinsi Gorontalo,</p>
-            <div style="height: 60px;"></div>
-            <p style="text-decoration: underline; font-weight: bold;">Ir. Ramdhan Pade, M.Si</p>
-            <p>NIP. 19691115 200212 1 008</p>
+    <main>
+        <div class="title-section">
+            <h3>REKAPITULASI KELAHIRAN ANAK SAPI (PEDET)</h3>
+            <p>
+                @if(!empty($startDate) && !empty($endDate))
+                    Periode: {{ \Carbon\Carbon::parse($startDate)->translatedFormat('d F Y') }} s/d {{ \Carbon\Carbon::parse($endDate)->translatedFormat('d F Y') }}
+                @elseif(!empty($startDate))
+                    Mulai Tanggal: {{ \Carbon\Carbon::parse($startDate)->translatedFormat('d F Y') }}
+                @elseif(!empty($endDate))
+                    Sampai Tanggal: {{ \Carbon\Carbon::parse($endDate)->translatedFormat('d F Y') }}
+                @elseif(isset($month) && isset($year))
+                    Bulan: {{ $month }}/{{ $year }}
+                @else
+                    Semua Periode
+                @endif
+                {{ !empty($calfGender) ? ' | Gender: ' . $calfGender : '' }}
+                {{ !empty($breedFilter) ? ' | Ras: ' . $breedFilter : '' }}
+                {{ !empty($officerName) ? ' | Inseminator: ' . $officerName : '' }}
+            </p>
         </div>
-    </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 30px;">No</th>
+                    <th>NIK Anak Sapi</th>
+                    <th>Jenis Kelamin</th>
+                    <th>Tanggal Lahir</th>
+                    <th>Berat Lahir (kg)</th>
+                    <th>NIK Induk Sapi</th>
+                    <th>Nama Peternak</th>
+                    <th>NIK Peternak</th>
+                    <th>Wilayah Dinas</th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse($bornCalves as $index => $row)
+                <tr>
+                    <td class="text-center">{{ $index + 1 }}</td>
+                    <td style="font-family: monospace; font-weight: bold;">{{ $row->calf_nik }}</td>
+                    <td class="text-center" style="font-weight: bold;">{{ $row->gender }}</td>
+                    <td class="text-center">{{ $row->birth_date ? $row->birth_date->format('d/m/Y') : '-' }}</td>
+                    <td class="text-center">{{ $row->birth_weight ?? '-' }} kg</td>
+                    <td style="font-family: monospace;">{{ $row->motherCow->cow_nik ?? '-' }}</td>
+                    <td>{{ $row->motherCow->farmer->name ?? '-' }}</td>
+                    <td style="font-family: monospace;">{{ $row->motherCow->farmer->nik ?? '-' }}</td>
+                    <td>{{ $row->motherCow->regency->name ?? '-' }}, Kec. {{ $row->motherCow->district->name ?? '-' }}</td>
+                </tr>
+                @empty
+                <tr>
+                    <td colspan="9" class="text-center">Tidak ada data rekam kelahiran anak sapi pada filter ini.</td>
+                </tr>
+                @endforelse
+            </tbody>
+        </table>
+
+        <div class="signature-section">
+            <div class="signature-box">
+                <p>Gorontalo, {{ \Carbon\Carbon::now()->translatedFormat('d F Y') }}</p>
+                <p>Kepala Dinas Peternakan dan Perkebunan<br>Provinsi Gorontalo,</p>
+                <div style="height: 60px;"></div>
+                <p style="text-decoration: underline; font-weight: bold;">Ir. Ramdhan Pade, M.Si</p>
+                <p>NIP. 19691115 200212 1 008</p>
+            </div>
+        </div>
+    </main>
 
 </body>
 </html>

@@ -26,3 +26,9 @@ Thumbs.db
 *.sqlite-journal
 database/*.sqlite
 database/*.sqlite-journal
+/.agent
+/.agents
+/.cursor
+/.devin
+/.gemini
+skills-lock.json
