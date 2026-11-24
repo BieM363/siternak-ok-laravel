@@ -115,7 +115,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $opA = User::create([
-            'name' => 'Operator A (Budi Inseminator - Gorontalo)',
+            'name' => 'Budi Santoso (Inseminator)',
             'email' => 'operator@siternak.go.id',
             'password' => Hash::make('password'),
             'role' => 'operator',
@@ -124,7 +124,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $opB = User::create([
-            'name' => 'Operator B (M. Taufik Inseminator - Gorontalo)',
+            'name' => 'M. Taufik (Inseminator)',
             'email' => 'operator2@siternak.go.id',
             'password' => Hash::make('password'),
             'role' => 'operator',
@@ -132,21 +132,22 @@ class DatabaseSeeder extends Seeder
             'phone' => '087711223344',
         ]);
 
-        // 3. Database Master Kode Straw Pejantan IB
+        // 3. Database Master Identitas Pejantan (Straw) IB — Dikelola Admin Provinsi
         $this->command->info('3. Membuat master data Straw Pejantan IB...');
         $straws = [
-            ['code' => 'LIM-8890', 'bull_name' => 'Bima Limosin Super', 'breed' => 'Limosin', 'producer' => 'BIB Daerah Gorontalo / BBIB'],
-            ['code' => 'SIM-4421', 'bull_name' => 'Gatotkaca Simental', 'breed' => 'Simental', 'producer' => 'BBIB Singosari'],
-            ['code' => 'FH-7731', 'bull_name' => 'Subali FH Perah', 'breed' => 'Frisian Holstein', 'producer' => 'BIB Lembang'],
-            ['code' => 'PO-1102', 'bull_name' => 'Anoman PO Ongole', 'breed' => 'PO (Peranakan Ongole)', 'producer' => 'BBIB Singosari'],
-            ['code' => 'BRM-9912', 'bull_name' => 'Perkasa Brahman', 'breed' => 'Brahman', 'producer' => 'BBIB Singosari'],
-            ['code' => 'LIM-3320', 'bull_name' => 'Super Limosin II', 'breed' => 'Limosin', 'producer' => 'BBIB Singosari'],
-            ['code' => 'SIM-9001', 'bull_name' => 'Megantara Simental', 'breed' => 'Simental', 'producer' => 'BBIB Singosari'],
-            ['code' => 'BAL-5501', 'bull_name' => 'Maleo Bali Unggul', 'breed' => 'Bali', 'producer' => 'BIB Daerah Gorontalo'],
+            ['code' => 'LIM-8890', 'kode_bull' => 'LIM-8890', 'kode_batch' => 'B26-001', 'bull_name' => 'Bima Limosin Super', 'breed' => 'Limosin', 'producer' => 'BIB Daerah Gorontalo / BBIB'],
+            ['code' => 'SIM-4421', 'kode_bull' => 'SIM-4421', 'kode_batch' => 'B26-014', 'bull_name' => 'Gatotkaca Simental', 'breed' => 'Simental', 'producer' => 'BBIB Singosari'],
+            ['code' => 'FH-7731', 'kode_bull' => 'FH-7731', 'kode_batch' => 'B26-022', 'bull_name' => 'Subali FH Perah', 'breed' => 'Friesian Holstein (FH)', 'producer' => 'BIB Lembang'],
+            ['code' => 'PO-1102', 'kode_bull' => 'PO-1102', 'kode_batch' => 'B26-031', 'bull_name' => 'Anoman PO Ongole', 'breed' => 'PO (Peranakan Ongole)', 'producer' => 'BBIB Singosari'],
+            ['code' => 'BRM-9912', 'kode_bull' => 'BRM-9912', 'kode_batch' => 'B26-045', 'bull_name' => 'Perkasa Brahman', 'breed' => 'Brahman', 'producer' => 'BBIB Singosari'],
+            ['code' => 'LIM-3320', 'kode_bull' => 'LIM-3320', 'kode_batch' => 'B26-052', 'bull_name' => 'Super Limosin II', 'breed' => 'Limosin', 'producer' => 'BBIB Singosari'],
+            ['code' => 'SIM-9001', 'kode_bull' => 'SIM-9001', 'kode_batch' => 'B26-067', 'bull_name' => 'Megantara Simental', 'breed' => 'Simental', 'producer' => 'BBIB Singosari'],
+            ['code' => 'BAL-5501', 'kode_bull' => 'BAL-5501', 'kode_batch' => 'B26-078', 'bull_name' => 'Maleo Bali Unggul', 'breed' => 'Bali', 'producer' => 'BIB Daerah Gorontalo'],
         ];
 
+        $strawModels = [];
         foreach ($straws as $st) {
-            BullStraw::create(array_merge($st, ['is_active' => true]));
+            $strawModels[$st['code']] = BullStraw::create(array_merge($st, ['is_active' => true]));
         }
 
         // 4. Buat Data Peternak di Wilayah Gorontalo
@@ -166,7 +167,7 @@ class DatabaseSeeder extends Seeder
         $farmers = [
             ['nik' => '7502011001850001', 'name' => 'Ahmad Mohamad', 'phone' => '081233445566', 'address' => 'Desa ' . $vGorontalo[0]->name, 'regency_id' => $regGorontalo->id, 'district_id' => $vGorontalo[0]->district_id, 'village_id' => $vGorontalo[0]->id],
             ['nik' => '7502011504780002', 'name' => 'Siti Rahmawati', 'phone' => '081399887766', 'address' => 'Desa ' . ($vGorontalo[1]->name ?? $vGorontalo[0]->name), 'regency_id' => $regGorontalo->id, 'district_id' => ($vGorontalo[1]->district_id ?? $vGorontalo[0]->district_id), 'village_id' => ($vGorontalo[1]->id ?? $vGorontalo[0]->id)],
-            ['nik' => '7502022006900003', 'name' => 'Ismail Polapa', 'phone' => '082144556677', 'address' => 'Desa ' . ($vGorontalo[2]->name ?? $vGorontalo[0]->name), 'regency_id' => $regGorontalo->id, 'district_id' => ($vGorontalo[2]->district_id ?? $vGorontalo[0]->district_id), 'village_id' => ($vGorontalo[2]->id ?? $vGorontalo[0]->id)],
+            ['nik' => null, 'name' => 'Ismail Polapa', 'phone' => '082144556677', 'address' => 'Desa ' . ($vGorontalo[2]->name ?? $vGorontalo[0]->name), 'regency_id' => $regGorontalo->id, 'district_id' => ($vGorontalo[2]->district_id ?? $vGorontalo[0]->district_id), 'village_id' => ($vGorontalo[2]->id ?? $vGorontalo[0]->id)],
             ['nik' => '7502022508820004', 'name' => 'Yusuf Gobel', 'phone' => '085711223344', 'address' => 'Desa ' . ($vGorontalo[3]->name ?? $vGorontalo[0]->name), 'regency_id' => $regGorontalo->id, 'district_id' => ($vGorontalo[3]->district_id ?? $vGorontalo[0]->district_id), 'village_id' => ($vGorontalo[3]->id ?? $vGorontalo[0]->id)],
             ['nik' => '7571011003750005', 'name' => 'H. Rusli Habibie', 'phone' => '087812341234', 'address' => 'Kawasan Peternakan ' . $vKota->name, 'regency_id' => $regKotaGorontalo->id, 'district_id' => $vKota->district_id, 'village_id' => $vKota->id],
         ];
@@ -176,8 +177,8 @@ class DatabaseSeeder extends Seeder
             $farmerModels[] = Farmer::create($f);
         }
 
-        // 5. Buat Data Sapi Betina & Rekam Kehamilan
-        $this->command->info('5. Membuat data sapi & siklus kehamilan...');
+        // 5. Buat Data Sapi Betina & Rekam Kebuntingan
+        $this->command->info('5. Membuat data sapi & siklus kebuntingan...');
         $samples = [
             [
                 'name' => 'Si Murni', 'breed' => 'Limosin', 'farmer_id' => $farmerModels[0]->id, 'village' => $vGorontalo[0],
@@ -185,24 +186,24 @@ class DatabaseSeeder extends Seeder
             ],
             [
                 'name' => 'Si Bella', 'breed' => 'Simental', 'farmer_id' => $farmerModels[0]->id, 'village' => $vGorontalo[0],
-                'ib_days_ago' => 35, 'status' => 'Estimasi 30 Hari', 'cow_status' => 'Pasca IB', 'semen' => 'SIM-4421', 'officer' => $opA->name, 'op' => $opA->id
+                'ib_days_ago' => 31, 'status' => 'Estimasi 30 Hari', 'cow_status' => 'Pasca IB', 'semen' => 'SIM-4421', 'officer' => $opA->name, 'op' => $opA->id
             ],
             [
-                'name' => 'Si Mega', 'breed' => 'Frisian Holstein', 'farmer_id' => $farmerModels[4]->id, 'village' => $vKota,
-                'ib_days_ago' => 250, 'status' => 'Siap Melahirkan (245 Hari)', 'cow_status' => 'Siap Melahirkan', 'semen' => 'FH-7731', 'officer' => $opA->name, 'op' => $opA->id
+                'name' => 'Si Mega', 'breed' => 'Friesian Holstein (FH)', 'farmer_id' => $farmerModels[4]->id, 'village' => $vKota,
+                'ib_days_ago' => 200, 'status' => 'Siap Melahirkan (245 Hari)', 'cow_status' => 'Bunting', 'semen' => 'FH-7731', 'officer' => $opA->name, 'op' => $opA->id
             ],
             [
-                'name' => 'Si Mawar', 'breed' => 'Limosin Cross', 'farmer_id' => $farmerModels[3]->id, 'village' => ($vGorontalo[3] ?? $vGorontalo[0]),
+                'name' => 'Si Mawar', 'breed' => 'Cross / Persilangan', 'farmer_id' => $farmerModels[3]->id, 'village' => ($vGorontalo[3] ?? $vGorontalo[0]),
                 'ib_days_ago' => 310, 'status' => 'Melahirkan (Selesai)', 'cow_status' => 'Pasca Melahirkan', 'semen' => 'LIM-3320', 'officer' => $opA->name, 'op' => $opA->id,
                 'birth' => true, 'calf_gender' => 'Jantan'
             ],
             [
                 'name' => 'Si Cantik', 'breed' => 'PO (Peranakan Ongole)', 'farmer_id' => $farmerModels[1]->id, 'village' => ($vGorontalo[1] ?? $vGorontalo[0]),
-                'ib_days_ago' => 120, 'status' => 'Bunting (PKB 90 Hari)', 'cow_status' => 'Bunting', 'semen' => 'PO-1102', 'officer' => $opB->name, 'op' => $opB->id
+                'ib_days_ago' => 91, 'status' => 'Bunting (PKB 90 Hari)', 'cow_status' => 'Bunting', 'semen' => 'PO-1102', 'officer' => $opB->name, 'op' => $opB->id
             ],
             [
                 'name' => 'Si Rosi', 'breed' => 'Brahman', 'farmer_id' => $farmerModels[2]->id, 'village' => ($vGorontalo[2] ?? $vGorontalo[0]),
-                'ib_days_ago' => 284, 'status' => 'Fase Melahirkan', 'cow_status' => 'Mendekati Melahirkan', 'semen' => 'BRM-9912', 'officer' => $opB->name, 'op' => $opB->id
+                'ib_days_ago' => 275, 'status' => 'Fase Melahirkan', 'cow_status' => 'Mendekati Melahirkan', 'semen' => 'BRM-9912', 'officer' => $opB->name, 'op' => $opB->id
             ],
             [
                 'name' => 'Si Melati', 'breed' => 'Bali', 'farmer_id' => $farmerModels[1]->id, 'village' => ($vGorontalo[1] ?? $vGorontalo[0]),
@@ -231,20 +232,29 @@ class DatabaseSeeder extends Seeder
             ]);
 
             $ibDate = Carbon::now()->subDays($data['ib_days_ago']);
+            $stModel = $strawModels[$data['semen']] ?? null;
 
             $pregnancy = PregnancyRecord::create([
                 'cow_id' => $cow->id,
                 'operator_id' => $data['op'],
+                'ib_ke' => 1,
                 'insemination_date' => $ibDate->format('Y-m-d'),
                 'semen_code' => $data['semen'],
+                'bull_straw_id' => $stModel?->id,
+                'straw_rumpun' => $stModel?->breed ?? $data['breed'],
+                'straw_kode_bull' => $stModel?->kode_bull ?? $data['semen'],
+                'straw_kode_batch' => $stModel?->kode_batch,
+                'straw_producer' => $stModel?->producer,
+                'is_custom_straw' => false,
                 'officer_name' => $data['officer'],
                 'day30_date' => (clone $ibDate)->addDays(30)->format('Y-m-d'),
                 'day90_date' => (clone $ibDate)->addDays(90)->format('Y-m-d'),
                 'day245_date' => (clone $ibDate)->addDays(245)->format('Y-m-d'),
-                'estimated_birth_date' => (clone $ibDate)->addDays(284)->format('Y-m-d'),
-                'birth_window_end_date' => (clone $ibDate)->addDays(333)->format('Y-m-d'),
+                'day270_date' => (clone $ibDate)->addDays(270)->format('Y-m-d'),
+                'estimated_birth_date' => (clone $ibDate)->addDays(280)->format('Y-m-d'),
+                'birth_window_end_date' => (clone $ibDate)->addDays(330)->format('Y-m-d'),
                 'status' => $data['status'],
-                'notes' => 'Seeding data simulasi kehamilan sapi ' . $data['name'] . ' di Gorontalo',
+                'notes' => 'Seeding data simulasi kebuntingan sapi ' . $data['name'] . ' di Gorontalo',
             ]);
 
             if (isset($data['birth']) && $data['birth'] === true) {

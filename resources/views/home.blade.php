@@ -161,13 +161,13 @@
                     <i class="fa-solid fa-cow {{ request()->routeIs('cows.*') ? 'text-white' : 'text-emerald-600 dark:text-emerald-400' }}" aria-hidden="true"></i>
                     <span>Sapi IB</span>
                 </a>
+                <a href="{{ route('pregnancies.index') }}" class="px-3 py-2 rounded-xl text-xs font-bold transition-colors flex items-center gap-1.5 {{ request()->routeIs('pregnancies.*') ? $navActive : $navIdle }}">
+                    <i class="fa-solid fa-heart-pulse {{ request()->routeIs('pregnancies.*') ? 'text-white' : 'text-emerald-600 dark:text-emerald-400' }}" aria-hidden="true"></i>
+                    <span>Data Kebuntingan</span>
+                </a>
                 <a href="{{ route('calves.index') }}" class="px-3 py-2 rounded-xl text-xs font-bold transition-colors flex items-center gap-1.5 {{ request()->routeIs('calves.*') ? $navActive : $navIdle }}">
                     <i class="fa-solid fa-baby-carriage {{ request()->routeIs('calves.*') ? 'text-white' : 'text-emerald-600 dark:text-emerald-400' }}" aria-hidden="true"></i>
-                    <span>Pedet</span>
-                </a>
-                <a href="{{ route('reports.index') }}" class="px-3 py-2 rounded-xl text-xs font-bold transition-colors flex items-center gap-1.5 {{ request()->routeIs('reports.index') ? $navActive : $navIdle }}">
-                    <i class="fa-solid fa-file-invoice {{ request()->routeIs('reports.index') ? 'text-white' : 'text-emerald-600 dark:text-emerald-400' }}" aria-hidden="true"></i>
-                    <span>Kelahiran</span>
+                    <span>Pedet &amp; Kelahiran</span>
                 </a>
                 <a href="{{ route('reports.inseminators') }}" class="px-3 py-2 rounded-xl text-xs font-bold transition-colors flex items-center gap-1.5 {{ request()->routeIs('reports.inseminators') ? $navActive : $navIdle }}">
                     <i class="fa-solid fa-trophy {{ request()->routeIs('reports.inseminators') ? 'text-white' : 'text-amber-600 dark:text-amber-400' }}" aria-hidden="true"></i>
@@ -246,13 +246,13 @@
                     <i class="fa-solid fa-cow w-5 text-center {{ request()->routeIs('cows.*') ? 'text-white' : 'text-emerald-600 dark:text-emerald-400' }}" aria-hidden="true"></i>
                     <span>Sapi IB</span>
                 </a>
+                <a href="{{ route('pregnancies.index') }}" @click="mobileNav = false" class="min-h-[44px] flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-bold transition-colors {{ request()->routeIs('pregnancies.*') ? $navActive : $navIdle }}">
+                    <i class="fa-solid fa-heart-pulse w-5 text-center {{ request()->routeIs('pregnancies.*') ? 'text-white' : 'text-emerald-600 dark:text-emerald-400' }}" aria-hidden="true"></i>
+                    <span>Data Kebuntingan</span>
+                </a>
                 <a href="{{ route('calves.index') }}" @click="mobileNav = false" class="min-h-[44px] flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-bold transition-colors {{ request()->routeIs('calves.*') ? $navActive : $navIdle }}">
                     <i class="fa-solid fa-baby-carriage w-5 text-center {{ request()->routeIs('calves.*') ? 'text-white' : 'text-emerald-600 dark:text-emerald-400' }}" aria-hidden="true"></i>
-                    <span>Pedet</span>
-                </a>
-                <a href="{{ route('reports.index') }}" @click="mobileNav = false" class="min-h-[44px] flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-bold transition-colors {{ request()->routeIs('reports.index') ? $navActive : $navIdle }}">
-                    <i class="fa-solid fa-file-invoice w-5 text-center {{ request()->routeIs('reports.index') ? 'text-white' : 'text-emerald-600 dark:text-emerald-400' }}" aria-hidden="true"></i>
-                    <span>Kelahiran</span>
+                    <span>Pedet &amp; Kelahiran</span>
                 </a>
                 <a href="{{ route('reports.inseminators') }}" @click="mobileNav = false" class="min-h-[44px] flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-bold transition-colors {{ request()->routeIs('reports.inseminators') ? $navActive : $navIdle }}">
                     <i class="fa-solid fa-trophy w-5 text-center {{ request()->routeIs('reports.inseminators') ? 'text-white' : 'text-amber-600 dark:text-amber-400' }}" aria-hidden="true"></i>
@@ -438,11 +438,11 @@
             <section class="glass-hero rounded-3xl p-6 sm:p-10 text-left">
                 <div class="max-w-3xl space-y-4">
                     <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight leading-tight">
-                        Sistem Pemantauan Kehamilan Sapi <span class="text-emerald-600 dark:text-emerald-400">SiTernak-OK</span>
+                        Sistem Pemantauan Kebuntingan Sapi <span class="text-emerald-600 dark:text-emerald-400">SiTernak-OK</span>
                     </h1>
 
                     <p class="text-sm sm:text-base text-slate-600 dark:text-slate-300 leading-relaxed max-w-[68ch]">
-                        Layanan informasi resmi Dinas Peternakan dan Perkebunan Provinsi Gorontalo untuk memantau siklus kebuntingan sapi betina (Pasca IB, PKB 90 Hari, 245 Hari Siap Melahirkan, hingga HPL 283 Hari), rekapitulasi kelahiran pedet, dan capaian kinerja inseminator lapangan.
+                        Layanan informasi resmi Dinas Peternakan dan Perkebunan Provinsi Gorontalo untuk memantau siklus kebuntingan sapi betina 3 tahap (Hari ke-30, PKB Hari ke-90, dan Bulan ke-9), rekapitulasi pedet &amp; kelahiran, serta kinerja inseminator.
                     </p>
 
                     <div class="pt-2 flex flex-wrap items-center gap-3 sm:gap-4 text-xs font-bold text-slate-800 dark:text-slate-200 tabular-nums">
@@ -569,7 +569,7 @@
                         </div>
                         <h3 class="text-lg font-extrabold text-slate-900 dark:text-white tracking-tight">Dashboard Sapi Kota Gorontalo</h3>
                         <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed max-w-[60ch]">
-                            Pemantauan siklus kehamilan sapi betina dan pengingat konfirmasi 3 hari di seluruh 9 Kecamatan Kota Gorontalo.
+                            Pemantauan siklus kebuntingan sapi betina 3 tahap dan pengingat konfirmasi 3 hari di seluruh 9 Kecamatan Kota Gorontalo.
                         </p>
                     </div>
                     <div>
@@ -941,7 +941,7 @@
 
     <footer class="px-4 sm:px-6 py-6 border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 text-slate-600 dark:text-slate-400 text-xs text-center sm:text-left">
         <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
-            <p>&copy; {{ date('Y') }} Dinas Peternakan dan Perkebunan Provinsi Gorontalo. SiTernak-OK (Sistem Pemantauan Kehamilan Sapi).</p>
+            <p>&copy; {{ date('Y') }} Dinas Peternakan dan Perkebunan Provinsi Gorontalo. SiTernak-OK (Sistem Pemantauan Kebuntingan Sapi).</p>
             <div class="flex items-center space-x-4">
                 <span class="inline-flex items-center gap-2 text-emerald-700 dark:text-emerald-400 font-semibold">
                     <span class="w-2 h-2 rounded-full bg-emerald-600 dark:bg-emerald-400" aria-hidden="true"></span>

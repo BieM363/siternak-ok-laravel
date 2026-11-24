@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#059669">
-    <title>Masuk Aplikasi - SiTernak-OK (Dinas Peternakan & Perkebunan Prov. Gorontalo)</title>
+    <title>Masuk Aplikasi - SiTernak-OK (Sistem Pemantauan Kebuntingan Sapi)</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -15,46 +15,18 @@
             darkMode: 'class',
             theme: {
                 extend: {
-                    fontFamily: {
-                        sans: ['"Public Sans"', 'sans-serif'],
-                    },
-                    colors: {
-                        emerald: {
-                            500: '#10b981',
-                            600: '#059669',
-                            700: '#047857',
-                        }
-                    }
+                    fontFamily: { sans: ['"Public Sans"', 'sans-serif'] },
+                    colors: { emerald: { 500: '#10b981', 600: '#059669', 700: '#047857' } }
                 }
             }
         }
     </script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <style>
-        ::selection {
-            background-color: rgba(16, 185, 129, 0.22);
-            color: inherit;
-        }
-        input {
-            caret-color: #059669;
-        }
-        a[href],
-        button:not(:disabled),
-        label[for],
-        input[type="checkbox"]:not(:disabled) {
-            cursor: pointer;
-        }
-        :focus-visible {
-            outline: 2px solid #10b981 !important;
-            outline-offset: 2px !important;
-        }
-        @media (prefers-reduced-motion: reduce) {
-            *, *::before, *::after {
-                animation-duration: 0.01ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: 0.01ms !important;
-            }
-        }
+        ::selection { background-color: rgba(16, 185, 129, 0.22); color: inherit; }
+        input { caret-color: #059669; }
+        a[href], button:not(:disabled), label[for], input[type="checkbox"]:not(:disabled) { cursor: pointer; }
+        :focus-visible { outline: 2px solid #10b981 !important; outline-offset: 2px !important; }
     </style>
 </head>
 <body class="min-h-screen font-sans antialiased bg-slate-100 text-slate-900 dark:bg-slate-950 dark:text-slate-100 flex items-center justify-center p-4 overflow-x-hidden max-w-full">
@@ -69,7 +41,7 @@
                 SiTernak<span class="text-emerald-600 dark:text-emerald-400">-OK</span>
             </h1>
             <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 font-medium">
-                Sistem Pemantauan Kehamilan Sapi & Otomasi HPL
+                Sistem Pemantauan Kebuntingan Sapi &amp; Otomasi 3 Tahap
             </p>
             <p class="text-xs font-bold text-emerald-700 dark:text-emerald-400">
                 Dinas Peternakan dan Perkebunan Provinsi Gorontalo
@@ -86,15 +58,17 @@
             </div>
             @endif
 
+            {{-- 1 Pintu Login Tunggal untuk 3 Role Utama (Admin Provinsi, Admin Kabupaten/Kota, Inseminator) --}}
             <form action="{{ route('login') }}" method="POST" class="space-y-4">
                 @csrf
                 <div>
-                    <label for="email" class="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">Email Pengguna</label>
+                    <label for="email" class="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">Email Akun</label>
                     <div class="relative">
                         <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
                             <i class="fa-solid fa-envelope" aria-hidden="true"></i>
                         </div>
-                        <input type="email" id="email" name="email" value="admin@siternak.go.id" required autocomplete="email"
+                        <input type="email" id="email" name="email" value="{{ old('email', 'admin@siternak.go.id') }}" required autocomplete="email"
+                            placeholder="nama@siternak.go.id"
                             class="w-full pl-10 pr-4 py-3 bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-xl text-sm text-slate-900 dark:text-white focus:border-emerald-500 transition-colors placeholder-slate-400">
                     </div>
                 </div>
@@ -130,52 +104,31 @@
 
             <div class="relative flex py-1 items-center">
                 <div class="flex-grow border-t border-slate-200 dark:border-slate-800"></div>
-                <span class="flex-shrink mx-3 text-[11px] uppercase tracking-wider text-slate-500 dark:text-slate-400 font-bold">Preset Akses Demo Wilayah Gorontalo</span>
+                <span class="flex-shrink mx-3 text-[11px] uppercase tracking-wider text-slate-500 dark:text-slate-400 font-bold">3 Role Utama (Contoh Akun Demo)</span>
                 <div class="flex-grow border-t border-slate-200 dark:border-slate-800"></div>
             </div>
 
-            <div class="space-y-2.5">
-                <p class="text-[11px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider">Akses Tingkat Administrasi</p>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                    <button type="button" onclick="setCredentials('admin@siternak.go.id', 'password')" class="min-h-[44px] px-3 py-2 bg-emerald-50 dark:bg-emerald-950/50 hover:bg-emerald-100 dark:hover:bg-emerald-900/60 border border-emerald-200 dark:border-emerald-800 text-emerald-900 dark:text-emerald-200 text-xs font-bold rounded-xl transition-colors text-left">
-                        <span class="block text-[10px] text-emerald-700 dark:text-emerald-400 font-extrabold uppercase">Semua 6 Kab/Kota</span>
-                        Admin Prov. Gorontalo
-                    </button>
-                    <button type="button" onclick="setCredentials('admin.gorontalo@siternak.go.id', 'password')" class="min-h-[44px] px-3 py-2 bg-sky-50 dark:bg-sky-950/50 hover:bg-sky-100 dark:hover:bg-sky-900/60 border border-sky-200 dark:border-sky-800 text-sky-900 dark:text-sky-200 text-xs font-bold rounded-xl transition-colors text-left">
-                        <span class="block text-[10px] text-sky-700 dark:text-sky-400 font-extrabold uppercase">Cakupan Kab. Gorontalo</span>
-                        Admin Kab. Gorontalo
-                    </button>
-                    <button type="button" onclick="setCredentials('admin.kotagorontalo@siternak.go.id', 'password')" class="min-h-[44px] px-3 py-2 bg-teal-50 dark:bg-teal-950/50 hover:bg-teal-100 dark:hover:bg-teal-900/60 border border-teal-200 dark:border-teal-800 text-teal-900 dark:text-teal-200 text-xs font-bold rounded-xl transition-colors text-left">
-                        <span class="block text-[10px] text-teal-700 dark:text-teal-400 font-extrabold uppercase">Cakupan Kota Gorontalo</span>
-                        Admin Kota Gorontalo
-                    </button>
-                    <button type="button" onclick="setCredentials('admin.boalemo@siternak.go.id', 'password')" class="min-h-[44px] px-3 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-slate-200 text-xs font-bold rounded-xl transition-colors text-left">
-                        <span class="block text-[10px] text-slate-600 dark:text-slate-400 font-extrabold uppercase">Cakupan Kab. Boalemo</span>
-                        Admin Kab. Boalemo
-                    </button>
-                </div>
+            <div class="grid grid-cols-1 gap-2">
+                <button type="button" onclick="setCredentials('admin@siternak.go.id', 'password')" class="min-h-[48px] px-3.5 py-2.5 bg-emerald-50 dark:bg-emerald-950/50 hover:bg-emerald-100 dark:hover:bg-emerald-900/60 border border-emerald-200 dark:border-emerald-800 text-emerald-900 dark:text-emerald-200 text-xs font-bold rounded-xl transition-colors text-left">
+                    <span class="block text-[10px] text-emerald-700 dark:text-emerald-400 font-extrabold uppercase">Role 1 · Admin Provinsi</span>
+                    Seluruh Gorontalo, Master Wilayah &amp; Distribusi Straw
+                </button>
 
-                <div class="flex items-center justify-between pt-2">
-                    <p class="text-[11px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider">Akses Operator Inseminator</p>
-                    <span class="px-2.5 py-0.5 rounded-full bg-amber-50 dark:bg-amber-950 border border-amber-200 dark:border-amber-800 text-[10px] font-bold text-amber-800 dark:text-amber-300 flex items-center gap-1">
-                        <i class="fa-solid fa-mobile-screen-button" aria-hidden="true"></i> Sesi 8 Jam & Notif HP
-                    </span>
-                </div>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                    <button type="button" onclick="setCredentials('operator@siternak.go.id', 'password')" class="min-h-[44px] px-3 py-2 bg-amber-50 dark:bg-amber-950/50 hover:bg-amber-100 dark:hover:bg-amber-900/60 border border-amber-200 dark:border-amber-800 text-amber-950 dark:text-amber-200 text-xs font-bold rounded-xl transition-colors text-left">
-                        <span class="block text-[10px] text-amber-700 dark:text-amber-400 font-extrabold uppercase">Operator Lapangan A</span>
-                        Budi (Inseminator Gorontalo)
-                    </button>
-                    <button type="button" onclick="setCredentials('operator2@siternak.go.id', 'password')" class="min-h-[44px] px-3 py-2 bg-amber-50 dark:bg-amber-950/50 hover:bg-amber-100 dark:hover:bg-amber-900/60 border border-amber-200 dark:border-amber-800 text-amber-950 dark:text-amber-200 text-xs font-bold rounded-xl transition-colors text-left">
-                        <span class="block text-[10px] text-amber-700 dark:text-amber-400 font-extrabold uppercase">Operator Lapangan B</span>
-                        Taufik (Inseminator Gorontalo)
-                    </button>
-                </div>
-                <p class="text-[11px] text-slate-600 dark:text-slate-400 leading-relaxed pt-1">
-                    <i class="fa-solid fa-stopwatch text-emerald-600 dark:text-emerald-400 mr-1" aria-hidden="true"></i>
-                    Khusus <strong>Operator Lapangan</strong>: Waktu login aktif dibatasi <strong>8 jam</strong> melalui cronjob otomatis dengan dukungan notifikasi peramban ponsel.
-                </p>
+                <button type="button" onclick="setCredentials('admin.gorontalo@siternak.go.id', 'password')" class="min-h-[48px] px-3.5 py-2.5 bg-sky-50 dark:bg-sky-950/50 hover:bg-sky-100 dark:hover:bg-sky-900/60 border border-sky-200 dark:border-sky-800 text-sky-900 dark:text-sky-200 text-xs font-bold rounded-xl transition-colors text-left">
+                    <span class="block text-[10px] text-sky-700 dark:text-sky-400 font-extrabold uppercase">Role 2 · Admin Kabupaten/Kota (Recorder Dinas)</span>
+                    1 Pintu Login · Data otomatis terfilter sesuai Kabupaten/Kota akun
+                </button>
+
+                <button type="button" onclick="setCredentials('operator@siternak.go.id', 'password')" class="min-h-[48px] px-3.5 py-2.5 bg-amber-50 dark:bg-amber-950/50 hover:bg-amber-100 dark:hover:bg-amber-900/60 border border-amber-200 dark:border-amber-800 text-amber-950 dark:text-amber-200 text-xs font-bold rounded-xl transition-colors text-left">
+                    <span class="block text-[10px] text-amber-700 dark:text-amber-400 font-extrabold uppercase">Role 3 · Inseminator (Mobile-First)</span>
+                    Input laporan IB ringan lintas kabupaten &amp; riwayat pribadi
+                </button>
             </div>
+
+            <p class="text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed">
+                <i class="fa-solid fa-circle-info text-emerald-600 dark:text-emerald-400 mr-1"></i>
+                Admin Kab/Kota lainnya cukup login di pintu yang sama dengan email daerahnya (contoh: <code class="font-mono text-[10px]">admin.kotagorontalo@siternak.go.id</code> atau <code class="font-mono text-[10px]">admin.boalemo@siternak.go.id</code>, sandi <code class="font-mono text-[10px]">password</code>).
+            </p>
 
             <a href="{{ route('home') }}" class="min-h-[42px] w-full py-2.5 px-4 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-semibold text-xs rounded-xl border border-slate-200 dark:border-slate-700 transition-colors flex items-center justify-center space-x-2">
                 <i class="fa-solid fa-arrow-left" aria-hidden="true"></i>

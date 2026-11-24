@@ -64,62 +64,29 @@ class OperatorSessionCron extends Command
             }
         }
 
-        // 3. Jalankan pengecekan milestone kebuntingan & sinkronisasi reminder notifikasi peramban HP
+        // 3. Jalankan pengecekan milestone kebuntingan 3 tahap (Hari 30, Hari 90, Bulan ke-9) & auto-lanjut 3 hari
         $today = Carbon::today();
         $activeRecords = PregnancyRecord::with('cow')
             ->whereNotIn('status', ['Melahirkan (Selesai)', 'Gagal/Keguguran'])
             ->get();
 
         $autoAdvancedCount = 0;
-        $reminderReadyCount = 0;
 
         foreach ($activeRecords as $record) {
             if ($record->checkAndAutoAdvance()) {
                 $autoAdvancedCount++;
             }
+        }
 
-            // Cek apakah sapi ini berada dalam jendela reminder konfirmasi untuk notifikasi HP operator
-            $isDueReminder = false;
-
-            if (
-                in_array($record->status, ['Pasca IB', 'Estimasi 30 Hari']) &&
-                $record->day30_date &&
-                $record->day30_date->lte($today) &&
-                $record->day30_date->gte($today->copy()->subDays(3))
-            ) {
-                $isDueReminder = true;
-            } elseif (
-                $record->status === 'Bunting (PKB 90 Hari)' &&
-                $record->day90_date &&
-                $record->day90_date->lte($today) &&
-                $record->day90_date->gte($today->copy()->subDays(3))
-            ) {
-                $isDueReminder = true;
-            } elseif (
-                $record->status === 'Siap Melahirkan (245 Hari)' &&
-                $record->day245_date &&
-                $record->day245_date->lte($today) &&
-                $record->day245_date->gte($today->copy()->subDays(3))
-            ) {
-                $isDueReminder = true;
-            } elseif (
-                $record->status === 'Fase Melahirkan' &&
-                $record->estimated_birth_date &&
-                $record->estimated_birth_date->lte($today) &&
-                (!$record->birth_window_end_date || $record->birth_window_end_date->gte($today))
-            ) {
-                $isDueReminder = true;
-            }
-
-            if ($isDueReminder) {
-                $reminderReadyCount++;
-                $record->update(['last_reminder_at' => $now]);
-            }
+        $dueRecords = PregnancyRecord::dueForReminder($today)->get();
+        $reminderReadyCount = $dueRecords->count();
+        foreach ($dueRecords as $rec) {
+            $rec->update(['last_reminder_at' => $now]);
         }
 
         $this->info(
-            "[Cron 8 Jam Operator] Sesi berakhir: {$expiredUsersCount} operator ({$deletedSessionsCount} sesi dihapus) | " .
-            "Auto-Advance: {$autoAdvancedCount} sapi | Siap Notifikasi Peramban HP: {$reminderReadyCount} sapi."
+            "[Cron Sesi Inseminator & 3 Tahap Kebuntingan] Sesi berakhir: {$expiredUsersCount} inseminator ({$deletedSessionsCount} sesi dihapus) | " .
+            "Auto-Lanjut 3 Hari: {$autoAdvancedCount} sapi | Notifikasi 3 Tahap Siap: {$reminderReadyCount} sapi."
         );
 
         return Command::SUCCESS;

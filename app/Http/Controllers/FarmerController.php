@@ -9,9 +9,8 @@ use App\Models\District;
 use App\Models\Village;
 
 /**
- * Controller Manajemen Data Peternak
- * SiTernak-OK (Sistem Pemantauan Kehamilan Sapi)
- * Mengelola pendaftaran peternak dengan NIK KTP dan Nama Peternak secara terpisah, serta wilayah tempat tinggal.
+ * Controller Manajemen Data Pemilik Sapi (Peternak)
+ * SiTernak-OK — NIK KTP bersifat opsional (nullable) dengan filter Tanpa NIK.
  */
 class FarmerController extends Controller
 {
@@ -19,31 +18,69 @@ class FarmerController extends Controller
     {
         $user = auth()->user();
         $search = $request->query('search');
+        $nikStatus = $request->query('nik_status');
+        $regencyId = $request->query('regency_id');
+
+        if ($user && $user->isAdminKabupaten()) {
+            $regencyId = $user->regency_id;
+        }
+
         $query = Farmer::with(['regency', 'district', 'village', 'cows']);
 
-        // Scope isolasi Admin Kabupaten / Kota
         if ($user && $user->isAdminKabupaten()) {
             $query->where('regency_id', $user->regency_id);
+        } elseif ($regencyId) {
+            $query->where('regency_id', $regencyId);
         }
 
         if ($search) {
             $query->where(function ($q) use ($search) {
                 $q->where('name', 'LIKE', "%{$search}%")
-                  ->orWhere('nik', 'LIKE', "%{$search}%");
+                  ->orWhere('nik', 'LIKE', "%{$search}%")
+                  ->orWhere('phone', 'LIKE', "%{$search}%");
             });
         }
 
-        $farmers = $query->latest()->paginate(10)->withQueryString();
+        if ($nikStatus === 'without_nik') {
+            $query->where(function ($q) {
+                $q->whereNull('nik')->orWhere('nik', '');
+            });
+        } elseif ($nikStatus === 'with_nik') {
+            $query->whereNotNull('nik')->where('nik', '!=', '');
+        }
+
+        $baseStatQuery = Farmer::query();
+        if ($user && $user->isAdminKabupaten()) {
+            $baseStatQuery->where('regency_id', $user->regency_id);
+        } elseif ($regencyId) {
+            $baseStatQuery->where('regency_id', $regencyId);
+        }
+
+        $totalFarmersCount = (clone $baseStatQuery)->count();
+        $withoutNikCount = (clone $baseStatQuery)->where(fn($q) => $q->whereNull('nik')->orWhere('nik', ''))->count();
+        $withNikCount = $totalFarmersCount - $withoutNikCount;
+
+        $farmers = $query->latest()->paginate(12)->withQueryString();
 
         $regencies = ($user && $user->isAdminKabupaten())
             ? Regency::where('id', $user->regency_id)->with('districts.villages')->get()
-            : Regency::with('districts.villages')->get();
+            : Regency::with('districts.villages')->orderBy('name')->get();
 
         $districts = ($user && $user->isAdminKabupaten())
             ? District::where('regency_id', $user->regency_id)->with('villages')->get()
             : District::with('villages')->get();
 
-        return view('farmers.index', compact('farmers', 'regencies', 'districts', 'search'));
+        return view('farmers.index', compact(
+            'farmers',
+            'regencies',
+            'districts',
+            'search',
+            'nikStatus',
+            'regencyId',
+            'totalFarmersCount',
+            'withoutNikCount',
+            'withNikCount'
+        ));
     }
 
     public function searchJson(Request $request)
@@ -52,25 +89,20 @@ class FarmerController extends Controller
         $q = $request->query('q');
 
         $query = Farmer::query();
-        if(auth()->check()) {
+        if (auth()->check()) {
             $query->where(function ($sq) use ($q) {
                 $sq->where('name', 'LIKE', "%{$q}%")
                    ->orWhere('nik', 'LIKE', "%{$q}%");
-            });    
+            });
         } else {
             $query->where('name', 'LIKE', "%{$q}%");
         }
-        
+
         if ($user && $user->isAdminKabupaten()) {
             $query->where('regency_id', $user->regency_id);
         }
 
-        $fields = ['id', 'nik', 'name', 'phone'];
-        if(auth()->check()) {
-            $fields[] = 'nik';
-        }
-
-        $farmers = $query->limit(15)->get($fields);
+        $farmers = $query->limit(15)->get(['id', 'nik', 'name', 'phone']);
 
         return response()->json($farmers);
     }
@@ -79,14 +111,13 @@ class FarmerController extends Controller
     {
         $user = auth()->user();
 
+        $nik = trim((string) $request->input('nik', ''));
+        $request->merge(['nik' => $nik !== '' ? $nik : null]);
+
         $request->validate([
-            'nik' => [
-                'required',
-                'digits:16',
-                'unique:farmers,nik',
-            ],
+            'nik' => ['nullable', 'digits:16', 'unique:farmers,nik'],
             'name' => 'required|string|max:100',
-            'phone' => 'nullable|string',
+            'phone' => 'nullable|string|max:30',
             'village_id' => 'required|exists:villages,id',
             'address' => 'nullable|string',
         ]);
@@ -95,12 +126,12 @@ class FarmerController extends Controller
         $farmerRegencyId = $village->district->regency_id ?? null;
 
         if ($user && $user->isAdminKabupaten() && $farmerRegencyId != $user->regency_id) {
-            return back()->with('error', 'Anda hanya dapat mendaftarkan peternak pada wilayah Kabupaten Anda sendiri.');
+            return back()->with('error', 'Anda hanya dapat mendaftarkan peternak pada wilayah Kabupaten/Kota Anda sendiri.');
         }
 
         Farmer::create([
             'nik' => $request->nik,
-            'name' => $request->name,
+            'name' => trim($request->name),
             'phone' => $request->phone,
             'address' => $request->address,
             'regency_id' => $farmerRegencyId,
@@ -108,7 +139,7 @@ class FarmerController extends Controller
             'village_id' => $village->id,
         ]);
 
-        return back()->with('success', 'Data Peternak berhasil ditambahkan.');
+        return back()->with('success', 'Data Pemilik Sapi (Peternak) berhasil ditambahkan.');
     }
 
     public function update(Request $request, $id)
@@ -120,14 +151,13 @@ class FarmerController extends Controller
             return back()->with('error', 'Anda tidak memiliki hak akses untuk mengubah data peternak dari wilayah lain.');
         }
 
+        $nik = trim((string) $request->input('nik', ''));
+        $request->merge(['nik' => $nik !== '' ? $nik : null]);
+
         $request->validate([
-            'nik' => [
-                'required',
-                'digits:16',
-                'unique:farmers,nik,' . $id,
-            ],
+            'nik' => ['nullable', 'digits:16', 'unique:farmers,nik,' . $id],
             'name' => 'required|string|max:100',
-            'phone' => 'nullable|string',
+            'phone' => 'nullable|string|max:30',
             'village_id' => 'required|exists:villages,id',
             'address' => 'nullable|string',
         ]);
@@ -136,12 +166,12 @@ class FarmerController extends Controller
         $farmerRegencyId = $village->district->regency_id ?? null;
 
         if ($user && $user->isAdminKabupaten() && $farmerRegencyId != $user->regency_id) {
-            return back()->with('error', 'Anda hanya dapat memindahkan peternak pada wilayah Kabupaten Anda sendiri.');
+            return back()->with('error', 'Anda hanya dapat memindahkan peternak pada wilayah Kabupaten/Kota Anda sendiri.');
         }
 
         $farmer->update([
             'nik' => $request->nik,
-            'name' => $request->name,
+            'name' => trim($request->name),
             'phone' => $request->phone,
             'address' => $request->address,
             'regency_id' => $farmerRegencyId,
@@ -149,7 +179,7 @@ class FarmerController extends Controller
             'village_id' => $village->id,
         ]);
 
-        return back()->with('success', 'Data Peternak berhasil diperbarui.');
+        return back()->with('success', 'Data Pemilik Sapi (Peternak) berhasil diperbarui.');
     }
 
     public function destroy($id)
@@ -162,6 +192,7 @@ class FarmerController extends Controller
         }
 
         $farmer->delete();
-        return back()->with('success', 'Data Peternak berhasil dihapus.');
+
+        return back()->with('success', 'Data Pemilik Sapi berhasil dihapus.');
     }
 }

@@ -88,16 +88,13 @@ class User extends Authenticatable
     public function getRoleBadgeText(): string
     {
         if ($this->isAdminProvinsi()) {
-            return 'Admin Prov';
-        }
-        if ($this->isAdminKota()) {
-            return 'Admin Kota';
+            return 'Admin Provinsi';
         }
         if ($this->isAdminKabupaten()) {
-            return 'Admin Kab';
+            return 'Admin Kab/Kota';
         }
         if ($this->isOperator()) {
-            return 'Operator IB';
+            return 'Inseminator';
         }
         return 'Tamu';
     }

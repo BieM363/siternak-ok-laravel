@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Cow;
+use App\Models\Farmer;
+use App\Models\BullStraw;
 use App\Models\PregnancyRecord;
 use App\Models\Regency;
 use App\Models\District;
@@ -21,26 +23,15 @@ class DashboardController extends Controller
         $isPureOperator = $user && $user->isOperator() && !$user->isAdmin();
         $isAdminKabupaten = $user && $user->isAdminKabupaten();
 
-        /*
-        |--------------------------------------------------------------------------
-        | AUTO ADVANCE
-        |--------------------------------------------------------------------------
-        |
-        | BAGIAN INI TIDAK DIUBAH.
-        | Sistem tetap otomatis melanjutkan status setelah 3 hari.
-        |
-        */
-
+        // 1. Auto-lanjut 3 hari berbasis tanggal_inseminasi
         $activeCheckQuery = PregnancyRecord::whereNotIn('status', [
             'Melahirkan (Selesai)',
-            'Gagal/Keguguran'
+            'Gagal/Keguguran',
         ]);
 
         if ($isPureOperator) {
             $activeCheckQuery->where('operator_id', $user->id);
-        }
-
-        if ($isAdminKabupaten) {
+        } elseif ($isAdminKabupaten) {
             $activeCheckQuery->whereHas('cow', function ($q) use ($user) {
                 $q->where('regency_id', $user->regency_id);
             });
@@ -50,54 +41,102 @@ class DashboardController extends Controller
             $record->checkAndAutoAdvance();
         }
 
-        /*
-        |--------------------------------------------------------------------------
-        | FILTER
-        |--------------------------------------------------------------------------
-        */
+        // 2. MODE RINGAN KHUSUS INSEMINATOR (Mobile-First: Langsung Form Input IB + Riwayat Pribadi)
+        if ($isPureOperator) {
+            $search = $request->query('search');
 
+            $myRecordsQuery = PregnancyRecord::with([
+                'cow.farmer',
+                'cow.regency',
+                'cow.district',
+                'cow.village',
+                'calf',
+            ])
+                ->whereHas('cow')
+                ->where('operator_id', $user->id)
+                ->orderByDesc('insemination_date')
+                ->orderByDesc('id');
+
+            if ($search) {
+                $myRecordsQuery->whereHas('cow', function ($q) use ($search) {
+                    $q->where('cow_nik', 'LIKE', "%{$search}%")
+                        ->orWhere('name', 'LIKE', "%{$search}%")
+                        ->orWhereHas('farmer', fn($fq) => $fq->where('name', 'LIKE', "%{$search}%"));
+                });
+            }
+
+            $myRecords = $myRecordsQuery->paginate(10)->withQueryString();
+
+            $myAll = PregnancyRecord::where('operator_id', $user->id)->whereHas('cow')->get();
+            $myTotalIb = $myAll->count();
+            $myTotalBunting = $myAll->whereIn('status', PregnancyRecord::ACTIVE_PREGNANCY_STATUSES)->count();
+            $myTotalLahir = $myAll->where('status', 'Melahirkan (Selesai)')->count();
+
+            // Wilayah bebas lintas kabupaten untuk Inseminator
+            $regencies = Regency::with('districts.villages')->orderBy('name')->get();
+            $farmers = Farmer::orderBy('name')->get(['id', 'name', 'nik', 'phone', 'regency_id', 'district_id', 'village_id']);
+            $straws = BullStraw::where('is_active', true)->orderBy('breed')->orderBy('kode_bull')->get();
+            $breeds = Cow::BREEDS;
+
+            // Sapi yang siap di-IB ulang (Gagal / Pasca Melahirkan) milik riwayat inseminator
+            $myCowsForNextIb = Cow::with(['farmer', 'regency', 'district', 'village', 'latestPregnancy'])
+                ->whereHas('pregnancyRecords', fn($q) => $q->where('operator_id', $user->id))
+                ->latest()
+                ->get()
+                ->filter(fn($c) => $c->canReceiveNextIb())
+                ->values();
+
+            $confirmationReminders = PregnancyRecord::with(['cow.farmer', 'cow.regency', 'cow.district', 'cow.village'])
+                ->whereHas('cow')
+                ->where('operator_id', $user->id)
+                ->dueForReminder()
+                ->orderBy('estimated_birth_date')
+                ->get();
+
+            return view('inseminator.dashboard', compact(
+                'myRecords',
+                'myTotalIb',
+                'myTotalBunting',
+                'myTotalLahir',
+                'regencies',
+                'farmers',
+                'straws',
+                'breeds',
+                'myCowsForNextIb',
+                'confirmationReminders',
+                'search'
+            ));
+        }
+
+        // 3. DASHBOARD ADMIN PROVINSI, ADMIN KABUPATEN/KOTA, & PUBLIK
         $search       = $request->query('search');
         $regencyId    = $request->query('regency_id');
         $districtId   = $request->query('district_id');
         $villageId    = $request->query('village_id');
         $statusFilter = $request->query('status');
         $officerName  = $request->query('officer_name');
+        $nikStatus    = $request->query('nik_status');
+        $startDate    = $request->query('start_date');
+        $endDate      = $request->query('end_date');
 
         if ($isAdminKabupaten) {
             $regencyId = $user->regency_id;
         }
-
-        /*
-        |--------------------------------------------------------------------------
-        | DATA TABEL
-        |--------------------------------------------------------------------------
-        */
 
         $query = PregnancyRecord::with([
             'cow.farmer',
             'cow.regency',
             'cow.district',
             'cow.village',
-            'calf'
+            'calf',
         ])
-        ->whereHas('cow')
-        ->orderBy('estimated_birth_date', 'asc');
-
-        if ($isPureOperator) {
-            $query->where('operator_id', $user->id);
-        }
+            ->whereHas('cow')
+            ->orderByDesc('insemination_date')
+            ->orderByDesc('id');
 
         if ($isAdminKabupaten) {
-            $query->whereHas('cow', function ($q) use ($user) {
-                $q->where('regency_id', $user->regency_id);
-            });
+            $query->whereHas('cow', fn($q) => $q->where('regency_id', $user->regency_id));
         }
-
-        /*
-        |--------------------------------------------------------------------------
-        | SEARCH
-        |--------------------------------------------------------------------------
-        */
 
         if ($search) {
             $query->whereHas('cow', function ($q) use ($search) {
@@ -110,428 +149,200 @@ class DashboardController extends Controller
             });
         }
 
-        /*
-        |--------------------------------------------------------------------------
-        | OFFICER
-        |--------------------------------------------------------------------------
-        */
-
-        if ($officerName && !$isPureOperator) {
+        if ($officerName) {
             $query->where('officer_name', $officerName);
         }
 
-        /*
-        |--------------------------------------------------------------------------
-        | REGENCY
-        |--------------------------------------------------------------------------
-        */
-
-        if ($regencyId) {
-            $query->whereHas('cow', function ($q) use ($regencyId) {
-                $q->where('regency_id', $regencyId);
-            });
+        if ($regencyId && !$isAdminKabupaten) {
+            $query->whereHas('cow', fn($q) => $q->where('regency_id', $regencyId));
         }
-
-        /*
-        |--------------------------------------------------------------------------
-        | DISTRICT
-        |--------------------------------------------------------------------------
-        */
 
         if ($districtId) {
-            $query->whereHas('cow', function ($q) use ($districtId) {
-                $q->where('district_id', $districtId);
-            });
+            $query->whereHas('cow', fn($q) => $q->where('district_id', $districtId));
         }
-
-        /*
-        |--------------------------------------------------------------------------
-        | VILLAGE
-        |--------------------------------------------------------------------------
-        */
 
         if ($villageId) {
-            $query->whereHas('cow', function ($q) use ($villageId) {
-                $q->where('village_id', $villageId);
-            });
+            $query->whereHas('cow', fn($q) => $q->where('village_id', $villageId));
         }
-
-        /*
-        |--------------------------------------------------------------------------
-        | STATUS
-        |--------------------------------------------------------------------------
-        */
 
         if ($statusFilter) {
             $query->where('status', $statusFilter);
         }
 
+        if ($startDate) {
+            $query->whereDate('insemination_date', '>=', $startDate);
+        }
+
+        if ($endDate) {
+            $query->whereDate('insemination_date', '<=', $endDate);
+        }
+
+        if ($nikStatus === 'without_nik') {
+            $query->whereHas('cow.farmer', fn($q) => $q->whereNull('nik')->orWhere('nik', ''));
+        } elseif ($nikStatus === 'with_nik') {
+            $query->whereHas('cow.farmer', fn($q) => $q->whereNotNull('nik')->where('nik', '!=', ''));
+        }
+
         $records = $query->paginate(10)->withQueryString();
 
-        /*
-        |--------------------------------------------------------------------------
-        | STATISTIK
-        |--------------------------------------------------------------------------
-        */
-
+        // STATISTIK UTAMA
         $cowQuery = Cow::forOperator($user);
-
-        if ($isAdminKabupaten) {
-            $cowQuery->where('regency_id', $user->regency_id);
+        if ($regencyId && !$isAdminKabupaten) {
+            $cowQuery->where('regency_id', $regencyId);
         }
-
         $totalCows = $cowQuery->count();
 
-        $pregBaseQuery = PregnancyRecord::query()->whereHas('cow');
-
-        if ($isPureOperator) {
-            $pregBaseQuery->where('operator_id', $user->id);
-        }
+        $pregBaseQuery = PregnancyRecord::with('cow')->whereHas('cow');
 
         if ($isAdminKabupaten) {
-            $pregBaseQuery->whereHas('cow', function ($q) use ($user) {
-                $q->where('regency_id', $user->regency_id);
-            });
+            $pregBaseQuery->whereHas('cow', fn($q) => $q->where('regency_id', $user->regency_id));
+        } elseif ($regencyId) {
+            $pregBaseQuery->whereHas('cow', fn($q) => $q->where('regency_id', $regencyId));
         }
 
-        if ($regencyId && !$isAdminKabupaten) {
-            $pregBaseQuery->whereHas('cow', function ($q) use ($regencyId) {
-                $q->where('regency_id', $regencyId);
-            });
-        }
-
-        if ($officerName && !$isPureOperator) {
+        if ($officerName) {
             $pregBaseQuery->where('officer_name', $officerName);
         }
 
-        $totalPascaIb = (clone $pregBaseQuery)
-            ->whereIn('status', ['Pasca IB', 'Estimasi 30 Hari'])
-            ->count();
+        if ($startDate) {
+            $pregBaseQuery->whereDate('insemination_date', '>=', $startDate);
+        }
 
-        $totalPregnant90 = (clone $pregBaseQuery)
-            ->where('status', 'Bunting (PKB 90 Hari)')
-            ->count();
+        if ($endDate) {
+            $pregBaseQuery->whereDate('insemination_date', '<=', $endDate);
+        }
 
-        $totalReady245 = (clone $pregBaseQuery)
-            ->where('status', 'Siap Melahirkan (245 Hari)')
-            ->count();
+        if ($nikStatus === 'without_nik') {
+            $pregBaseQuery->whereHas('cow.farmer', fn($q) => $q->whereNull('nik')->orWhere('nik', ''));
+        } elseif ($nikStatus === 'with_nik') {
+            $pregBaseQuery->whereHas('cow.farmer', fn($q) => $q->whereNotNull('nik')->where('nik', '!=', ''));
+        }
 
-        $totalBirthPhase = (clone $pregBaseQuery)
-            ->where('status', 'Fase Melahirkan')
-            ->count();
+        $allPregForStats = (clone $pregBaseQuery)->get();
 
-        $totalDelivered = (clone $pregBaseQuery)
-            ->where('status', 'Melahirkan (Selesai)')
-            ->count();
+        $totalIbCount = $allPregForStats->count();
+        $totalPascaIb = $allPregForStats->whereIn('status', ['Pasca IB', 'Estimasi 30 Hari'])->count();
+        $totalPregnant90 = $allPregForStats->where('status', 'Bunting (PKB 90 Hari)')->count();
+        $totalReady245 = $allPregForStats->where('status', 'Siap Melahirkan (245 Hari)')->count();
+        $totalBirthPhase = $allPregForStats->where('status', 'Fase Melahirkan')->count();
+        $totalDelivered = $allPregForStats->where('status', 'Melahirkan (Selesai)')->count();
 
-        /*
-        |--------------------------------------------------------------------------
-        | CONCEPTION RATE & CALVING RATE
-        |--------------------------------------------------------------------------
-        */
+        $totalConfirmedBunting = $allPregForStats->whereIn('status', [
+            'Bunting (PKB 90 Hari)',
+            'Siap Melahirkan (245 Hari)',
+            'Fase Melahirkan',
+            'Melahirkan (Selesai)',
+        ])->count();
 
-        $totalIbCount = (clone $pregBaseQuery)->count();
+        $totalActivePregnancies = $allPregForStats->whereIn('status', PregnancyRecord::ACTIVE_PREGNANCY_STATUSES)->count();
 
-        $totalConfirmedBunting = (clone $pregBaseQuery)
-            ->whereIn('status', [
-                'Bunting (PKB 90 Hari)',
-                'Siap Melahirkan (245 Hari)',
-                'Fase Melahirkan',
-                'Melahirkan (Selesai)'
-            ])
-            ->count();
+        $conceptionRate = $totalIbCount > 0 ? round(($totalConfirmedBunting / $totalIbCount) * 100, 1) : 0;
+        $calvingRate = $totalConfirmedBunting > 0 ? round(($totalDelivered / $totalConfirmedBunting) * 100, 1) : 0;
 
-        $conceptionRate = $totalIbCount > 0
-            ? round(($totalConfirmedBunting / $totalIbCount) * 100, 1)
-            : 0;
+        // Rekapitulasi per Ras/Jenis Sapi (Total IB, Total Bunting, Total Kelahiran/Pedet)
+        $breedRecap = $allPregForStats
+            ->groupBy(fn($r) => $r->cow->breed ?? 'Lainnya')
+            ->map(function ($group, $breedName) {
+                return (object) [
+                    'breed' => $breedName,
+                    'total_ib' => $group->count(),
+                    'total_bunting' => $group->whereIn('status', PregnancyRecord::ACTIVE_PREGNANCY_STATUSES)->count(),
+                    'total_lahir' => $group->where('status', 'Melahirkan (Selesai)')->count(),
+                ];
+            })
+            ->sortByDesc('total_ib')
+            ->values();
 
-        $calvingRate = $totalConfirmedBunting > 0
-            ? round(($totalDelivered / $totalConfirmedBunting) * 100, 1)
-            : 0;
-
-        /*
-        |--------------------------------------------------------------------------
-        | TOTAL ANAK SAPI
-        |--------------------------------------------------------------------------
-        */
-
+        // TOTAL PEDET
         $calfQuery = Calf::query();
-
-        if ($isPureOperator) {
-            $calfQuery->whereHas('pregnancyRecord', function ($q) use ($user) {
-                $q->where('operator_id', $user->id);
-            });
-        }
-
         if ($isAdminKabupaten) {
-            $calfQuery->whereHas('motherCow', function ($q) use ($user) {
-                $q->where('regency_id', $user->regency_id);
-            });
+            $calfQuery->whereHas('motherCow', fn($q) => $q->where('regency_id', $user->regency_id));
+        } elseif ($regencyId) {
+            $calfQuery->whereHas('motherCow', fn($q) => $q->where('regency_id', $regencyId));
         }
-
+        if ($officerName) {
+            $calfQuery->whereHas('pregnancyRecord', fn($q) => $q->where('officer_name', $officerName));
+        }
         $totalCalves = $calfQuery->count();
 
-        /*
-        |--------------------------------------------------------------------------
-        | REMINDER KONFIRMASI
-        |--------------------------------------------------------------------------
-        */
-
-        $today = Carbon::today();
-
+        // NOTIFIKASI 3 TAHAP (Hari 30, Hari 90, Bulan ke-9) — Diarahkan ke Admin Kab/Kota & Admin Provinsi
         $reminderQuery = PregnancyRecord::with([
             'cow.farmer',
             'cow.regency',
             'cow.district',
-            'cow.village'
+            'cow.village',
         ])
-        ->whereHas('cow')
-        ->whereNotIn('status', [
-            'Melahirkan (Selesai)',
-            'Gagal/Keguguran'
-        ])
-        ->where(function ($q) use ($today) {
-
-            /*
-            | 30 HARI
-            */
-
-            $q->where(function ($sub) use ($today) {
-
-                $sub->whereIn('status', [
-                    'Pasca IB',
-                    'Estimasi 30 Hari'
-                ])
-                ->whereDate('day30_date', '<=', $today)
-                ->whereDate(
-                    'day30_date',
-                    '>=',
-                    $today->copy()->subDays(3)
-                );
-
-            })
-
-            /*
-            | 90 HARI
-            */
-
-            ->orWhere(function ($sub) use ($today) {
-
-                $sub->where(
-                    'status',
-                    'Bunting (PKB 90 Hari)'
-                )
-                ->whereDate('day90_date', '<=', $today)
-                ->whereDate(
-                    'day90_date',
-                    '>=',
-                    $today->copy()->subDays(3)
-                );
-
-            })
-
-            /*
-            | 245 HARI
-            */
-
-            ->orWhere(function ($sub) use ($today) {
-
-                $sub->where(
-                    'status',
-                    'Siap Melahirkan (245 Hari)'
-                )
-                ->whereDate('day245_date', '<=', $today)
-                ->whereDate(
-                    'day245_date',
-                    '>=',
-                    $today->copy()->subDays(3)
-                );
-
-            })
-
-            /*
-            | FASE MELAHIRKAN
-            */
-
-            ->orWhere(function ($sub) use ($today) {
-
-                $sub->where(
-                    'status',
-                    'Fase Melahirkan'
-                )
-                ->whereDate(
-                    'estimated_birth_date',
-                    '<=',
-                    $today
-                )
-                ->whereDate(
-                    'birth_window_end_date',
-                    '>=',
-                    $today
-                );
-
-            });
-        });
-
-        /*
-        |--------------------------------------------------------------------------
-        | OPERATOR SCOPE
-        |--------------------------------------------------------------------------
-        */
-
-        if ($isPureOperator) {
-            $reminderQuery->where(
-                'operator_id',
-                $user->id
-            );
-        }
-
-        /*
-        |--------------------------------------------------------------------------
-        | ADMIN KABUPATEN SCOPE
-        |--------------------------------------------------------------------------
-        */
+            ->whereHas('cow')
+            ->dueForReminder();
 
         if ($isAdminKabupaten) {
-            $reminderQuery->whereHas('cow', function ($q) use ($user) {
-                $q->where(
-                    'regency_id',
-                    $user->regency_id
-                );
-            });
+            $reminderQuery->whereHas('cow', fn($q) => $q->where('regency_id', $user->regency_id));
+        } elseif ($regencyId) {
+            $reminderQuery->whereHas('cow', fn($q) => $q->where('regency_id', $regencyId));
         }
-
-        /*
-        |--------------------------------------------------------------------------
-        | AMBIL REMINDER
-        |--------------------------------------------------------------------------
-        */
 
         $confirmationReminders = $reminderQuery
             ->orderBy('estimated_birth_date')
             ->get();
 
-        /*
-        |--------------------------------------------------------------------------
-        | WILAYAH
-        |--------------------------------------------------------------------------
-        */
-
+        // MASTER FILTER
         $regencies = $isAdminKabupaten
-            ? Regency::where('id', $user->regency_id)
-                ->with('districts.villages')
-                ->get()
-            : Regency::with('districts.villages')->get();
+            ? Regency::where('id', $user->regency_id)->with('districts.villages')->get()
+            : Regency::with('districts.villages')->orderBy('name')->get();
 
         $districts = $regencyId
-            ? District::where(
-                'regency_id',
-                $regencyId
-            )
-            ->with('villages')
-            ->get()
+            ? District::where('regency_id', $regencyId)->with('villages')->get()
             : District::with('villages')->get();
 
-        /*
-        |--------------------------------------------------------------------------
-        | OFFICERS
-        |--------------------------------------------------------------------------
-        */
-
         $officerQuery = DB::table('pregnancy_records')
-        ->whereNotNull('officer_name')
-        ->where('officer_name', '!=', '');
-    
-    if ($isAdminKabupaten) {
-        $officerQuery->whereExists(function ($q) use ($user) {
-            $q->select(DB::raw(1))
-                ->from('cows')
-                ->whereColumn(
-                    'cows.id',
-                    'pregnancy_records.cow_id'
-                )
-                ->where(
-                    'cows.regency_id',
-                    $user->regency_id
-                );
-        });
-    }
-    
-    $officers = $officerQuery
-        ->distinct()
-        ->orderBy('officer_name')
-        ->pluck('officer_name');
+            ->whereNotNull('officer_name')
+            ->where('officer_name', '!=', '');
 
-        /*
-        |--------------------------------------------------------------------------
-        | DAFTAR RAS
-        |--------------------------------------------------------------------------
-        |
-        | Karena saat ini breed disimpan langsung di tabel cows,
-        | kita ambil semua breed yang sudah tersedia.
-        |
-        */
+        if ($isAdminKabupaten) {
+            $officerQuery->whereExists(function ($q) use ($user) {
+                $q->select(DB::raw(1))
+                    ->from('cows')
+                    ->whereColumn('cows.id', 'pregnancy_records.cow_id')
+                    ->where('cows.regency_id', $user->regency_id);
+            });
+        }
 
-        $breeds = Cow::whereNotNull('breed')
-            ->where('breed', '!=', '')
-            ->distinct()
-            ->orderBy('breed')
-            ->pluck('breed')
-            ->values();
+        $officers = $officerQuery->distinct()->orderBy('officer_name')->pluck('officer_name');
+        $breeds = Cow::BREEDS;
 
-        /*
-        |--------------------------------------------------------------------------
-        | TOTAL DASHBOARD
-        |--------------------------------------------------------------------------
-        */
-
-        $totalActivePregnancies = $totalConfirmedBunting;
-
-        $totalReadyToGiveBirth =
-            $totalReady245 +
-            $totalBirthPhase;
-
+        $totalReadyToGiveBirth = $totalBirthPhase;
         $totalCalvesBorn = $totalCalves;
-
-        /*
-        |--------------------------------------------------------------------------
-        | VIEW
-        |--------------------------------------------------------------------------
-        */
 
         return view('dashboard', compact(
             'records',
-
             'totalCows',
             'totalActivePregnancies',
             'totalReadyToGiveBirth',
             'totalCalvesBorn',
-
             'totalPascaIb',
             'totalPregnant90',
             'totalReady245',
             'totalBirthPhase',
             'totalDelivered',
-
             'totalCalves',
             'totalIbCount',
-
             'conceptionRate',
             'calvingRate',
-
+            'breedRecap',
             'confirmationReminders',
-
             'regencies',
             'districts',
             'officers',
             'breeds',
-
             'search',
             'regencyId',
             'districtId',
             'villageId',
             'statusFilter',
-            'officerName'
+            'officerName',
+            'nikStatus',
+            'startDate',
+            'endDate'
         ));
     }
 }

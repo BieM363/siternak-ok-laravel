@@ -15,7 +15,7 @@ use App\Http\Controllers\NotificationController;
 
 /*
 |--------------------------------------------------------------------------
-| Web Routes - SiTernak-OK (Sistem Pemantauan Kehamilan Sapi Dinas Peternakan)
+| Web Routes - SiTernak-OK (Sistem Pemantauan Kebuntingan Sapi Disnakbun Gorontalo)
 |--------------------------------------------------------------------------
 */
 
@@ -27,75 +27,76 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::post('/guest-login', [AuthController::class, 'guestLogin'])->name('guest.login');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-// Public Read-Only Access Routes (Bisa Diakses oleh Tamu & Pengguna Umum Tanpa Login)
+// Public Read-Only Access Routes
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-// Sapi (Read-Only)
+// Data Sapi Betina (Akseptor IB)
 Route::get('/cows', [CowController::class, 'index'])->name('cows.index');
 Route::get('/cows/{id}', [CowController::class, 'show'])->name('cows.show');
 
-// Data Anak Sapi (Read-Only)
+// Menu Khusus: Data Kebuntingan Aktif & Ekspor Excel
+Route::get('/pregnancies', [PregnancyController::class, 'index'])->name('pregnancies.index');
+Route::get('/pregnancies/excel', [PregnancyController::class, 'exportExcel'])->name('pregnancies.excel');
+
+// Menu Terpadu: Data Pedet & Kelahiran
 Route::get('/calves', [CalfController::class, 'index'])->name('calves.index');
+Route::get('/calves/excel', [ReportController::class, 'exportExcel'])->name('calves.excel');
+Route::get('/calves/pdf', [ReportController::class, 'exportPdf'])->name('calves.pdf');
 Route::get('/calves/{id}', [CalfController::class, 'show'])->name('calves.show');
 
-// Menu 1: Rekapan Kelahiran Pedet (Read-Only)
+// Rekapitulasi Laporan & Ekspor Excel (.xlsx) / PDF
 Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
 Route::get('/reports/pdf', [ReportController::class, 'exportPdf'])->name('reports.pdf');
 Route::get('/reports/excel', [ReportController::class, 'exportExcel'])->name('reports.excel');
 
-// Menu 2: Dedicated Leaderboard Inseminator (Read-Only)
+// Leaderboard & Evaluasi Kinerja Inseminator
 Route::get('/inseminators', [ReportController::class, 'inseminators'])->name('reports.inseminators');
 
-// Data Peternak (Read-Only)
+// Data Peternak (Pemilik Sapi)
 Route::get('/farmers', [FarmerController::class, 'index'])->name('farmers.index');
 Route::get('/farmers/search-json', [FarmerController::class, 'searchJson'])->name('farmers.search-json');
 
-// Operator ONLY Routes: Pendaftaran Inseminasi Buatan (IB) Baru
-Route::middleware(['auth', 'role:operator'])->group(function () {
+// Inseminator & Admin Actions (Admin Kab/Kota dapat input susulan/backdate, Inseminator input bebas wilayah)
+Route::middleware(['auth', 'role:admin,operator'])->group(function () {
     Route::get('/cows-create', [CowController::class, 'create'])->name('cows.create');
     Route::post('/cows', [CowController::class, 'store'])->name('cows.store');
     Route::post('/pregnancy', [PregnancyController::class, 'store'])->name('pregnancy.store');
-});
 
-// Operator & Administrasi Shared Actions (Wajib Auth Login)
-Route::middleware(['auth', 'role:admin,operator'])->group(function () {
     Route::get('/cows-auto-nik', [CowController::class, 'getAutoNik'])->name('cows.auto-nik');
     Route::get('/cows/{id}/edit', [CowController::class, 'edit'])->name('cows.edit');
     Route::put('/cows/{id}', [CowController::class, 'update'])->name('cows.update');
     Route::delete('/cows/{id}', [CowController::class, 'destroy'])->name('cows.destroy');
 
-    // Manajemen Database Straw Pejantan IB
+    // Database Master Identitas Pejantan (Straw) — Lihat untuk semua petugas, kelola untuk Admin Provinsi
     Route::get('/straws', [BullStrawController::class, 'index'])->name('straws.index');
     Route::post('/straws', [BullStrawController::class, 'store'])->name('straws.store');
     Route::put('/straws/{id}', [BullStrawController::class, 'update'])->name('straws.update');
     Route::delete('/straws/{id}', [BullStrawController::class, 'destroy'])->name('straws.destroy');
 
-    // Update Status Kehamilan, Tandai Gagal & Trigger Cron
+    // Konfirmasi Kebuntingan 3 Tahap & Trigger Cron
     Route::put('/pregnancy/{id}/update-status', [PregnancyController::class, 'updateStatus'])->name('pregnancy.update-status');
     Route::post('/pregnancy/trigger-cron', [PregnancyController::class, 'triggerCron'])->name('pregnancy.trigger-cron');
 
-    // Endpoint Notifikasi Peramban Ponsel & Pemantauan Sesi Login 8 Jam Operator
+    // Endpoint Notifikasi Peramban Ponsel & Pemantauan Sesi 8 Jam Inseminator
     Route::get('/notifications/poll', [NotificationController::class, 'poll'])->name('notifications.poll');
     Route::post('/notifications/sync-cron', [NotificationController::class, 'syncCron'])->name('notifications.sync-cron');
 
-    // Edit, Update & Promosikan Anak Sapi
+    // Edit, Update & Promosikan Pedet Betina
     Route::get('/calves/{id}/edit', [CalfController::class, 'edit'])->name('calves.edit');
     Route::put('/calves/{id}', [CalfController::class, 'update'])->name('calves.update');
     Route::post('/calves/{id}/promote', [CalfController::class, 'promoteToCow'])->name('calves.promote');
 });
 
-// Administrasi Only Routes (Pengisian Master Data Peternak, User & Wilayah)
+// Administrasi Only Routes (Admin Provinsi & Admin Kabupaten/Kota)
 Route::middleware(['auth', 'role:admin'])->group(function () {
-
-    // Hapus Data Anak Sapi
     Route::delete('/calves/{id}', [CalfController::class, 'destroy'])->name('calves.destroy');
 
-    // Manajemen Peternak Actions (Tambah, Edit & Hapus)
+    // Manajemen Peternak (NIK opsional)
     Route::post('/farmers', [FarmerController::class, 'store'])->name('farmers.store');
     Route::put('/farmers/{id}', [FarmerController::class, 'update'])->name('farmers.update');
     Route::delete('/farmers/{id}', [FarmerController::class, 'destroy'])->name('farmers.destroy');
 
-    // Manajemen Hirarki Wilayah (Kabupaten, Kecamatan, Desa)
+    // Manajemen Wilayah Administratif (Provinsi)
     Route::get('/regions', [RegionController::class, 'index'])->name('regions.index');
     Route::post('/regions/regency', [RegionController::class, 'storeRegency'])->name('regions.store-regency');
     Route::put('/regions/regency/{id}', [RegionController::class, 'updateRegency'])->name('regions.update-regency');
@@ -104,7 +105,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::post('/regions/village', [RegionController::class, 'storeVillage'])->name('regions.store-village');
     Route::put('/regions/village/{id}', [RegionController::class, 'updateVillage'])->name('regions.update-village');
 
-    // Manajemen User & Role (Admin Provinsi, Admin Kota, Admin Kab & Operator)
+    // Manajemen Pengguna (Admin Provinsi, Admin Kab/Kota, Inseminator)
     Route::get('/users', [UserController::class, 'index'])->name('users.index');
     Route::post('/users', [UserController::class, 'store'])->name('users.store');
     Route::put('/users/{id}', [UserController::class, 'update'])->name('users.update');

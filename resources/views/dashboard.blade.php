@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Dashboard Pemantauan Kehamilan Sapi')
+@section('title', 'Dashboard Pemantauan Kebuntingan Sapi')
 
 @section('content')
 <div class="space-y-6">
@@ -173,7 +173,7 @@
                 <div class="space-y-2">
                     <div class="flex flex-wrap items-center gap-2">
                         <h1 class="text-lg sm:text-2xl font-extrabold tracking-tight text-white">
-                            Sistem Pemantauan Kehamilan Sapi &bull; Disnakbun Provinsi Gorontalo
+                            Sistem Pemantauan Kebuntingan Sapi &bull; Disnakbun Provinsi Gorontalo
                         </h1>
                         <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-slate-800 text-slate-300 text-[11px] font-bold uppercase border border-slate-700">
                             <i class="fa-solid fa-eye text-emerald-400"></i>
@@ -206,11 +206,11 @@
                 <div class="flex items-center space-x-2">
                     <span class="w-2.5 h-2.5 rounded-full bg-emerald-400"></span>
                     <h2 class="font-extrabold text-xs sm:text-sm text-emerald-300 uppercase tracking-wide tabular-nums">
-                        Reminder Konfirmasi (Batas 3 Hari): {{ $confirmationReminders->count() }} Sapi Membutuhkan Aksi
+                        Notifikasi 3 Tahap Kebuntingan (Auto-Lanjut 3 Hari): {{ $confirmationReminders->count() }} Sapi Perlu Konfirmasi
                     </h2>
                 </div>
                 <p class="text-xs text-slate-300">
-                    Sapi betina di bawah telah memasuki jadwal milestone atau fase melahirkan. Mohon konfirmasi YA atau TIDAK.
+                    Notifikasi diarahkan ke Admin Kabupaten/Kota pada <strong>Hari ke-30</strong>, <strong>PKB Hari ke-90 (3 Bulan)</strong>, dan <strong>Bulan ke-9 (Konfirmasi Kelahiran)</strong> berdasarkan Tanggal Inseminasi. Jika tidak direspons 3 hari, sistem otomatis melanjutkan tahap kebuntingan.
                 </p>
             </div>
 
@@ -228,22 +228,9 @@
             @foreach($confirmationReminders as $rec)
                 @php
                     $cow = $rec->cow;
-                    $milestoneLabel = 'Konfirmasi';
-                    $targetDate = null;
-
-                    if (in_array($rec->status, ['Pasca IB', 'Estimasi 30 Hari'])) {
-                        $milestoneLabel = 'PKB 30 Hari';
-                        $targetDate = $rec->day30_date;
-                    } elseif ($rec->status === 'Bunting (PKB 90 Hari)') {
-                        $milestoneLabel = 'PKB 90 Hari';
-                        $targetDate = $rec->day90_date;
-                    } elseif ($rec->status === 'Siap Melahirkan (245 Hari)') {
-                        $milestoneLabel = 'PKB 245 Hari';
-                        $targetDate = $rec->day245_date;
-                    } elseif ($rec->status === 'Fase Melahirkan') {
-                        $milestoneLabel = 'Konfirmasi Kelahiran';
-                        $targetDate = $rec->estimated_birth_date;
-                    }
+                    $stageInfo = $rec->reminder_stage_info;
+                    $milestoneLabel = $stageInfo['label'];
+                    $targetDate = $stageInfo['target_date'];
                 @endphp
 
                 @if($cow)
@@ -590,7 +577,7 @@
                             <i class="fa-solid fa-clock"></i> Sisa Waktu Login (Maks 8 Jam):
                         </span>
                         <span data-operator-countdown class="font-mono font-black text-emerald-700 dark:text-emerald-300 bg-white dark:bg-slate-900 px-2 py-0.5 rounded border border-emerald-200 dark:border-emerald-800 tabular-nums">
-                            08:00:00
+                            {{ auth()->user()->getFormattedRemainingSession() }}
                         </span>
                     </div>
                     <p class="text-[11px] text-slate-600 dark:text-slate-400">
@@ -650,27 +637,27 @@
     <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
         <div class="glass-card p-4 sm:p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex items-center justify-between">
             <div>
-                <span class="text-[10px] font-extrabold text-slate-500 dark:text-slate-400 uppercase tracking-wider block">Total Sapi Betina</span>
-                <p class="text-xl sm:text-2xl font-black text-slate-900 dark:text-white mt-1 tabular-nums">{{ $totalCows }}</p>
+                <span class="text-[10px] font-extrabold text-slate-500 dark:text-slate-400 uppercase tracking-wider block">Total Sapi di-IB</span>
+                <p class="text-xl sm:text-2xl font-black text-slate-900 dark:text-white mt-1 tabular-nums">{{ $totalIbCount }}</p>
             </div>
             <div class="w-10 h-10 rounded-xl bg-sky-50 dark:bg-sky-950 text-sky-700 dark:text-sky-400 flex items-center justify-center font-bold border border-sky-200 dark:border-sky-800">
-                <i class="fa-solid fa-cow text-lg"></i>
-            </div>
-        </div>
-
-        <div class="glass-card p-4 sm:p-5 rounded-2xl border-2 border-emerald-600/40 dark:border-emerald-500/40 shadow-sm flex items-center justify-between">
-            <div>
-                <span class="text-[10px] font-extrabold text-emerald-700 dark:text-emerald-400 uppercase tracking-wider block">Sapi Bunting (Aktif)</span>
-                <p class="text-xl sm:text-2xl font-black text-emerald-700 dark:text-emerald-400 mt-1 tabular-nums">{{ $totalActivePregnancies }}</p>
-            </div>
-            <div class="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-400 flex items-center justify-center font-bold border border-emerald-200 dark:border-emerald-800">
                 <i class="fa-solid fa-syringe text-lg"></i>
             </div>
         </div>
 
+        <a href="{{ route('pregnancies.index') }}" class="glass-card p-4 sm:p-5 rounded-2xl border-2 border-emerald-600/40 dark:border-emerald-500/40 shadow-sm flex items-center justify-between hover:border-emerald-500 transition">
+            <div>
+                <span class="text-[10px] font-extrabold text-emerald-700 dark:text-emerald-400 uppercase tracking-wider block">Total Bunting Aktif</span>
+                <p class="text-xl sm:text-2xl font-black text-emerald-700 dark:text-emerald-400 mt-1 tabular-nums">{{ $totalActivePregnancies }}</p>
+            </div>
+            <div class="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-400 flex items-center justify-center font-bold border border-emerald-200 dark:border-emerald-800">
+                <i class="fa-solid fa-heart-pulse text-lg"></i>
+            </div>
+        </a>
+
         <div class="glass-card p-4 sm:p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex items-center justify-between">
             <div>
-                <span class="text-[10px] font-extrabold text-amber-700 dark:text-amber-400 uppercase tracking-wider block">Siap Melahirkan (HPL)</span>
+                <span class="text-[10px] font-extrabold text-amber-700 dark:text-amber-400 uppercase tracking-wider block">Bulan ke-9 (Lahir)</span>
                 <p class="text-xl sm:text-2xl font-black text-amber-600 dark:text-amber-400 mt-1 tabular-nums">{{ $totalReadyToGiveBirth }}</p>
             </div>
             <div class="w-10 h-10 rounded-xl bg-amber-50 dark:bg-amber-950 text-amber-600 dark:text-amber-400 flex items-center justify-center font-bold border border-amber-200 dark:border-amber-800">
@@ -678,86 +665,104 @@
             </div>
         </div>
 
-        <div class="glass-card p-4 sm:p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex items-center justify-between">
+        <a href="{{ route('calves.index') }}" class="glass-card p-4 sm:p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex items-center justify-between hover:border-teal-500 transition">
             <div>
-                <span class="text-[10px] font-extrabold text-teal-700 dark:text-teal-400 uppercase tracking-wider block">Anak Sapi Lahir</span>
+                <span class="text-[10px] font-extrabold text-teal-700 dark:text-teal-400 uppercase tracking-wider block">Pedet &amp; Kelahiran</span>
                 <p class="text-xl sm:text-2xl font-black text-teal-700 dark:text-teal-400 mt-1 tabular-nums">{{ $totalCalvesBorn }}</p>
             </div>
             <div class="w-10 h-10 rounded-xl bg-teal-50 dark:bg-teal-950 text-teal-700 dark:text-teal-400 flex items-center justify-center font-bold border border-teal-200 dark:border-teal-800">
                 <i class="fa-solid fa-baby-carriage text-lg"></i>
             </div>
-        </div>
+        </a>
     </div>
 
+    @if(isset($breedRecap) && $breedRecap->count() > 0)
+    <div class="glass-card p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-2.5">
+        <div class="flex flex-wrap items-center justify-between gap-2">
+            <span class="text-[11px] font-extrabold uppercase tracking-wider text-slate-600 dark:text-slate-400">
+                Rekap Per Jenis / Ras Sapi (Total IB · Bunting · Kelahiran/Pedet)
+            </span>
+            <a href="{{ route('reports.excel', request()->query()) }}" class="text-xs font-bold text-emerald-700 dark:text-emerald-400 hover:underline inline-flex items-center gap-1">
+                <i class="fa-solid fa-file-excel"></i> Ekspor Rekap Excel (.xlsx)
+            </a>
+        </div>
+        <div class="flex flex-wrap gap-2 tabular-nums">
+            @foreach($breedRecap as $br)
+                <span class="px-3 py-1.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-[11px] font-semibold text-slate-800 dark:text-slate-200">
+                    <strong>{{ $br->breed }}</strong>: IB {{ $br->total_ib }} · <span class="text-emerald-700 dark:text-emerald-400 font-bold">Bunting {{ $br->total_bunting }}</span> · <span class="text-teal-700 dark:text-teal-400 font-bold">Lahir {{ $br->total_lahir }}</span>
+                </span>
+            @endforeach
+        </div>
+    </div>
+    @endif
+
     <div class="glass-card p-4 sm:p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
-        <form method="GET" action="{{ route('dashboard') }}" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
+        <form method="GET" action="{{ route('dashboard') }}" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
             <div>
-                <label for="dashboard-search" class="block text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">Cari NIK Sapi / Nama / Peternak</label>
-                <div class="relative">
-                    <input id="dashboard-search" type="text" name="search" value="{{ $search }}" placeholder="Ketik NIK Sapi, Nama, atau Peternak..."
-                        class="w-full pl-9 pr-4 py-2.5 bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-xl text-xs text-slate-900 dark:text-white focus:outline-none focus:border-emerald-600">
-                    <i class="fa-solid fa-magnifying-glass absolute left-3 top-3 text-slate-400 text-xs"></i>
-                </div>
+                <label for="dashboard-search" class="block text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">Cari Sapi / Pemilik</label>
+                <input id="dashboard-search" type="text" name="search" value="{{ $search }}" placeholder="NIK Sapi, Nama, atau Pemilik..."
+                    class="w-full px-3 py-2 bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-xl text-xs text-slate-900 dark:text-white focus:outline-none focus:border-emerald-600">
             </div>
 
             <div>
-                <label for="dashboard-regency" class="block text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">Kabupaten / Kota</label>
-                <select id="dashboard-regency" name="regency_id" class="w-full px-3 py-2.5 bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-xl text-xs text-slate-900 dark:text-white focus:outline-none focus:border-emerald-600" {{ auth()->check() && auth()->user()->isAdminKabupaten() ? 'disabled' : '' }}>
-                    <option value="">-- Semua Kabupaten --</option>
+                <label for="dashboard-regency" class="block text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">Kabupaten / Kota</label>
+                <select id="dashboard-regency" name="regency_id" class="w-full px-3 py-2 bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-xl text-xs text-slate-900 dark:text-white" {{ auth()->check() && auth()->user()->isAdminKabupaten() ? 'disabled' : '' }}>
+                    <option value="">-- Semua Kabupaten/Kota --</option>
                     @foreach($regencies as $r)
-                    <option value="{{ $r->id }}" {{ $regencyId == $r->id ? 'selected' : '' }}>{{ $r->code }} - {{ $r->name }}</option>
+                    <option value="{{ $r->id }}" {{ $regencyId == $r->id ? 'selected' : '' }}>{{ $r->name }}</option>
                     @endforeach
                 </select>
             </div>
 
             <div>
-                <label for="dashboard-officer" class="block text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
-                    Inseminator / Petugas
-                </label>
-
-                @if(auth()->check() && auth()->user()->isOperator())
-                    <input
-                        id="dashboard-officer"
-                        type="text"
-                        value="{{ auth()->user()->name }}"
-                        disabled
-                        class="w-full px-3 py-2.5 bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl text-xs text-slate-600 dark:text-slate-400 cursor-not-allowed"
-                    >
-                @else
-                    <select
-                        id="dashboard-officer"
-                        name="officer_name"
-                        class="w-full px-3 py-2.5 bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-xl text-xs text-slate-900 dark:text-white focus:outline-none focus:border-emerald-600"
-                    >
-                        <option value="">-- Semua Petugas --</option>
-                        @foreach($officers as $off)
-                            <option value="{{ $off }}" {{ $officerName == $off ? 'selected' : '' }}>{{ $off }}</option>
-                        @endforeach
-                    </select>
-                @endif
+                <label for="dashboard-officer" class="block text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">Petugas Inseminator</label>
+                <select id="dashboard-officer" name="officer_name" class="w-full px-3 py-2 bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-xl text-xs text-slate-900 dark:text-white">
+                    <option value="">-- Semua Inseminator --</option>
+                    @foreach($officers as $off)
+                        <option value="{{ $off }}" {{ $officerName == $off ? 'selected' : '' }}>{{ $off }}</option>
+                    @endforeach
+                </select>
             </div>
 
             <div>
-                <label for="dashboard-status" class="block text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">Fase Kebuntingan</label>
-                <select id="dashboard-status" name="status" class="w-full px-3 py-2.5 bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-xl text-xs text-slate-900 dark:text-white focus:outline-none focus:border-emerald-600">
-                    <option value="">-- Semua Fase --</option>
-                    <option value="Pasca IB" {{ $statusFilter == 'Pasca IB' ? 'selected' : '' }}>Pasca IB (0-30 Hari)</option>
-                    <option value="Estimasi 30 Hari" {{ $statusFilter == 'Estimasi 30 Hari' ? 'selected' : '' }}>Estimasi 30 Hari</option>
-                    <option value="Bunting (PKB 90 Hari)" {{ $statusFilter == 'Bunting (PKB 90 Hari)' ? 'selected' : '' }}>Bunting PKB 90 Hari</option>
-                    <option value="Siap Melahirkan (245 Hari)" {{ $statusFilter == 'Siap Melahirkan (245 Hari)' ? 'selected' : '' }}>Siap Melahirkan (245 Hari)</option>
-                    <option value="Fase Melahirkan" {{ $statusFilter == 'Fase Melahirkan' ? 'selected' : '' }}>Fase Melahirkan (HPL)</option>
+                <label for="dashboard-nik-status" class="block text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">Status NIK Pemilik</label>
+                <select id="dashboard-nik-status" name="nik_status" class="w-full px-3 py-2 bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-xl text-xs text-slate-900 dark:text-white">
+                    <option value="">-- Semua Pemilik --</option>
+                    <option value="with_nik" {{ ($nikStatus ?? '') === 'with_nik' ? 'selected' : '' }}>Pemilik Ada NIK</option>
+                    <option value="without_nik" {{ ($nikStatus ?? '') === 'without_nik' ? 'selected' : '' }}>Pemilik Tanpa NIK</option>
+                </select>
+            </div>
+
+            <div>
+                <label for="dashboard-start" class="block text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">Dari Tgl Inseminasi</label>
+                <input id="dashboard-start" type="date" name="start_date" value="{{ $startDate ?? '' }}" class="w-full px-3 py-2 bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-xl text-xs text-slate-900 dark:text-white tabular-nums">
+            </div>
+
+            <div>
+                <label for="dashboard-end" class="block text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">Sampai Tgl Inseminasi</label>
+                <input id="dashboard-end" type="date" name="end_date" value="{{ $endDate ?? '' }}" class="w-full px-3 py-2 bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-xl text-xs text-slate-900 dark:text-white tabular-nums">
+            </div>
+
+            <div>
+                <label for="dashboard-status" class="block text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">Tahap Kebuntingan</label>
+                <select id="dashboard-status" name="status" class="w-full px-3 py-2 bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-xl text-xs text-slate-900 dark:text-white">
+                    <option value="">-- Semua Tahap --</option>
+                    <option value="Pasca IB" {{ $statusFilter == 'Pasca IB' ? 'selected' : '' }}>Tahap 1 · Pasca IB (0-30 Hr)</option>
+                    <option value="Bunting (PKB 90 Hari)" {{ $statusFilter == 'Bunting (PKB 90 Hari)' ? 'selected' : '' }}>Tahap 2 · Menunggu PKB 90 Hr</option>
+                    <option value="Siap Melahirkan (245 Hari)" {{ $statusFilter == 'Siap Melahirkan (245 Hari)' ? 'selected' : '' }}>Bunting Terkonfirmasi (PKB 90)</option>
+                    <option value="Fase Melahirkan" {{ $statusFilter == 'Fase Melahirkan' ? 'selected' : '' }}>Tahap 3 · Bulan ke-9 (Lahir)</option>
                     <option value="Melahirkan (Selesai)" {{ $statusFilter == 'Melahirkan (Selesai)' ? 'selected' : '' }}>Melahirkan (Selesai)</option>
-                    <option value="Gagal/Keguguran" {{ $statusFilter == 'Gagal/Keguguran' ? 'selected' : '' }}>Gagal / Keguguran</option>
+                    <option value="Gagal/Keguguran" {{ $statusFilter == 'Gagal/Keguguran' ? 'selected' : '' }}>Tidak Bunting / Siap IB Ulang</option>
                 </select>
             </div>
 
             <div class="flex items-end space-x-2">
-                <button type="submit" class="w-full min-h-[38px] py-2.5 px-4 bg-emerald-700 hover:bg-emerald-600 text-white font-bold text-xs rounded-xl transition flex items-center justify-center space-x-2">
+                <button type="submit" class="w-full min-h-[38px] py-2 px-4 bg-emerald-700 hover:bg-emerald-600 text-white font-bold text-xs rounded-xl transition flex items-center justify-center space-x-2">
                     <i class="fa-solid fa-filter"></i>
-                    <span>Filter</span>
+                    <span>Terapkan</span>
                 </button>
-                @if($search || $regencyId || $statusFilter || $officerName)
-                <a href="{{ route('dashboard') }}" aria-label="Reset filter" class="min-h-[38px] py-2.5 px-3 bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-xl text-xs font-semibold transition flex items-center justify-center">
+                @if($search || $regencyId || $statusFilter || $officerName || ($nikStatus ?? '') || ($startDate ?? '') || ($endDate ?? ''))
+                <a href="{{ route('dashboard') }}" aria-label="Reset filter" class="min-h-[38px] py-2 px-3 bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-xl text-xs font-semibold flex items-center justify-center">
                     <i class="fa-solid fa-xmark"></i>
                 </a>
                 @endif
@@ -769,7 +774,7 @@
         <div class="px-4 sm:px-6 py-4 border-b border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 bg-slate-50 dark:bg-slate-900">
             <h2 class="font-bold text-xs sm:text-sm text-slate-900 dark:text-white flex items-center gap-2">
                 <i class="fa-solid fa-list-check text-emerald-600 dark:text-emerald-400 shrink-0"></i>
-                <span>Daftar Pemantauan Kehamilan, Tanggal Milestone &amp; Sisa Hari</span>
+                <span>Daftar Pemantauan Kebuntingan, 3 Tahap Milestone &amp; Umur Kebuntingan</span>
             </h2>
             <span class="text-[11px] sm:text-xs text-slate-500 dark:text-slate-400 tabular-nums shrink-0">Menampilkan {{ $records->count() }} dari {{ $records->total() }} Sapi</span>
         </div>
@@ -848,7 +853,7 @@
             @empty
             <div class="px-6 py-10 text-center text-slate-500 dark:text-slate-400">
                 <i class="fa-solid fa-cow text-3xl mb-2 block text-slate-300 dark:text-slate-700"></i>
-                <p class="text-xs font-semibold">Tidak ada data kehamilan sapi yang cocok.</p>
+                <p class="text-xs font-semibold">Tidak ada data kebuntingan sapi yang cocok.</p>
             </div>
             @endforelse
         </div>
@@ -859,9 +864,9 @@
                     <tr>
                         <th class="px-4 py-3.5 whitespace-nowrap">NIK Sapi &amp; Wilayah</th>
                         <th class="px-4 py-3.5 whitespace-nowrap">Nama Sapi &amp; Peternak</th>
-                        <th class="px-4 py-3.5 whitespace-nowrap">Tgl Inseminasi (IB)</th>
-                        <th class="px-4 py-3.5 whitespace-nowrap">Milestone (30/90/245 Hr)</th>
-                        <th class="px-4 py-3.5 whitespace-nowrap">Estimasi HPL (283 Hari)</th>
+                        <th class="px-4 py-3.5 whitespace-nowrap">Tanggal Inseminasi &amp; IB ke-</th>
+                        <th class="px-4 py-3.5 whitespace-nowrap">3 Tahap (30 / 90 / Bln 9)</th>
+                        <th class="px-4 py-3.5 whitespace-nowrap">Umur &amp; Estimasi Lahir</th>
                         <th class="px-4 py-3.5 whitespace-nowrap">Fase &amp; Status Milestone</th>
                         <th class="px-4 py-3.5 text-right whitespace-nowrap">Aksi &amp; Pengingat</th>
                     </tr>
@@ -897,17 +902,19 @@
 
                         <td class="px-4 py-3.5 tabular-nums">
                             <span class="font-bold text-slate-900 dark:text-slate-200">{{ $rec->insemination_date ? $rec->insemination_date->format('d/m/Y') : '-' }}</span>
+                            <span class="ml-1 px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-[10px] font-bold">IB ke-{{ $rec->ib_ke ?? 1 }}</span>
                             <p class="text-[10px] text-slate-500 dark:text-slate-400">Inseminator: {{ $rec->officer_name ?? '-' }}</p>
                         </td>
 
                         <td class="px-4 py-3.5 text-[11px] text-slate-700 dark:text-slate-300 space-y-0.5 tabular-nums">
-                            <p>30 Hr: <strong class="text-sky-700 dark:text-sky-300">{{ $rec->day30_date ? $rec->day30_date->format('d/m/Y') : '-' }}</strong></p>
-                            <p>90 Hr (PKB): <strong class="text-emerald-700 dark:text-emerald-300">{{ $rec->day90_date ? $rec->day90_date->format('d/m/Y') : '-' }}</strong></p>
-                            <p>245 Hr: <strong class="text-amber-700 dark:text-amber-300">{{ $rec->day245_date ? $rec->day245_date->format('d/m/Y') : '-' }}</strong></p>
+                            <p>Tahap 1 (30 Hr): <strong class="text-sky-700 dark:text-sky-300">{{ $rec->day30_date ? $rec->day30_date->format('d/m/Y') : '-' }}</strong></p>
+                            <p>Tahap 2 (PKB 90): <strong class="text-emerald-700 dark:text-emerald-300">{{ $rec->day90_date ? $rec->day90_date->format('d/m/Y') : '-' }}</strong></p>
+                            <p>Tahap 3 (Bln 9): <strong class="text-amber-700 dark:text-amber-300">{{ ($rec->target_month9_date ?? $rec->estimated_birth_date)?->format('d/m/Y') ?? '-' }}</strong></p>
                         </td>
 
                         <td class="px-4 py-3.5 tabular-nums">
-                            <span class="font-bold text-amber-700 dark:text-amber-300 text-xs">{{ $rec->estimated_birth_date ? $rec->estimated_birth_date->format('d/m/Y') : '-' }}</span>
+                            <span class="font-bold text-emerald-700 dark:text-emerald-400 text-xs block">{{ $rec->pregnancy_age_label }}</span>
+                            <span class="text-[11px] text-amber-700 dark:text-amber-300 font-semibold">Est: {{ $rec->estimated_birth_date ? $rec->estimated_birth_date->format('d/m/Y') : '-' }}</span>
                             @if($rec->actual_birth_date)
                             <p class="text-[10px] text-teal-700 dark:text-teal-400 font-bold mt-0.5">Lahir: {{ $rec->actual_birth_date->format('d/m/Y') }}</p>
                             @endif
@@ -951,7 +958,7 @@
                     <tr>
                         <td colspan="7" class="px-6 py-12 text-center text-slate-500 dark:text-slate-400">
                             <i class="fa-solid fa-cow text-3xl mb-3 block text-slate-300 dark:text-slate-700"></i>
-                            <p class="text-sm font-semibold">Tidak ada data kehamilan sapi yang cocok.</p>
+                            <p class="text-sm font-semibold">Tidak ada data kebuntingan sapi yang cocok.</p>
                         </td>
                     </tr>
                     @endforelse

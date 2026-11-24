@@ -192,65 +192,88 @@
                 @php
                     $navActive = 'bg-emerald-600 text-white shadow-sm';
                     $navIdle = 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800';
+                    $isPureInseminator = auth()->check() && auth()->user()->isOperator() && !auth()->user()->isAdmin();
                 @endphp
                 <nav aria-label="Navigasi Utama" class="hidden lg:flex items-center space-x-1 whitespace-nowrap">
-                    <a href="{{ route('home') }}" class="px-2.5 py-2 2xl:px-3 rounded-xl text-xs font-bold transition-colors flex items-center gap-1.5 {{ request()->routeIs('home') ? $navActive : $navIdle }}">
-                        <i class="fa-solid fa-house {{ request()->routeIs('home') ? 'text-white' : 'text-emerald-600 dark:text-emerald-400' }}" aria-hidden="true"></i>
-                        <span>Utama</span>
-                    </a>
+                    @if($isPureInseminator)
+                        <a href="{{ route('dashboard') }}" class="px-3 py-2 rounded-xl text-xs font-bold transition-colors flex items-center gap-1.5 {{ request()->routeIs('dashboard') ? $navActive : $navIdle }}">
+                            <i class="fa-solid fa-syringe {{ request()->routeIs('dashboard') ? 'text-white' : 'text-emerald-600 dark:text-emerald-400' }}" aria-hidden="true"></i>
+                            <span>Input &amp; Riwayat IB</span>
+                        </a>
+                        <a href="{{ route('pregnancies.index') }}" class="px-3 py-2 rounded-xl text-xs font-bold transition-colors flex items-center gap-1.5 {{ request()->routeIs('pregnancies.*') ? $navActive : $navIdle }}">
+                            <i class="fa-solid fa-heart-pulse {{ request()->routeIs('pregnancies.*') ? 'text-white' : 'text-emerald-600 dark:text-emerald-400' }}" aria-hidden="true"></i>
+                            <span>Data Kebuntingan</span>
+                        </a>
+                        <a href="{{ route('calves.index') }}" class="px-3 py-2 rounded-xl text-xs font-bold transition-colors flex items-center gap-1.5 {{ request()->routeIs('calves.*') ? $navActive : $navIdle }}">
+                            <i class="fa-solid fa-baby-carriage {{ request()->routeIs('calves.*') ? 'text-white' : 'text-emerald-600 dark:text-emerald-400' }}" aria-hidden="true"></i>
+                            <span>Pedet &amp; Kelahiran</span>
+                        </a>
+                        <a href="{{ route('straws.index') }}" class="px-3 py-2 rounded-xl text-xs font-bold transition-colors flex items-center gap-1.5 {{ request()->routeIs('straws.*') ? $navActive : $navIdle }}">
+                            <i class="fa-solid fa-vial {{ request()->routeIs('straws.*') ? 'text-white' : 'text-teal-600 dark:text-teal-400' }}" aria-hidden="true"></i>
+                            <span>Straw Pejantan</span>
+                        </a>
+                    @else
+                        <a href="{{ route('home') }}" class="px-2.5 py-2 rounded-xl text-xs font-bold transition-colors flex items-center gap-1.5 {{ request()->routeIs('home') ? $navActive : $navIdle }}">
+                            <i class="fa-solid fa-house {{ request()->routeIs('home') ? 'text-white' : 'text-emerald-600 dark:text-emerald-400' }}" aria-hidden="true"></i>
+                            <span>Utama</span>
+                        </a>
 
-                    <a href="{{ route('dashboard') }}" class="px-2.5 py-2 2xl:px-3 rounded-xl text-xs font-bold transition-colors flex items-center gap-1.5 {{ request()->routeIs('dashboard') ? $navActive : $navIdle }}">
-                        <i class="fa-solid fa-chart-line {{ request()->routeIs('dashboard') ? 'text-white' : 'text-emerald-600 dark:text-emerald-400' }}" aria-hidden="true"></i>
-                        <span>Dashboard</span>
-                    </a>
+                        <a href="{{ route('dashboard') }}" class="px-2.5 py-2 rounded-xl text-xs font-bold transition-colors flex items-center gap-1.5 {{ request()->routeIs('dashboard') ? $navActive : $navIdle }}">
+                            <i class="fa-solid fa-chart-line {{ request()->routeIs('dashboard') ? 'text-white' : 'text-emerald-600 dark:text-emerald-400' }}" aria-hidden="true"></i>
+                            <span>Dashboard</span>
+                        </a>
 
-                    <a href="{{ route('cows.index') }}" class="px-2.5 py-2 2xl:px-3 rounded-xl text-xs font-bold transition-colors flex items-center gap-1.5 {{ request()->routeIs('cows.*') ? $navActive : $navIdle }}">
-                        <i class="fa-solid fa-cow {{ request()->routeIs('cows.*') ? 'text-white' : 'text-emerald-600 dark:text-emerald-400' }}" aria-hidden="true"></i>
-                        <span>Sapi IB</span>
-                    </a>
+                        <a href="{{ route('cows.index') }}" class="px-2.5 py-2 rounded-xl text-xs font-bold transition-colors flex items-center gap-1.5 {{ request()->routeIs('cows.*') ? $navActive : $navIdle }}">
+                            <i class="fa-solid fa-cow {{ request()->routeIs('cows.*') ? 'text-white' : 'text-emerald-600 dark:text-emerald-400' }}" aria-hidden="true"></i>
+                            <span>Sapi IB</span>
+                        </a>
 
-                    <a href="{{ route('calves.index') }}" class="px-2.5 py-2 2xl:px-3 rounded-xl text-xs font-bold transition-colors flex items-center gap-1.5 {{ request()->routeIs('calves.*') ? $navActive : $navIdle }}">
-                        <i class="fa-solid fa-baby-carriage {{ request()->routeIs('calves.*') ? 'text-white' : 'text-emerald-600 dark:text-emerald-400' }}" aria-hidden="true"></i>
-                        <span>Pedet</span>
-                    </a>
+                        <a href="{{ route('pregnancies.index') }}" class="px-2.5 py-2 rounded-xl text-xs font-bold transition-colors flex items-center gap-1.5 {{ request()->routeIs('pregnancies.*') ? $navActive : $navIdle }}">
+                            <i class="fa-solid fa-heart-pulse {{ request()->routeIs('pregnancies.*') ? 'text-white' : 'text-emerald-600 dark:text-emerald-400' }}" aria-hidden="true"></i>
+                            <span>Data Kebuntingan</span>
+                        </a>
 
-                    <a href="{{ route('reports.index') }}" class="px-2.5 py-2 2xl:px-3 rounded-xl text-xs font-bold transition-colors flex items-center gap-1.5 {{ request()->routeIs('reports.index') ? $navActive : $navIdle }}">
-                        <i class="fa-solid fa-file-invoice {{ request()->routeIs('reports.index') ? 'text-white' : 'text-emerald-600 dark:text-emerald-400' }}" aria-hidden="true"></i>
-                        <span>Kelahiran</span>
-                    </a>
+                        <a href="{{ route('calves.index') }}" class="px-2.5 py-2 rounded-xl text-xs font-bold transition-colors flex items-center gap-1.5 {{ request()->routeIs('calves.*') ? $navActive : $navIdle }}">
+                            <i class="fa-solid fa-baby-carriage {{ request()->routeIs('calves.*') ? 'text-white' : 'text-emerald-600 dark:text-emerald-400' }}" aria-hidden="true"></i>
+                            <span>Pedet &amp; Kelahiran</span>
+                        </a>
 
-                    <a href="{{ route('reports.inseminators') }}" class="px-2.5 py-2 2xl:px-3 rounded-xl text-xs font-bold transition-colors flex items-center gap-1.5 {{ request()->routeIs('reports.inseminators') ? $navActive : $navIdle }}">
-                        <i class="fa-solid fa-trophy {{ request()->routeIs('reports.inseminators') ? 'text-white' : 'text-amber-600 dark:text-amber-400' }}" aria-hidden="true"></i>
-                        <span>Inseminator</span>
-                    </a>
+                        <a href="{{ route('reports.index') }}" class="px-2.5 py-2 rounded-xl text-xs font-bold transition-colors flex items-center gap-1.5 {{ request()->routeIs('reports.index') ? $navActive : $navIdle }}">
+                            <i class="fa-solid fa-file-excel {{ request()->routeIs('reports.index') ? 'text-white' : 'text-emerald-600 dark:text-emerald-400' }}" aria-hidden="true"></i>
+                            <span>Rekap</span>
+                        </a>
 
-                    @if(auth()->check() && (auth()->user()->isAdmin() || auth()->user()->isOperator()))
-                    <a href="{{ route('straws.index') }}" class="px-2.5 py-2 2xl:px-3 rounded-xl text-xs font-bold transition-colors flex items-center gap-1.5 {{ request()->routeIs('straws.*') ? $navActive : $navIdle }}">
-                        <i class="fa-solid fa-vial {{ request()->routeIs('straws.*') ? 'text-white' : 'text-teal-600 dark:text-teal-400' }}" aria-hidden="true"></i>
-                        <span>Straw Pejantan</span>
-                    </a>
-                    @endif
+                        <a href="{{ route('reports.inseminators') }}" class="px-2.5 py-2 rounded-xl text-xs font-bold transition-colors flex items-center gap-1.5 {{ request()->routeIs('reports.inseminators') ? $navActive : $navIdle }}">
+                            <i class="fa-solid fa-trophy {{ request()->routeIs('reports.inseminators') ? 'text-white' : 'text-amber-600 dark:text-amber-400' }}" aria-hidden="true"></i>
+                            <span>Inseminator</span>
+                        </a>
 
-                    @if(auth()->check() && auth()->user()->isAdmin())
-                    <div class="relative" @click.away="adminDropdownOpen = false">
-                        <button @click="adminDropdownOpen = !adminDropdownOpen" :aria-expanded="adminDropdownOpen.toString()" type="button" class="px-2.5 py-2 2xl:px-3 rounded-xl text-xs font-bold transition-colors flex items-center gap-1.5 {{ request()->routeIs('farmers.*') || request()->routeIs('regions.*') || request()->routeIs('users.*') ? $navActive : $navIdle }}">
-                            <i class="fa-solid fa-user-shield {{ request()->routeIs('farmers.*') || request()->routeIs('regions.*') || request()->routeIs('users.*') ? 'text-white' : 'text-emerald-600 dark:text-emerald-400' }}" aria-hidden="true"></i>
-                            <span>Administrasi</span>
-                            <i class="fa-solid fa-chevron-down text-[10px] ml-0.5" aria-hidden="true"></i>
-                        </button>
+                        @if(auth()->check() && auth()->user()->isAdmin())
+                        <div class="relative" @click.away="adminDropdownOpen = false">
+                            <button @click="adminDropdownOpen = !adminDropdownOpen" :aria-expanded="adminDropdownOpen.toString()" type="button" class="px-2.5 py-2 rounded-xl text-xs font-bold transition-colors flex items-center gap-1.5 {{ request()->routeIs('farmers.*') || request()->routeIs('regions.*') || request()->routeIs('users.*') || request()->routeIs('straws.*') ? $navActive : $navIdle }}">
+                                <i class="fa-solid fa-user-shield {{ request()->routeIs('farmers.*') || request()->routeIs('regions.*') || request()->routeIs('users.*') || request()->routeIs('straws.*') ? 'text-white' : 'text-emerald-600 dark:text-emerald-400' }}" aria-hidden="true"></i>
+                                <span>Master</span>
+                                <i class="fa-solid fa-chevron-down text-[10px] ml-0.5" aria-hidden="true"></i>
+                            </button>
 
-                        <div x-show="adminDropdownOpen" x-cloak x-transition class="absolute right-0 mt-2 w-56 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xl py-2 z-50">
-                            <a href="{{ route('farmers.index') }}" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
-                                <i class="fa-solid fa-users text-emerald-600 dark:text-emerald-400 w-4 text-center" aria-hidden="true"></i> Data Peternak
-                            </a>
-                            <a href="{{ route('regions.index') }}" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
-                                <i class="fa-solid fa-map-location-dot text-emerald-600 dark:text-emerald-400 w-4 text-center" aria-hidden="true"></i> Wilayah Administratif
-                            </a>
-                            <a href="{{ route('users.index') }}" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
-                                <i class="fa-solid fa-user-gear text-emerald-600 dark:text-emerald-400 w-4 text-center" aria-hidden="true"></i> Kelola Role User
-                            </a>
+                            <div x-show="adminDropdownOpen" x-cloak x-transition class="absolute right-0 mt-2 w-56 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xl py-2 z-50">
+                                <a href="{{ route('farmers.index') }}" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+                                    <i class="fa-solid fa-users text-emerald-600 dark:text-emerald-400 w-4 text-center" aria-hidden="true"></i> Data Pemilik (Peternak)
+                                </a>
+                                <a href="{{ route('straws.index') }}" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+                                    <i class="fa-solid fa-vial text-teal-600 dark:text-teal-400 w-4 text-center" aria-hidden="true"></i> Master Straw Pejantan
+                                </a>
+                                @if(auth()->user()->isAdminProvinsi())
+                                <a href="{{ route('regions.index') }}" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+                                    <i class="fa-solid fa-map-location-dot text-emerald-600 dark:text-emerald-400 w-4 text-center" aria-hidden="true"></i> Wilayah Administratif
+                                </a>
+                                @endif
+                                <a href="{{ route('users.index') }}" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+                                    <i class="fa-solid fa-user-gear text-emerald-600 dark:text-emerald-400 w-4 text-center" aria-hidden="true"></i> Kelola Akun &amp; Role
+                                </a>
+                            </div>
                         </div>
-                    </div>
+                        @endif
                     @endif
                 </nav>
 
@@ -265,7 +288,7 @@
 
                     @if(auth()->check() && !auth()->user()->isGuest())
                     @if(auth()->user()->isOperator())
-                    <div class="hidden md:flex items-center gap-1.5 px-3 py-2 bg-emerald-50 dark:bg-emerald-950/70 border border-emerald-200 dark:border-emerald-800/80 rounded-xl text-xs font-bold text-emerald-800 dark:text-emerald-300" title="Batas waktu login operator lapangan maksimal 8 jam">
+                    <div class="hidden md:flex items-center gap-1.5 px-3 py-2 bg-emerald-50 dark:bg-emerald-950/70 border border-emerald-200 dark:border-emerald-800/80 rounded-xl text-xs font-bold text-emerald-800 dark:text-emerald-300" title="Batas waktu login Inseminator maksimal 8 jam">
                         <i class="fa-solid fa-stopwatch text-emerald-600 dark:text-emerald-400" aria-hidden="true"></i>
                         <span class="text-[11px] uppercase tracking-wider text-slate-600 dark:text-slate-400">Sesi 8 Jam:</span>
                         <span data-operator-countdown class="font-mono font-extrabold text-emerald-800 dark:text-emerald-300 tabular-nums">{{ auth()->user()->getFormattedRemainingSession() }}</span>
@@ -304,7 +327,7 @@
                             <div class="p-3 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800 space-y-2">
                                 <div class="flex items-center justify-between text-xs">
                                     <span class="font-bold text-emerald-900 dark:text-emerald-300 flex items-center gap-1.5">
-                                        <i class="fa-solid fa-clock" aria-hidden="true"></i> Sesi Login Operator (Maks 8 Jam)
+                                        <i class="fa-solid fa-clock" aria-hidden="true"></i> Sesi Login Inseminator (Maks 8 Jam)
                                     </span>
                                     <span data-operator-countdown class="font-mono font-black text-xs text-emerald-800 dark:text-emerald-300 bg-white dark:bg-slate-900 px-2 py-0.5 rounded border border-emerald-200 dark:border-emerald-800 tabular-nums">
                                         {{ auth()->user()->getFormattedRemainingSession() }}
@@ -474,30 +497,48 @@
                 @endif
 
                 <nav aria-label="Menu Mobile" class="grid grid-cols-2 gap-2 text-xs font-bold">
-                    <a href="{{ route('home') }}" @click="mobileMenuOpen = false" class="min-h-[44px] p-3 bg-slate-100 dark:bg-slate-800 rounded-xl flex items-center gap-2 text-slate-800 dark:text-slate-200 {{ request()->routeIs('home') ? 'ring-2 ring-emerald-500' : '' }}">
-                        <i class="fa-solid fa-house text-emerald-600 dark:text-emerald-400" aria-hidden="true"></i> Utama
-                    </a>
-                    <a href="{{ route('dashboard') }}" @click="mobileMenuOpen = false" class="min-h-[44px] p-3 bg-slate-100 dark:bg-slate-800 rounded-xl flex items-center gap-2 text-slate-800 dark:text-slate-200 {{ request()->routeIs('dashboard') ? 'ring-2 ring-emerald-500' : '' }}">
-                        <i class="fa-solid fa-chart-line text-emerald-600 dark:text-emerald-400" aria-hidden="true"></i> Dashboard
-                    </a>
-                    <a href="{{ route('cows.index') }}" @click="mobileMenuOpen = false" class="min-h-[44px] p-3 bg-slate-100 dark:bg-slate-800 rounded-xl flex items-center gap-2 text-slate-800 dark:text-slate-200 {{ request()->routeIs('cows.*') ? 'ring-2 ring-emerald-500' : '' }}">
-                        <i class="fa-solid fa-cow text-emerald-600 dark:text-emerald-400" aria-hidden="true"></i> Sapi IB
-                    </a>
-                    <a href="{{ route('calves.index') }}" @click="mobileMenuOpen = false" class="min-h-[44px] p-3 bg-slate-100 dark:bg-slate-800 rounded-xl flex items-center gap-2 text-slate-800 dark:text-slate-200 {{ request()->routeIs('calves.*') ? 'ring-2 ring-emerald-500' : '' }}">
-                        <i class="fa-solid fa-baby-carriage text-emerald-600 dark:text-emerald-400" aria-hidden="true"></i> Pedet
-                    </a>
-                    <a href="{{ route('reports.index') }}" @click="mobileMenuOpen = false" class="min-h-[44px] p-3 bg-slate-100 dark:bg-slate-800 rounded-xl flex items-center gap-2 text-slate-800 dark:text-slate-200 {{ request()->routeIs('reports.index') ? 'ring-2 ring-emerald-500' : '' }}">
-                        <i class="fa-solid fa-file-invoice text-emerald-600 dark:text-emerald-400" aria-hidden="true"></i> Kelahiran
-                    </a>
-                    <a href="{{ route('reports.inseminators') }}" @click="mobileMenuOpen = false" class="min-h-[44px] p-3 bg-slate-100 dark:bg-slate-800 rounded-xl flex items-center gap-2 text-slate-800 dark:text-slate-200 {{ request()->routeIs('reports.inseminators') ? 'ring-2 ring-emerald-500' : '' }}">
-                        <i class="fa-solid fa-trophy text-amber-600 dark:text-amber-400" aria-hidden="true"></i> Inseminator
-                    </a>
-                    <a href="{{ route('farmers.index') }}" @click="mobileMenuOpen = false" class="min-h-[44px] p-3 bg-slate-100 dark:bg-slate-800 rounded-xl flex items-center gap-2 text-slate-800 dark:text-slate-200 {{ request()->routeIs('farmers.*') ? 'ring-2 ring-emerald-500' : '' }}">
-                        <i class="fa-solid fa-users text-emerald-600 dark:text-emerald-400" aria-hidden="true"></i> Peternak
-                    </a>
-                    <a href="{{ route('straws.index') }}" @click="mobileMenuOpen = false" class="min-h-[44px] p-3 bg-slate-100 dark:bg-slate-800 rounded-xl flex items-center gap-2 text-slate-800 dark:text-slate-200 {{ request()->routeIs('straws.*') ? 'ring-2 ring-teal-500' : '' }}">
-                        <i class="fa-solid fa-vial text-teal-600 dark:text-teal-400" aria-hidden="true"></i> Straw IB
-                    </a>
+                    @if($isPureInseminator)
+                        <a href="{{ route('dashboard') }}" @click="mobileMenuOpen = false" class="col-span-2 min-h-[44px] p-3 bg-emerald-50 dark:bg-emerald-950/60 rounded-xl flex items-center gap-2 text-emerald-900 dark:text-emerald-200 {{ request()->routeIs('dashboard') ? 'ring-2 ring-emerald-500' : '' }}">
+                            <i class="fa-solid fa-syringe text-emerald-600 dark:text-emerald-400" aria-hidden="true"></i> Input &amp; Riwayat IB
+                        </a>
+                        <a href="{{ route('pregnancies.index') }}" @click="mobileMenuOpen = false" class="min-h-[44px] p-3 bg-slate-100 dark:bg-slate-800 rounded-xl flex items-center gap-2 text-slate-800 dark:text-slate-200 {{ request()->routeIs('pregnancies.*') ? 'ring-2 ring-emerald-500' : '' }}">
+                            <i class="fa-solid fa-heart-pulse text-emerald-600 dark:text-emerald-400" aria-hidden="true"></i> Kebuntingan
+                        </a>
+                        <a href="{{ route('calves.index') }}" @click="mobileMenuOpen = false" class="min-h-[44px] p-3 bg-slate-100 dark:bg-slate-800 rounded-xl flex items-center gap-2 text-slate-800 dark:text-slate-200 {{ request()->routeIs('calves.*') ? 'ring-2 ring-emerald-500' : '' }}">
+                            <i class="fa-solid fa-baby-carriage text-emerald-600 dark:text-emerald-400" aria-hidden="true"></i> Pedet &amp; Lahir
+                        </a>
+                        <a href="{{ route('straws.index') }}" @click="mobileMenuOpen = false" class="col-span-2 min-h-[44px] p-3 bg-slate-100 dark:bg-slate-800 rounded-xl flex items-center gap-2 text-slate-800 dark:text-slate-200 {{ request()->routeIs('straws.*') ? 'ring-2 ring-teal-500' : '' }}">
+                            <i class="fa-solid fa-vial text-teal-600 dark:text-teal-400" aria-hidden="true"></i> Master Straw Pejantan
+                        </a>
+                    @else
+                        <a href="{{ route('home') }}" @click="mobileMenuOpen = false" class="min-h-[44px] p-3 bg-slate-100 dark:bg-slate-800 rounded-xl flex items-center gap-2 text-slate-800 dark:text-slate-200 {{ request()->routeIs('home') ? 'ring-2 ring-emerald-500' : '' }}">
+                            <i class="fa-solid fa-house text-emerald-600 dark:text-emerald-400" aria-hidden="true"></i> Utama
+                        </a>
+                        <a href="{{ route('dashboard') }}" @click="mobileMenuOpen = false" class="min-h-[44px] p-3 bg-slate-100 dark:bg-slate-800 rounded-xl flex items-center gap-2 text-slate-800 dark:text-slate-200 {{ request()->routeIs('dashboard') ? 'ring-2 ring-emerald-500' : '' }}">
+                            <i class="fa-solid fa-chart-line text-emerald-600 dark:text-emerald-400" aria-hidden="true"></i> Dashboard
+                        </a>
+                        <a href="{{ route('cows.index') }}" @click="mobileMenuOpen = false" class="min-h-[44px] p-3 bg-slate-100 dark:bg-slate-800 rounded-xl flex items-center gap-2 text-slate-800 dark:text-slate-200 {{ request()->routeIs('cows.*') ? 'ring-2 ring-emerald-500' : '' }}">
+                            <i class="fa-solid fa-cow text-emerald-600 dark:text-emerald-400" aria-hidden="true"></i> Sapi IB
+                        </a>
+                        <a href="{{ route('pregnancies.index') }}" @click="mobileMenuOpen = false" class="min-h-[44px] p-3 bg-slate-100 dark:bg-slate-800 rounded-xl flex items-center gap-2 text-slate-800 dark:text-slate-200 {{ request()->routeIs('pregnancies.*') ? 'ring-2 ring-emerald-500' : '' }}">
+                            <i class="fa-solid fa-heart-pulse text-emerald-600 dark:text-emerald-400" aria-hidden="true"></i> Kebuntingan
+                        </a>
+                        <a href="{{ route('calves.index') }}" @click="mobileMenuOpen = false" class="min-h-[44px] p-3 bg-slate-100 dark:bg-slate-800 rounded-xl flex items-center gap-2 text-slate-800 dark:text-slate-200 {{ request()->routeIs('calves.*') ? 'ring-2 ring-emerald-500' : '' }}">
+                            <i class="fa-solid fa-baby-carriage text-emerald-600 dark:text-emerald-400" aria-hidden="true"></i> Pedet &amp; Lahir
+                        </a>
+                        <a href="{{ route('reports.index') }}" @click="mobileMenuOpen = false" class="min-h-[44px] p-3 bg-slate-100 dark:bg-slate-800 rounded-xl flex items-center gap-2 text-slate-800 dark:text-slate-200 {{ request()->routeIs('reports.index') ? 'ring-2 ring-emerald-500' : '' }}">
+                            <i class="fa-solid fa-file-excel text-emerald-600 dark:text-emerald-400" aria-hidden="true"></i> Rekap Excel
+                        </a>
+                        <a href="{{ route('reports.inseminators') }}" @click="mobileMenuOpen = false" class="min-h-[44px] p-3 bg-slate-100 dark:bg-slate-800 rounded-xl flex items-center gap-2 text-slate-800 dark:text-slate-200 {{ request()->routeIs('reports.inseminators') ? 'ring-2 ring-emerald-500' : '' }}">
+                            <i class="fa-solid fa-trophy text-amber-600 dark:text-amber-400" aria-hidden="true"></i> Inseminator
+                        </a>
+                        <a href="{{ route('farmers.index') }}" @click="mobileMenuOpen = false" class="min-h-[44px] p-3 bg-slate-100 dark:bg-slate-800 rounded-xl flex items-center gap-2 text-slate-800 dark:text-slate-200 {{ request()->routeIs('farmers.*') ? 'ring-2 ring-emerald-500' : '' }}">
+                            <i class="fa-solid fa-users text-emerald-600 dark:text-emerald-400" aria-hidden="true"></i> Pemilik Sapi
+                        </a>
+                        <a href="{{ route('straws.index') }}" @click="mobileMenuOpen = false" class="col-span-2 min-h-[44px] p-3 bg-slate-100 dark:bg-slate-800 rounded-xl flex items-center gap-2 text-slate-800 dark:text-slate-200 {{ request()->routeIs('straws.*') ? 'ring-2 ring-teal-500' : '' }}">
+                            <i class="fa-solid fa-vial text-teal-600 dark:text-teal-400" aria-hidden="true"></i> Master Straw Pejantan
+                        </a>
+                    @endif
                 </nav>
 
                 @if(auth()->check() && auth()->user()->isAdmin())
@@ -538,33 +579,35 @@
             <div class="flex items-center space-x-2 w-full sm:w-auto min-w-0">
                 <span class="w-2 h-2 rounded-full bg-emerald-600 dark:bg-emerald-400 shrink-0" aria-hidden="true"></span>
                 <p class="text-sm sm:text-base font-extrabold text-slate-900 dark:text-white tracking-tight truncate min-w-0">
-                    @yield('title', 'Pemantauan Kehamilan Sapi')
+                    @yield('title', 'Pemantauan Kebuntingan Sapi')
                 </p>
             </div>
 
             <div class="grid grid-cols-2 sm:flex sm:flex-nowrap items-center gap-2 w-full sm:w-auto min-w-0">
-                @if(auth()->check() && auth()->user()->isOperator())
-                <div class="col-span-2 md:hidden w-full min-w-0 flex items-center justify-between gap-2 px-3 py-2 bg-emerald-50 dark:bg-emerald-950/80 border border-emerald-200 dark:border-emerald-800 rounded-xl text-xs font-bold text-emerald-900 dark:text-emerald-300">
-                    <span class="flex items-center gap-1.5 min-w-0 truncate">
-                        <i class="fa-solid fa-stopwatch text-emerald-600 dark:text-emerald-400 shrink-0" aria-hidden="true"></i>
-                        <span class="truncate">Batas Login (8 Jam):</span>
-                    </span>
-                    <span data-operator-countdown class="font-mono font-black text-emerald-800 dark:text-emerald-300 tabular-nums shrink-0">{{ auth()->user()->getFormattedRemainingSession() }}</span>
-                </div>
+                @if(auth()->check() && auth()->user()->canOperate())
+                    @if(auth()->user()->isOperator() && !auth()->user()->isAdmin())
+                    <div class="col-span-2 md:hidden w-full min-w-0 flex items-center justify-between gap-2 px-3 py-2 bg-emerald-50 dark:bg-emerald-950/80 border border-emerald-200 dark:border-emerald-800 rounded-xl text-xs font-bold text-emerald-900 dark:text-emerald-300">
+                        <span class="flex items-center gap-1.5 min-w-0 truncate">
+                            <i class="fa-solid fa-stopwatch text-emerald-600 dark:text-emerald-400 shrink-0" aria-hidden="true"></i>
+                            <span class="truncate">Sesi Inseminator (8 Jam):</span>
+                        </span>
+                        <span data-operator-countdown class="font-mono font-black text-emerald-800 dark:text-emerald-300 tabular-nums shrink-0">{{ auth()->user()->getFormattedRemainingSession() }}</span>
+                    </div>
+                    @endif
 
-                <form action="{{ route('pregnancy.trigger-cron') }}" method="POST" class="w-full sm:w-auto min-w-0">
-                    @csrf
-                    <button type="submit" class="min-h-[40px] w-full sm:w-auto inline-flex items-center justify-center gap-1.5 px-3 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-emerald-800 dark:text-emerald-300 rounded-xl text-xs font-bold border border-slate-200 dark:border-slate-700 transition-colors truncate" title="Jalankan sinkronisasi siklus 3 hari">
-                        <i class="fa-solid fa-rotate text-emerald-600 dark:text-emerald-400 shrink-0" aria-hidden="true"></i>
-                        <span class="hidden sm:inline">Sinkronisasi Milestone (3 Hari)</span>
-                        <span class="sm:hidden truncate">Sinkron 3 Hari</span>
-                    </button>
-                </form>
+                    <form action="{{ route('pregnancy.trigger-cron') }}" method="POST" class="w-full sm:w-auto min-w-0">
+                        @csrf
+                        <button type="submit" class="min-h-[40px] w-full sm:w-auto inline-flex items-center justify-center gap-1.5 px-3 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-emerald-800 dark:text-emerald-300 rounded-xl text-xs font-bold border border-slate-200 dark:border-slate-700 transition-colors truncate" title="Jalankan sinkronisasi otomatis 3 tahap & batas 3 hari">
+                            <i class="fa-solid fa-rotate text-emerald-600 dark:text-emerald-400 shrink-0" aria-hidden="true"></i>
+                            <span class="hidden sm:inline">Sinkron 3 Tahap (3 Hari)</span>
+                            <span class="sm:hidden truncate">Sinkron 3 Hari</span>
+                        </button>
+                    </form>
 
-                <a href="{{ route('cows.create') }}" class="min-h-[40px] w-full sm:w-auto inline-flex items-center justify-center gap-1.5 px-3 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-bold shadow-sm transition-colors truncate">
-                    <i class="fa-solid fa-plus shrink-0" aria-hidden="true"></i>
-                    <span class="truncate">Pendaftaran IB Baru</span>
-                </a>
+                    <a href="{{ route('cows.create') }}" class="min-h-[40px] w-full sm:w-auto inline-flex items-center justify-center gap-1.5 px-3 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-bold shadow-sm transition-colors truncate">
+                        <i class="fa-solid fa-plus shrink-0" aria-hidden="true"></i>
+                        <span class="truncate">{{ auth()->user()->isAdmin() ? 'Input IB Susulan' : 'Input Laporan IB' }}</span>
+                    </a>
                 @endif
             </div>
         </div>
@@ -609,7 +652,7 @@
 
     <footer class="mt-auto border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 text-slate-600 dark:text-slate-400 text-xs py-6">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-3">
-            <p>&copy; {{ date('Y') }} Dinas Peternakan dan Perkebunan Provinsi Gorontalo. SiTernak-OK (Sistem Pemantauan Kehamilan Sapi).</p>
+            <p>&copy; {{ date('Y') }} Dinas Peternakan dan Perkebunan Provinsi Gorontalo. SiTernak-OK (Sistem Pemantauan Kebuntingan Sapi).</p>
             <div class="flex items-center space-x-4">
                 <span class="inline-flex items-center gap-2 text-xs text-emerald-700 dark:text-emerald-400 font-semibold">
                     <span class="w-2 h-2 rounded-full bg-emerald-600 dark:bg-emerald-400" aria-hidden="true"></span>
@@ -1003,7 +1046,7 @@
                 if (remaining <= 0) {
                     dispatchUniversalNotification(
                         'Batas Waktu Login 8 Jam Berakhir',
-                        'Sesi kerja Operator 8 jam telah selesai. Silakan login kembali melalui peramban ponsel Anda.',
+                        'Sesi kerja Inseminator 8 jam telah selesai. Silakan login kembali melalui peramban ponsel Anda.',
                         LOGIN_URL,
                         'siternak-session-expired'
                     );

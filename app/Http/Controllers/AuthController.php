@@ -96,7 +96,7 @@ class AuthController extends Controller
                 return redirect()->intended(route('dashboard'))
                     ->with(
                         'success',
-                        'Selamat bertugas di lapangan, ' . $user->name . '! Sesi login Operator berlaku selama 8 jam (berakhir pukul ' . $expiresAt->format('H:i') . '). Notifikasi peramban ponsel telah diaktifkan.'
+                        'Selamat bertugas di lapangan, ' . $user->name . '! Sesi login Inseminator berlaku selama 8 jam (berakhir pukul ' . $expiresAt->format('H:i') . ' WITA). Notifikasi peramban ponsel telah diaktifkan.'
                     );
             }
 

@@ -12,14 +12,11 @@ use Carbon\Carbon;
 /**
  * NotificationController
  * Menyediakan endpoint JSON real-time untuk:
- * 1. Pemantauan sisa waktu login Operator (batas maksimal 8 jam).
- * 2. Pengiriman notifikasi pengingat konfirmasi sapi ke semua peramban (terutama peramban ponsel/HP saat turun lapangan).
+ * 1. Notifikasi 3 Tahap Kebuntingan (Hari ke-30, Hari ke-90/PKB, Bulan ke-9) ke Admin Kab/Kota & petugas.
+ * 2. Pemantauan sisa waktu login Inseminator (batas maksimal 8 jam).
  */
 class NotificationController extends Controller
 {
-    /**
-     * Endpoint polling status sesi 8 jam & daftar pengingat kebuntingan untuk peramban ponsel/desktop
-     */
     public function poll(Request $request)
     {
         if (!Auth::check() || Auth::user()->isGuest()) {
@@ -33,7 +30,6 @@ class NotificationController extends Controller
         $isPureOperator = $user->isOperator() && !$user->isAdmin();
         $isAdminKabupaten = $user->isAdminKabupaten();
 
-        // Hitung informasi sesi 8 jam khusus Operator
         $now = now();
         $loginAtTimestamp = session('operator_login_at')
             ?? ($user->last_login_at ? $user->last_login_at->timestamp : $now->timestamp);
@@ -41,12 +37,10 @@ class NotificationController extends Controller
             ?? ($user->login_expires_at ? $user->login_expires_at->timestamp : ($loginAtTimestamp + (User::OPERATOR_SESSION_HOURS * 3600)));
 
         $remainingSeconds = $user->isOperator()
-            ? max(0, (int) ($expiresAtTimestamp - $now->timestamp))
+            ? max(0, min(User::OPERATOR_SESSION_HOURS * 3600, (int) ($expiresAtTimestamp - $now->timestamp)))
             : null;
 
-        // Ambil daftar sapi yang masuk masa konfirmasi (batas 3 hari)
-        $today = Carbon::today();
-
+        // Ambil daftar sapi yang masuk jendela notifikasi 3 tahap (Hari 30, Hari 90, Bulan ke-9)
         $reminderQuery = PregnancyRecord::with([
             'cow.farmer',
             'cow.regency',
@@ -54,32 +48,7 @@ class NotificationController extends Controller
             'cow.village',
         ])
             ->whereHas('cow')
-            ->whereNotIn('status', [
-                'Melahirkan (Selesai)',
-                'Gagal/Keguguran',
-            ])
-            ->where(function ($q) use ($today) {
-                $q->where(function ($sub) use ($today) {
-                    $sub->whereIn('status', ['Pasca IB', 'Estimasi 30 Hari'])
-                        ->whereDate('day30_date', '<=', $today)
-                        ->whereDate('day30_date', '>=', $today->copy()->subDays(3));
-                })
-                ->orWhere(function ($sub) use ($today) {
-                    $sub->where('status', 'Bunting (PKB 90 Hari)')
-                        ->whereDate('day90_date', '<=', $today)
-                        ->whereDate('day90_date', '>=', $today->copy()->subDays(3));
-                })
-                ->orWhere(function ($sub) use ($today) {
-                    $sub->where('status', 'Siap Melahirkan (245 Hari)')
-                        ->whereDate('day245_date', '<=', $today)
-                        ->whereDate('day245_date', '>=', $today->copy()->subDays(3));
-                })
-                ->orWhere(function ($sub) use ($today) {
-                    $sub->where('status', 'Fase Melahirkan')
-                        ->whereDate('estimated_birth_date', '<=', $today)
-                        ->whereDate('birth_window_end_date', '>=', $today);
-                });
-            });
+            ->dueForReminder();
 
         if ($isPureOperator) {
             $reminderQuery->where('operator_id', $user->id);
@@ -95,23 +64,7 @@ class NotificationController extends Controller
 
         $reminders = $records->map(function ($rec) {
             $cow = $rec->cow;
-            $milestoneLabel = 'Konfirmasi Kebuntingan';
-            $targetDate = null;
-
-            if (in_array($rec->status, ['Pasca IB', 'Estimasi 30 Hari'])) {
-                $milestoneLabel = 'PKB 30 Hari Pasca IB';
-                $targetDate = $rec->day30_date;
-            } elseif ($rec->status === 'Bunting (PKB 90 Hari)') {
-                $milestoneLabel = 'PKB 90 Hari';
-                $targetDate = $rec->day90_date;
-            } elseif ($rec->status === 'Siap Melahirkan (245 Hari)') {
-                $milestoneLabel = 'Siap Melahirkan (245 Hari)';
-                $targetDate = $rec->day245_date;
-            } elseif ($rec->status === 'Fase Melahirkan') {
-                $milestoneLabel = 'Fase Melahirkan (Konfirmasi Pedet)';
-                $targetDate = $rec->estimated_birth_date;
-            }
-
+            $stageInfo = $rec->reminder_stage_info;
             $villageName = $cow->village->name ?? '-';
             $districtName = $cow->district->name ?? '-';
 
@@ -120,12 +73,14 @@ class NotificationController extends Controller
                 'cow_id' => $cow->id,
                 'cow_nik' => $cow->cow_nik,
                 'cow_name' => $cow->name ?? ('Sapi ' . $cow->cow_nik),
+                'ib_ke' => $rec->ib_ke ?? 1,
                 'breed' => $cow->breed ?? '-',
                 'farmer_name' => $cow->farmer->name ?? '-',
                 'location' => "{$villageName}, Kec. {$districtName}",
                 'status' => $rec->status,
-                'milestone_label' => $milestoneLabel,
-                'target_date' => $targetDate ? Carbon::parse($targetDate)->format('d M Y') : '-',
+                'stage' => $stageInfo['stage'],
+                'milestone_label' => $stageInfo['label'],
+                'target_date' => $stageInfo['target_date'] ? Carbon::parse($stageInfo['target_date'])->format('d M Y') : '-',
                 'hpl_date' => $rec->estimated_birth_date ? $rec->estimated_birth_date->format('d M Y') : '-',
                 'action_url' => route('dashboard') . '#reminder-section',
                 'detail_url' => route('cows.show', $cow->id),
@@ -157,9 +112,6 @@ class NotificationController extends Controller
         ]);
     }
 
-    /**
-     * Jalankan cronjob sesi 8 jam & pengingat via AJAX dari peramban ponsel/desktop
-     */
     public function syncCron(Request $request)
     {
         if (!Auth::check() || !Auth::user()->canOperate()) {
@@ -175,4 +127,3 @@ class NotificationController extends Controller
         return response()->json($pollResponse);
     }
 }
-

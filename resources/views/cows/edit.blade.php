@@ -39,7 +39,7 @@
                 <div>
                     <label for="edit-cow-breed" class="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">Ras / Jenis Sapi <span class="text-rose-500">*</span></label>
                     <select id="edit-cow-breed" name="breed" required class="w-full px-4 py-3 bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-xl text-sm text-slate-900 dark:text-white focus:outline-none focus:border-emerald-600">
-                        @foreach(['Limosin', 'Simental', 'PO (Peranakan Ongole)', 'Brahman', 'Frisian Holstein', 'Bali', 'Sapi Bali (Lokal)', 'Madura', 'Cross / Persilangan'] as $b)
+                        @foreach($breeds ?? \App\Models\Cow::BREEDS as $b)
                         <option value="{{ $b }}" {{ $cow->breed == $b ? 'selected' : '' }}>{{ $b }}</option>
                         @endforeach
                     </select>
@@ -64,7 +64,7 @@
                 <select id="edit-cow-farmer" name="farmer_id" required class="w-full px-4 py-3 bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-xl text-sm text-slate-900 dark:text-white focus:outline-none focus:border-emerald-600">
                     @foreach($farmers as $f)
                     <option value="{{ $f->id }}" {{ $cow->farmer_id == $f->id ? 'selected' : '' }}>
-                        NIK: {{ $f->nik }} | Nama: {{ $f->name }}
+                        {{ $f->name }} ({{ $f->nik ?: 'Tanpa NIK' }})
                     </option>
                     @endforeach
                 </select>

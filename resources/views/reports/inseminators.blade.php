@@ -65,29 +65,42 @@
     </div>
 
     <div class="glass-card p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
-        <form method="GET" action="{{ route('reports.inseminators') }}" class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+        <form method="GET" action="{{ route('reports.inseminators') }}" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
             <div>
                 <label for="ins-search" class="block text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase mb-1">Cari Nama Inseminator</label>
                 <div class="relative">
-                    <input id="ins-search" type="text" name="search" value="{{ request('search') }}" placeholder="Cari nama petugas inseminator..." class="w-full bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-xl px-3 py-2.5 pl-9 text-xs text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-emerald-600">
-                    <i class="fa-solid fa-magnifying-glass absolute left-3 top-3 text-slate-400 dark:text-slate-500 text-xs"></i>
+                    <input id="ins-search" type="text" name="search" value="{{ request('search') }}" placeholder="Cari nama inseminator..." class="w-full bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-xl px-3 py-2.5 pl-9 text-xs text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-emerald-600">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3 top-3 text-slate-400 text-xs"></i>
                 </div>
             </div>
 
             <div>
-                <label for="ins-regency" class="block text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase mb-1">Wilayah Kabupaten / Kota</label>
+                <label for="ins-regency" class="block text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase mb-1">Kabupaten / Kota</label>
                 <select id="ins-regency" name="regency_id" class="w-full bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-xl px-3 py-2.5 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-emerald-600">
-                    <option value="">-- Semua Kabupaten / Kota --</option>
+                    <option value="">-- Semua Kab/Kota --</option>
                     @foreach($regencies as $reg)
                         <option value="{{ $reg->id }}" {{ request('regency_id') == $reg->id ? 'selected' : '' }}>{{ $reg->name }}</option>
                     @endforeach
                 </select>
             </div>
 
+            <div>
+                <label for="ins-start" class="block text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase mb-1">Periode Dari</label>
+                <input id="ins-start" type="date" name="start_date" value="{{ $startDate ?? '' }}" class="w-full bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-xl px-3 py-2.5 text-xs text-slate-900 dark:text-white tabular-nums">
+            </div>
+
+            <div>
+                <label for="ins-end" class="block text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase mb-1">Sampai Tanggal</label>
+                <input id="ins-end" type="date" name="end_date" value="{{ $endDate ?? '' }}" class="w-full bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-xl px-3 py-2.5 text-xs text-slate-900 dark:text-white tabular-nums">
+            </div>
+
             <div class="flex items-end gap-2">
-                <button type="submit" class="w-full min-h-[38px] py-2.5 bg-emerald-700 hover:bg-emerald-600 text-white font-bold text-xs rounded-xl transition whitespace-nowrap">
-                    Cari Inseminator
+                <button type="submit" class="flex-1 min-h-[38px] py-2.5 bg-emerald-700 hover:bg-emerald-600 text-white font-bold text-xs rounded-xl transition whitespace-nowrap">
+                    Filter Kinerja
                 </button>
+                <a href="{{ route('reports.inseminators') }}" class="min-h-[38px] px-3 py-2.5 bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-xl flex items-center justify-center" title="Reset">
+                    <i class="fa-solid fa-rotate-left"></i>
+                </a>
             </div>
         </form>
     </div>

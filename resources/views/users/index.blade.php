@@ -11,10 +11,10 @@
         <div>
             <h1 class="text-base sm:text-lg font-extrabold text-slate-900 dark:text-white flex items-center gap-2">
                 <i class="fa-solid fa-user-gear text-emerald-600 dark:text-emerald-400"></i>
-                Kelola Pengguna, Role &amp; Scope Wilayah (Provinsi vs Kab/Kota)
+                Kelola 3 Role Utama (Admin Provinsi, Admin Kab/Kota &amp; Inseminator)
             </h1>
             <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">
-                Pengaturan akun resmi: Admin Provinsi (Seluruh Gorontalo), Admin Kab/Kota (Wilayah spesifik), dan Operator (Inseminator Lapangan).
+                Pengaturan akun resmi: <strong>Admin Provinsi</strong> (seluruh Gorontalo, wilayah &amp; master straw), <strong>Admin Kabupaten/Kota (Recorder Dinas)</strong> (otomatis terfilter per kabupaten), dan <strong>Inseminator</strong> (input lapangan mobile lintas kabupaten).
             </p>
             @if(auth()->user() && auth()->user()->isAdminKabupaten())
                 <span class="inline-flex items-center gap-1.5 mt-2 px-3 py-1 bg-amber-50 dark:bg-amber-950 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-800 text-[11px] font-bold rounded-lg">
@@ -40,8 +40,8 @@
                         default => 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border-slate-300 dark:border-slate-700',
                     };
                     $roleName = match($u->role) {
-                        'admin' => $u->isAdminProvinsi() ? 'ADMIN PROVINSI' : ($u->isAdminKota() ? 'ADMIN KOTA' : 'ADMIN KABUPATEN'),
-                        'operator' => 'OPERATOR / INSEMINATOR',
+                        'admin' => $u->isAdminProvinsi() ? 'ADMIN PROVINSI' : 'ADMIN KAB/KOTA',
+                        'operator' => 'INSEMINATOR',
                         default => 'PENGGUNA',
                     };
                 @endphp
@@ -217,8 +217,8 @@
                 <div>
                     <label for="add-user-role" class="block font-bold text-slate-700 dark:text-slate-300 mb-1">Pilih Role Hak Akses <span class="text-rose-500">*</span></label>
                     <select id="add-user-role" name="role" x-model="selectedRole" required class="w-full px-3.5 py-2.5 bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-xl text-slate-900 dark:text-white">
-                        <option value="admin">Administrasi (Admin Provinsi / Admin Kabupaten / Admin Kota)</option>
-                        <option value="operator">Operator (Inseminator Lapangan)</option>
+                        <option value="admin">Admin Provinsi / Admin Kabupaten/Kota (Recorder Dinas)</option>
+                        <option value="operator">Inseminator (Petugas Lapangan)</option>
                     </select>
                 </div>
 
@@ -279,8 +279,8 @@
                 <div>
                     <label for="edit-user-role" class="block font-bold text-slate-700 dark:text-slate-300 mb-1">Pilih Role Hak Akses <span class="text-rose-500">*</span></label>
                     <select id="edit-user-role" name="role" x-model="editUserData.role" required class="w-full px-3.5 py-2.5 bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-xl text-slate-900 dark:text-white">
-                        <option value="admin">Administrasi (Admin Provinsi / Admin Kabupaten / Admin Kota)</option>
-                        <option value="operator">Operator (Inseminator Lapangan)</option>
+                        <option value="admin">Admin Provinsi / Admin Kabupaten/Kota (Recorder Dinas)</option>
+                        <option value="operator">Inseminator (Petugas Lapangan)</option>
                     </select>
                 </div>
 
