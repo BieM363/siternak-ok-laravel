@@ -100,9 +100,13 @@ class CowController extends Controller
         $isAdminKab = $user->isAdminKabupaten();
 
         // Inseminator bebas pilih wilayah (lintas kabupaten); Admin Kab/Kota terkunci pada kabupatennya
-        $farmers = $isAdminKab
-            ? Farmer::where('regency_id', $user->regency_id)->orderBy('name')->get()
-            : Farmer::orderBy('name')->get();
+        $farmers = ($isAdminKab
+            ? Farmer::where('regency_id', $user->regency_id)
+            : Farmer::query())
+            ->with(['cows' => fn($q) => $q->select('id', 'farmer_id', 'cow_nik', 'name', 'breed', 'current_status')->latest()])
+            ->withCount('cows')
+            ->orderBy('name')
+            ->get();
 
         $regencies = $isAdminKab
             ? Regency::where('id', $user->regency_id)->with('districts.villages')->get()

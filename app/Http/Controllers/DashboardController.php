@@ -74,7 +74,10 @@ class DashboardController extends Controller
 
             // Wilayah bebas lintas kabupaten untuk Inseminator
             $regencies = Regency::with('districts.villages')->orderBy('name')->get();
-            $farmers = Farmer::orderBy('name')->get(['id', 'name', 'nik', 'phone', 'regency_id', 'district_id', 'village_id']);
+            $farmers = Farmer::with(['cows' => fn($q) => $q->select('id', 'farmer_id', 'cow_nik', 'name', 'breed', 'current_status')->latest()])
+                ->withCount('cows')
+                ->orderBy('name')
+                ->get(['id', 'name', 'nik', 'phone', 'regency_id', 'district_id', 'village_id']);
             $straws = BullStraw::where('is_active', true)->orderBy('breed')->orderBy('kode_bull')->get();
             $breeds = Cow::BREEDS;
 

@@ -33,6 +33,23 @@
             'label' => $st->display_label,
         ];
     })->values();
+
+    $farmersPayload = $farmers->map(function ($f) {
+        return [
+            'id' => $f->id,
+            'name' => $f->name,
+            'nik' => $f->nik ?: 'Tanpa NIK',
+            'cows_count' => (int) ($f->cows_count ?? $f->cows->count()),
+            'cows' => $f->cows->map(function ($c) {
+                return [
+                    'id' => $c->id,
+                    'name' => $c->name ?: $c->cow_nik,
+                    'breed' => $c->breed,
+                    'status' => $c->current_status,
+                ];
+            })->values(),
+        ];
+    })->values();
 @endphp
 
 <div class="max-w-3xl mx-auto space-y-5"
@@ -42,6 +59,8 @@
         strawMode: '{{ old('straw_mode', 'master') }}',
         regencies: @js($regenciesPayload),
         straws: @js($strawsPayload),
+        farmersList: @js($farmersPayload),
+        selectedFarmerId: '{{ old('farmer_id', '') }}',
         selectedRegencyId: '{{ old('regency_id', '') }}',
         selectedDistrictId: '{{ old('district_id', '') }}',
         selectedVillageId: '{{ old('village_id', '') }}',
@@ -49,6 +68,15 @@
         nextIbModalOpen: false,
         nextIbCow: { id: '', name: '', cow_nik: '', farmer_name: '', next_ib: 2 },
         nextIbStrawMode: 'master',
+        get selectedFarmerObj() {
+            return this.farmersList.find(f => String(f.id) === String(this.selectedFarmerId)) || null;
+        },
+        get autoCowNamePlaceholder() {
+            if (this.farmerMode === 'existing' && this.selectedFarmerObj) {
+                return 'Kosong = otomatis ' + this.selectedFarmerObj.name + ' ' + (this.selectedFarmerObj.cows_count + 1);
+            }
+            return 'Kosong = otomatis [Nama Pemilik] 1';
+        },
         get availableDistricts() {
             const reg = this.regencies.find(r => String(r.id) === String(this.selectedRegencyId));
             return reg ? reg.districts : [];
@@ -205,17 +233,37 @@
                     <input type="hidden" name="farmer_mode" :value="farmerMode">
                 </div>
 
-                <div x-show="farmerMode === 'existing'">
+                <div x-show="farmerMode === 'existing'" class="space-y-2">
                     <label for="ins-farmer-select" class="block font-bold text-slate-700 dark:text-slate-300 mb-1">Pilih Pemilik Terdaftar <span class="text-rose-500">*</span></label>
-                    <select id="ins-farmer-select" name="farmer_id" :required="farmerMode === 'existing'"
+                    <select id="ins-farmer-select" name="farmer_id" x-model="selectedFarmerId" :required="farmerMode === 'existing'"
                         class="w-full min-h-[42px] px-3 py-2 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white text-xs">
                         <option value="">-- Pilih Nama Pemilik Sapi --</option>
                         @foreach($farmers as $f)
                             <option value="{{ $f->id }}" {{ old('farmer_id') == $f->id ? 'selected' : '' }}>
-                                {{ $f->name }} ({{ $f->nik ?: 'Tanpa NIK' }})
+                                {{ $f->name }} ({{ $f->nik ?: 'Tanpa NIK' }}) — {{ $f->cows_count ?? $f->cows->count() }} ekor sapi
                             </option>
                         @endforeach
                     </select>
+
+                    <template x-if="selectedFarmerObj">
+                        <div class="p-3 rounded-xl bg-sky-50 dark:bg-sky-950/40 border border-sky-200 dark:border-sky-800 space-y-1.5 text-[11px]">
+                            <p class="font-extrabold text-slate-900 dark:text-white">
+                                <i class="fa-solid fa-circle-info text-sky-600 dark:text-sky-400 mr-1"></i>
+                                <span x-text="selectedFarmerObj.name"></span> sudah memiliki
+                                <strong class="text-emerald-700 dark:text-emerald-400" x-text="selectedFarmerObj.cows_count + ' ekor sapi'"></strong> terdata.
+                                (Sapi baru ini jadi ke-<strong x-text="selectedFarmerObj.cows_count + 1"></strong>)
+                            </p>
+                            <template x-if="selectedFarmerObj.cows.length > 0">
+                                <div class="flex flex-wrap gap-1 pt-1">
+                                    <template x-for="c in selectedFarmerObj.cows" :key="c.id">
+                                        <a :href="'/cows-create?cow_id=' + c.id" class="px-2 py-0.5 rounded bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-[10px] font-semibold text-slate-800 dark:text-slate-200">
+                                            <span x-text="c.name + ' (' + c.breed + ')'"></span>
+                                        </a>
+                                    </template>
+                                </div>
+                            </template>
+                        </div>
+                    </template>
                 </div>
 
                 <div x-show="farmerMode === 'custom'" x-cloak class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
@@ -262,7 +310,7 @@
                     <div>
                         <label for="ins-cow-name" class="block font-bold text-slate-700 dark:text-slate-300 mb-1">Nama Panggilan Sapi (Opsional)</label>
                         <input id="ins-cow-name" type="text" name="name" value="{{ old('name') }}"
-                            placeholder="Kosong = otomatis [Nama Pemilik] 1"
+                            :placeholder="autoCowNamePlaceholder"
                             class="w-full min-h-[42px] px-3 py-2 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white text-xs">
                     </div>
                 </div>
