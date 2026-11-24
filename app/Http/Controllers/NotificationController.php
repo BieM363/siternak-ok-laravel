@@ -5,18 +5,140 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\DB;
+use App\Models\Cow;
 use App\Models\PregnancyRecord;
+use App\Models\Regency;
 use App\Models\User;
 use Carbon\Carbon;
 
 /**
  * NotificationController
- * Menyediakan endpoint JSON real-time untuk:
- * 1. Notifikasi 3 Tahap Kebuntingan (Hari ke-30, Hari ke-90/PKB, Bulan ke-9) ke Admin Kab/Kota & petugas.
- * 2. Pemantauan sisa waktu login Inseminator (batas maksimal 8 jam).
+ * Menyediakan:
+ * 1. Halaman khusus Menu "Konfirmasi 3 Tahap Kebuntingan" (/confirmations) — terpisah dari Dashboard agar rapi.
+ * 2. Endpoint JSON polling notifikasi peramban ponsel & desktop (/notifications/poll).
  */
 class NotificationController extends Controller
 {
+    /**
+     * Halaman Khusus: Notifikasi & Konfirmasi 3 Tahap Kebuntingan (Auto-Lanjut 3 Hari)
+     * Dapat diakses oleh Admin Provinsi, Admin Kabupaten/Kota (otomatis terfilter per kabupaten),
+     * dan Inseminator (sapi tanggung jawabnya).
+     */
+    public function index(Request $request)
+    {
+        $user = Auth::user();
+        $isPureOperator = $user && $user->isOperator() && !$user->isAdmin();
+        $isAdminKabupaten = $user && $user->isAdminKabupaten();
+
+        // Jalankan auto-advance 3 hari sesuai scope user
+        $autoQuery = PregnancyRecord::whereNotIn('status', ['Melahirkan (Selesai)', 'Gagal/Keguguran']);
+        if ($isPureOperator) {
+            $autoQuery->where('operator_id', $user->id);
+        } elseif ($isAdminKabupaten) {
+            $autoQuery->whereHas('cow', fn($q) => $q->where('regency_id', $user->regency_id));
+        }
+        foreach ($autoQuery->get() as $rec) {
+            $rec->checkAndAutoAdvance();
+        }
+
+        $search      = $request->query('search');
+        $stage       = $request->query('stage'); // '1', '2', '3'
+        $regencyId   = $request->query('regency_id');
+        $officerName = $request->query('officer_name');
+
+        if ($isAdminKabupaten) {
+            $regencyId = $user->regency_id;
+        }
+
+        $baseQuery = PregnancyRecord::with([
+            'cow.farmer',
+            'cow.regency',
+            'cow.district',
+            'cow.village',
+        ])
+            ->whereHas('cow')
+            ->dueForReminder();
+
+        if ($isPureOperator) {
+            $baseQuery->where('operator_id', $user->id);
+        } elseif ($isAdminKabupaten) {
+            $baseQuery->whereHas('cow', fn($q) => $q->where('regency_id', $user->regency_id));
+        } elseif ($regencyId) {
+            $baseQuery->whereHas('cow', fn($q) => $q->where('regency_id', $regencyId));
+        }
+
+        if ($officerName && !$isPureOperator) {
+            $baseQuery->where('officer_name', $officerName);
+        }
+
+        if ($search) {
+            $baseQuery->whereHas('cow', function ($q) use ($search) {
+                $q->where('cow_nik', 'LIKE', "%{$search}%")
+                    ->orWhere('name', 'LIKE', "%{$search}%")
+                    ->orWhereHas('farmer', function ($fq) use ($search) {
+                        $fq->where('name', 'LIKE', "%{$search}%")
+                            ->orWhere('nik', 'LIKE', "%{$search}%");
+                    });
+            });
+        }
+
+        // Hitung jumlah per tahap (sebelum filter tab stage)
+        $allDue = (clone $baseQuery)->get();
+        $totalAll = $allDue->count();
+        $countStage1 = $allDue->whereIn('status', ['Pasca IB', 'Estimasi 30 Hari'])->count();
+        $countStage2 = $allDue->where('status', 'Bunting (PKB 90 Hari)')->count();
+        $countStage3 = $allDue->where('status', 'Fase Melahirkan')->count();
+
+        // Filter tab stage
+        $listQuery = clone $baseQuery;
+        if ($stage === '1') {
+            $listQuery->whereIn('status', ['Pasca IB', 'Estimasi 30 Hari']);
+        } elseif ($stage === '2') {
+            $listQuery->where('status', 'Bunting (PKB 90 Hari)');
+        } elseif ($stage === '3') {
+            $listQuery->where('status', 'Fase Melahirkan');
+        }
+
+        $confirmationReminders = $listQuery
+            ->orderBy('estimated_birth_date')
+            ->paginate(12)
+            ->withQueryString();
+
+        $regencies = $isAdminKabupaten
+            ? Regency::where('id', $user->regency_id)->get()
+            : Regency::orderBy('name')->get();
+
+        $officerQuery = DB::table('pregnancy_records')
+            ->whereNotNull('officer_name')
+            ->where('officer_name', '!=', '');
+        if ($isAdminKabupaten) {
+            $officerQuery->whereExists(function ($q) use ($user) {
+                $q->select(DB::raw(1))
+                    ->from('cows')
+                    ->whereColumn('cows.id', 'pregnancy_records.cow_id')
+                    ->where('cows.regency_id', $user->regency_id);
+            });
+        }
+        $officers = $officerQuery->distinct()->orderBy('officer_name')->pluck('officer_name');
+        $breeds = Cow::BREEDS;
+
+        return view('confirmations.index', compact(
+            'confirmationReminders',
+            'totalAll',
+            'countStage1',
+            'countStage2',
+            'countStage3',
+            'regencies',
+            'officers',
+            'breeds',
+            'search',
+            'stage',
+            'regencyId',
+            'officerName'
+        ));
+    }
+
     public function poll(Request $request)
     {
         if (!Auth::check() || Auth::user()->isGuest()) {
@@ -82,7 +204,7 @@ class NotificationController extends Controller
                 'milestone_label' => $stageInfo['label'],
                 'target_date' => $stageInfo['target_date'] ? Carbon::parse($stageInfo['target_date'])->format('d M Y') : '-',
                 'hpl_date' => $rec->estimated_birth_date ? $rec->estimated_birth_date->format('d M Y') : '-',
-                'action_url' => route('dashboard') . '#reminder-section',
+                'action_url' => route('confirmations.index'),
                 'detail_url' => route('cows.show', $cow->id),
             ];
         })->values();

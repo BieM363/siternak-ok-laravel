@@ -38,6 +38,9 @@ Route::get('/cows/{id}', [CowController::class, 'show'])->name('cows.show');
 Route::get('/pregnancies', [PregnancyController::class, 'index'])->name('pregnancies.index');
 Route::get('/pregnancies/excel', [PregnancyController::class, 'exportExcel'])->name('pregnancies.excel');
 
+// Menu Khusus: Notifikasi & Konfirmasi 3 Tahap Kebuntingan (Dipisah dari Dashboard)
+Route::get('/confirmations', [NotificationController::class, 'index'])->name('confirmations.index');
+
 // Menu Terpadu: Data Pedet & Kelahiran
 Route::get('/calves', [CalfController::class, 'index'])->name('calves.index');
 Route::get('/calves/excel', [ReportController::class, 'exportExcel'])->name('calves.excel');

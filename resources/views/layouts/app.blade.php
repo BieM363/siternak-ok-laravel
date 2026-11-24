@@ -200,6 +200,13 @@
                             <i class="fa-solid fa-syringe {{ request()->routeIs('dashboard') ? 'text-white' : 'text-emerald-600 dark:text-emerald-400' }}" aria-hidden="true"></i>
                             <span>Input &amp; Riwayat IB</span>
                         </a>
+                        <a href="{{ route('confirmations.index') }}" class="px-3 py-2 rounded-xl text-xs font-bold transition-colors flex items-center gap-1.5 {{ request()->routeIs('confirmations.*') ? $navActive : $navIdle }}">
+                            <i class="fa-solid fa-bell {{ request()->routeIs('confirmations.*') ? 'text-white' : 'text-amber-600 dark:text-amber-400' }}" aria-hidden="true"></i>
+                            <span>Konfirmasi</span>
+                            @if(($navConfirmationCount ?? 0) > 0)
+                                <span class="px-1.5 py-0.5 rounded-full text-[10px] font-black tabular-nums {{ request()->routeIs('confirmations.*') ? 'bg-white text-emerald-700' : 'bg-rose-600 text-white' }}">{{ $navConfirmationCount }}</span>
+                            @endif
+                        </a>
                         <a href="{{ route('pregnancies.index') }}" class="px-3 py-2 rounded-xl text-xs font-bold transition-colors flex items-center gap-1.5 {{ request()->routeIs('pregnancies.*') ? $navActive : $navIdle }}">
                             <i class="fa-solid fa-heart-pulse {{ request()->routeIs('pregnancies.*') ? 'text-white' : 'text-emerald-600 dark:text-emerald-400' }}" aria-hidden="true"></i>
                             <span>Data Kebuntingan</span>
@@ -210,40 +217,48 @@
                         </a>
                         <a href="{{ route('straws.index') }}" class="px-3 py-2 rounded-xl text-xs font-bold transition-colors flex items-center gap-1.5 {{ request()->routeIs('straws.*') ? $navActive : $navIdle }}">
                             <i class="fa-solid fa-vial {{ request()->routeIs('straws.*') ? 'text-white' : 'text-teal-600 dark:text-teal-400' }}" aria-hidden="true"></i>
-                            <span>Straw Pejantan</span>
+                            <span>Straw</span>
                         </a>
                     @else
-                        <a href="{{ route('home') }}" class="px-2.5 py-2 rounded-xl text-xs font-bold transition-colors flex items-center gap-1.5 {{ request()->routeIs('home') ? $navActive : $navIdle }}">
+                        <a href="{{ route('home') }}" class="px-2 py-2 rounded-xl text-xs font-bold transition-colors flex items-center gap-1.5 {{ request()->routeIs('home') ? $navActive : $navIdle }}">
                             <i class="fa-solid fa-house {{ request()->routeIs('home') ? 'text-white' : 'text-emerald-600 dark:text-emerald-400' }}" aria-hidden="true"></i>
                             <span>Utama</span>
                         </a>
 
-                        <a href="{{ route('dashboard') }}" class="px-2.5 py-2 rounded-xl text-xs font-bold transition-colors flex items-center gap-1.5 {{ request()->routeIs('dashboard') ? $navActive : $navIdle }}">
+                        <a href="{{ route('dashboard') }}" class="px-2 py-2 rounded-xl text-xs font-bold transition-colors flex items-center gap-1.5 {{ request()->routeIs('dashboard') ? $navActive : $navIdle }}">
                             <i class="fa-solid fa-chart-line {{ request()->routeIs('dashboard') ? 'text-white' : 'text-emerald-600 dark:text-emerald-400' }}" aria-hidden="true"></i>
                             <span>Dashboard</span>
                         </a>
 
-                        <a href="{{ route('cows.index') }}" class="px-2.5 py-2 rounded-xl text-xs font-bold transition-colors flex items-center gap-1.5 {{ request()->routeIs('cows.*') ? $navActive : $navIdle }}">
+                        <a href="{{ route('confirmations.index') }}" class="px-2 py-2 rounded-xl text-xs font-bold transition-colors flex items-center gap-1.5 {{ request()->routeIs('confirmations.*') ? $navActive : $navIdle }}">
+                            <i class="fa-solid fa-bell {{ request()->routeIs('confirmations.*') ? 'text-white' : 'text-amber-600 dark:text-amber-400' }}" aria-hidden="true"></i>
+                            <span>Konfirmasi</span>
+                            @if(($navConfirmationCount ?? 0) > 0)
+                                <span class="px-1.5 py-0.5 rounded-full text-[10px] font-black tabular-nums {{ request()->routeIs('confirmations.*') ? 'bg-white text-emerald-700' : 'bg-rose-600 text-white' }}">{{ $navConfirmationCount }}</span>
+                            @endif
+                        </a>
+
+                        <a href="{{ route('cows.index') }}" class="px-2 py-2 rounded-xl text-xs font-bold transition-colors flex items-center gap-1.5 {{ request()->routeIs('cows.*') ? $navActive : $navIdle }}">
                             <i class="fa-solid fa-cow {{ request()->routeIs('cows.*') ? 'text-white' : 'text-emerald-600 dark:text-emerald-400' }}" aria-hidden="true"></i>
                             <span>Sapi IB</span>
                         </a>
 
-                        <a href="{{ route('pregnancies.index') }}" class="px-2.5 py-2 rounded-xl text-xs font-bold transition-colors flex items-center gap-1.5 {{ request()->routeIs('pregnancies.*') ? $navActive : $navIdle }}">
+                        <a href="{{ route('pregnancies.index') }}" class="px-2 py-2 rounded-xl text-xs font-bold transition-colors flex items-center gap-1.5 {{ request()->routeIs('pregnancies.*') ? $navActive : $navIdle }}">
                             <i class="fa-solid fa-heart-pulse {{ request()->routeIs('pregnancies.*') ? 'text-white' : 'text-emerald-600 dark:text-emerald-400' }}" aria-hidden="true"></i>
-                            <span>Data Kebuntingan</span>
+                            <span>Kebuntingan</span>
                         </a>
 
-                        <a href="{{ route('calves.index') }}" class="px-2.5 py-2 rounded-xl text-xs font-bold transition-colors flex items-center gap-1.5 {{ request()->routeIs('calves.*') ? $navActive : $navIdle }}">
+                        <a href="{{ route('calves.index') }}" class="px-2 py-2 rounded-xl text-xs font-bold transition-colors flex items-center gap-1.5 {{ request()->routeIs('calves.*') ? $navActive : $navIdle }}">
                             <i class="fa-solid fa-baby-carriage {{ request()->routeIs('calves.*') ? 'text-white' : 'text-emerald-600 dark:text-emerald-400' }}" aria-hidden="true"></i>
-                            <span>Pedet &amp; Kelahiran</span>
+                            <span>Pedet &amp; Lahir</span>
                         </a>
 
-                        <a href="{{ route('reports.index') }}" class="px-2.5 py-2 rounded-xl text-xs font-bold transition-colors flex items-center gap-1.5 {{ request()->routeIs('reports.index') ? $navActive : $navIdle }}">
+                        <a href="{{ route('reports.index') }}" class="px-2 py-2 rounded-xl text-xs font-bold transition-colors flex items-center gap-1.5 {{ request()->routeIs('reports.index') ? $navActive : $navIdle }}">
                             <i class="fa-solid fa-file-excel {{ request()->routeIs('reports.index') ? 'text-white' : 'text-emerald-600 dark:text-emerald-400' }}" aria-hidden="true"></i>
                             <span>Rekap</span>
                         </a>
 
-                        <a href="{{ route('reports.inseminators') }}" class="px-2.5 py-2 rounded-xl text-xs font-bold transition-colors flex items-center gap-1.5 {{ request()->routeIs('reports.inseminators') ? $navActive : $navIdle }}">
+                        <a href="{{ route('reports.inseminators') }}" class="px-2 py-2 rounded-xl text-xs font-bold transition-colors flex items-center gap-1.5 {{ request()->routeIs('reports.inseminators') ? $navActive : $navIdle }}">
                             <i class="fa-solid fa-trophy {{ request()->routeIs('reports.inseminators') ? 'text-white' : 'text-amber-600 dark:text-amber-400' }}" aria-hidden="true"></i>
                             <span>Inseminator</span>
                         </a>
@@ -501,6 +516,12 @@
                         <a href="{{ route('dashboard') }}" @click="mobileMenuOpen = false" class="col-span-2 min-h-[44px] p-3 bg-emerald-50 dark:bg-emerald-950/60 rounded-xl flex items-center gap-2 text-emerald-900 dark:text-emerald-200 {{ request()->routeIs('dashboard') ? 'ring-2 ring-emerald-500' : '' }}">
                             <i class="fa-solid fa-syringe text-emerald-600 dark:text-emerald-400" aria-hidden="true"></i> Input &amp; Riwayat IB
                         </a>
+                        <a href="{{ route('confirmations.index') }}" @click="mobileMenuOpen = false" class="col-span-2 min-h-[44px] p-3 bg-amber-50 dark:bg-amber-950/50 rounded-xl flex items-center justify-between text-amber-950 dark:text-amber-200 {{ request()->routeIs('confirmations.*') ? 'ring-2 ring-amber-500' : '' }}">
+                            <span class="flex items-center gap-2"><i class="fa-solid fa-bell text-amber-600 dark:text-amber-400" aria-hidden="true"></i> Konfirmasi 3 Tahap</span>
+                            @if(($navConfirmationCount ?? 0) > 0)
+                                <span class="px-2 py-0.5 rounded-full bg-rose-600 text-white text-[10px] font-black tabular-nums">{{ $navConfirmationCount }}</span>
+                            @endif
+                        </a>
                         <a href="{{ route('pregnancies.index') }}" @click="mobileMenuOpen = false" class="min-h-[44px] p-3 bg-slate-100 dark:bg-slate-800 rounded-xl flex items-center gap-2 text-slate-800 dark:text-slate-200 {{ request()->routeIs('pregnancies.*') ? 'ring-2 ring-emerald-500' : '' }}">
                             <i class="fa-solid fa-heart-pulse text-emerald-600 dark:text-emerald-400" aria-hidden="true"></i> Kebuntingan
                         </a>
@@ -516,6 +537,12 @@
                         </a>
                         <a href="{{ route('dashboard') }}" @click="mobileMenuOpen = false" class="min-h-[44px] p-3 bg-slate-100 dark:bg-slate-800 rounded-xl flex items-center gap-2 text-slate-800 dark:text-slate-200 {{ request()->routeIs('dashboard') ? 'ring-2 ring-emerald-500' : '' }}">
                             <i class="fa-solid fa-chart-line text-emerald-600 dark:text-emerald-400" aria-hidden="true"></i> Dashboard
+                        </a>
+                        <a href="{{ route('confirmations.index') }}" @click="mobileMenuOpen = false" class="col-span-2 min-h-[44px] p-3 bg-amber-50 dark:bg-amber-950/50 rounded-xl flex items-center justify-between text-amber-950 dark:text-amber-200 {{ request()->routeIs('confirmations.*') ? 'ring-2 ring-amber-500' : '' }}">
+                            <span class="flex items-center gap-2"><i class="fa-solid fa-bell text-amber-600 dark:text-amber-400" aria-hidden="true"></i> Konfirmasi 3 Tahap</span>
+                            @if(($navConfirmationCount ?? 0) > 0)
+                                <span class="px-2 py-0.5 rounded-full bg-rose-600 text-white text-[10px] font-black tabular-nums">{{ $navConfirmationCount }}</span>
+                            @endif
                         </a>
                         <a href="{{ route('cows.index') }}" @click="mobileMenuOpen = false" class="min-h-[44px] p-3 bg-slate-100 dark:bg-slate-800 rounded-xl flex items-center gap-2 text-slate-800 dark:text-slate-200 {{ request()->routeIs('cows.*') ? 'ring-2 ring-emerald-500' : '' }}">
                             <i class="fa-solid fa-cow text-emerald-600 dark:text-emerald-400" aria-hidden="true"></i> Sapi IB
@@ -683,7 +710,7 @@
             const POLL_URL = @json(route('notifications.poll'));
             const SYNC_CRON_URL = @json(route('notifications.sync-cron'));
             const LOGIN_URL = @json(route('login'));
-            const DASHBOARD_REMINDER_URL = @json(route('dashboard')) + '#reminder-section';
+            const DASHBOARD_REMINDER_URL = @json(route('confirmations.index'));
             const CSRF_TOKEN = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
 
             const INITIAL_REMAINING_SECONDS = @json(auth()->user()->getRemainingSessionSeconds());

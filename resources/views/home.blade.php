@@ -157,6 +157,10 @@
                     <i class="fa-solid fa-chart-line {{ request()->routeIs('dashboard') ? 'text-white' : 'text-emerald-600 dark:text-emerald-400' }}" aria-hidden="true"></i>
                     <span>Dashboard</span>
                 </a>
+                <a href="{{ route('confirmations.index') }}" class="px-3 py-2 rounded-xl text-xs font-bold transition-colors flex items-center gap-1.5 {{ request()->routeIs('confirmations.*') ? $navActive : $navIdle }}">
+                    <i class="fa-solid fa-bell {{ request()->routeIs('confirmations.*') ? 'text-white' : 'text-amber-600 dark:text-amber-400' }}" aria-hidden="true"></i>
+                    <span>Konfirmasi</span>
+                </a>
                 <a href="{{ route('cows.index') }}" class="px-3 py-2 rounded-xl text-xs font-bold transition-colors flex items-center gap-1.5 {{ request()->routeIs('cows.*') ? $navActive : $navIdle }}">
                     <i class="fa-solid fa-cow {{ request()->routeIs('cows.*') ? 'text-white' : 'text-emerald-600 dark:text-emerald-400' }}" aria-hidden="true"></i>
                     <span>Sapi IB</span>
@@ -241,6 +245,10 @@
                 <a href="{{ route('dashboard') }}" @click="mobileNav = false" class="min-h-[44px] flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-bold transition-colors {{ request()->routeIs('dashboard') ? $navActive : $navIdle }}">
                     <i class="fa-solid fa-chart-line w-5 text-center {{ request()->routeIs('dashboard') ? 'text-white' : 'text-emerald-600 dark:text-emerald-400' }}" aria-hidden="true"></i>
                     <span>Dashboard</span>
+                </a>
+                <a href="{{ route('confirmations.index') }}" @click="mobileNav = false" class="min-h-[44px] flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-bold transition-colors {{ request()->routeIs('confirmations.*') ? $navActive : $navIdle }}">
+                    <i class="fa-solid fa-bell w-5 text-center {{ request()->routeIs('confirmations.*') ? 'text-white' : 'text-amber-600 dark:text-amber-400' }}" aria-hidden="true"></i>
+                    <span>Konfirmasi 3 Tahap</span>
                 </a>
                 <a href="{{ route('cows.index') }}" @click="mobileNav = false" class="min-h-[44px] flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-bold transition-colors {{ request()->routeIs('cows.*') ? $navActive : $navIdle }}">
                     <i class="fa-solid fa-cow w-5 text-center {{ request()->routeIs('cows.*') ? 'text-white' : 'text-emerald-600 dark:text-emerald-400' }}" aria-hidden="true"></i>

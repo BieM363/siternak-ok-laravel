@@ -30,7 +30,7 @@ class ExampleTest extends TestCase
         $this->seed(DatabaseSeeder::class);
 
         $publicRoutes = [
-            '/', '/login', '/dashboard', '/cows', '/pregnancies',
+            '/', '/login', '/dashboard', '/confirmations', '/cows', '/pregnancies',
             '/calves', '/farmers', '/reports', '/reports/pdf', '/inseminators',
         ];
         foreach ($publicRoutes as $uri) {

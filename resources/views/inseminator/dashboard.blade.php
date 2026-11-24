@@ -130,6 +130,27 @@
         </div>
     </section>
 
+    {{-- Banner Ringkas Jika Ada Antrean Konfirmasi 3 Tahap --}}
+    @if(isset($confirmationReminders) && $confirmationReminders->count() > 0)
+    <a href="{{ route('confirmations.index') }}"
+       class="glass-card p-3.5 rounded-2xl border-2 border-amber-500/70 bg-amber-50 dark:bg-amber-950/30 flex items-center justify-between gap-3 transition hover:border-amber-400">
+        <div class="flex items-center gap-2.5 min-w-0">
+            <div class="w-9 h-9 rounded-xl bg-amber-500 text-slate-950 flex items-center justify-center shrink-0 font-black">
+                <i class="fa-solid fa-bell"></i>
+            </div>
+            <div class="min-w-0">
+                <p class="text-xs font-extrabold text-amber-950 dark:text-amber-200 truncate">
+                    {{ $confirmationReminders->count() }} Sapi Anda Perlu Konfirmasi 3 Tahap
+                </p>
+                <p class="text-[11px] text-amber-800 dark:text-amber-300/90 truncate">
+                    Ketuk untuk buka menu Konfirmasi (Batas 3 hari auto-lanjut)
+                </p>
+            </div>
+        </div>
+        <span class="px-2.5 py-1 rounded-lg bg-amber-500 text-slate-950 text-[11px] font-extrabold shrink-0">Buka &rarr;</span>
+    </a>
+    @endif
+
     {{-- Tab Switcher Ringan --}}
     <div class="grid grid-cols-2 gap-2 p-1 bg-slate-200 dark:bg-slate-900 rounded-2xl border border-slate-300 dark:border-slate-800">
         <button type="button" @click="tab = 'input'"
